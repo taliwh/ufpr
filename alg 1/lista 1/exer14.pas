@@ -1,27 +1,27 @@
-//Faça um programa Pascal que leia um número inteiro do teclado e imprima o cubo do número caso ele seja positivo ou igual a zero e o quadrado do número caso ele seja negativo.
+//Faça um programa Pascal que leia de teclado um número inteiro e imprima SIM se este é múltiplo de 3 e NAO caso contrário.
 
 //Exemplos:
 //Entrada 1:
-//0
+//5
 //Saída Esperada 1:
-//0
+//NAO
 
 //Entrada 2:
-//4
+//-3
 //Saída Esperada 2:
-//64
+//SIM
 
-//Entrada 2:
-//-5
-//Saída Esperada 2:
-//25
+//Entrada 3:
+//15
+//Saída Esperada 3:
+//SIM
 
 program Hello;
-var a: integer;
+var a: longint;
 begin
   read(a);
-  if a >= 0 then
-  writeln(a*a*a)
+  if (a mod 3) = 0 then
+  writeln('SIM')
   else
-  writeln (a*a);
+  writeln('NAO');
 end.
