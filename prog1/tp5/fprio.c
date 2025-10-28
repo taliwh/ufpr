@@ -23,7 +23,7 @@ struct fprio_t
     struct fpnodo_t *prim ;   // primeiro nodo da fila
     int num ;         // número de itens na fila
 };
-
+QUINTILIANOOOOOOOOOOOOOOOO
 // Cria uma fila vazia.
 // Retorno: ponteiro para a fila criada ou NULL se erro.
 struct fprio_t *fprio_cria () {
