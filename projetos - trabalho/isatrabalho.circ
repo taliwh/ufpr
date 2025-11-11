@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project source="4.0.0" version="1.0">
-  This file is intended to be loaded by Logisim-evolution v4.0.0(https://github.com/logisim-evolution/).
+<project source="3.8.0" version="1.0">
+  This file is intended to be loaded by Logisim-evolution v3.8.0(https://github.com/logisim-evolution/).
 
   <lib desc="#Wiring" name="0">
     <tool name="Pin">
@@ -38,7 +38,7 @@
     <tool lib="0" name="Pin"/>
     <tool lib="0" name="Pin">
       <a name="facing" val="west"/>
-      <a name="type" val="output"/>
+      <a name="output" val="true"/>
     </tool>
     <sep/>
     <tool lib="1" name="NOT Gate"/>
@@ -136,33 +136,34 @@
       <a name="fanout" val="1"/>
       <a name="incoming" val="18"/>
     </comp>
-    <comp lib="0" loc="(90,90)" name="Clock">
-      <a name="appearance" val="NewPins"/>
-    </comp>
+    <comp lib="0" loc="(90,90)" name="Clock"/>
     <comp lib="0" loc="(950,390)" name="Splitter">
-      <a name="bit0" val="none"/>
-      <a name="bit1" val="none"/>
-      <a name="bit10" val="2"/>
-      <a name="bit11" val="3"/>
-      <a name="bit12" val="3"/>
-      <a name="bit13" val="3"/>
-      <a name="bit14" val="4"/>
-      <a name="bit15" val="4"/>
-      <a name="bit16" val="4"/>
-      <a name="bit17" val="4"/>
-      <a name="bit2" val="none"/>
-      <a name="bit3" val="none"/>
-      <a name="bit4" val="none"/>
-      <a name="bit5" val="1"/>
-      <a name="bit6" val="1"/>
-      <a name="bit7" val="1"/>
-      <a name="bit8" val="2"/>
-      <a name="bit9" val="2"/>
-      <a name="fanout" val="5"/>
+      <a name="bit1" val="0"/>
+      <a name="bit10" val="0"/>
+      <a name="bit11" val="1"/>
+      <a name="bit12" val="1"/>
+      <a name="bit13" val="1"/>
+      <a name="bit14" val="2"/>
+      <a name="bit15" val="2"/>
+      <a name="bit16" val="2"/>
+      <a name="bit17" val="2"/>
+      <a name="bit2" val="0"/>
+      <a name="bit3" val="0"/>
+      <a name="bit4" val="0"/>
+      <a name="bit5" val="0"/>
+      <a name="bit6" val="0"/>
+      <a name="bit7" val="0"/>
+      <a name="bit8" val="0"/>
+      <a name="bit9" val="0"/>
+      <a name="fanout" val="3"/>
       <a name="incoming" val="18"/>
     </comp>
     <comp lib="0" loc="(960,520)" name="Bit Extender">
       <a name="out_width" val="18"/>
+    </comp>
+    <comp lib="0" loc="(990,460)" name="Tunnel">
+      <a name="label" val="opcode"/>
+      <a name="width" val="4"/>
     </comp>
     <comp lib="2" loc="(1470,360)" name="Multiplexer">
       <a name="width" val="18"/>
@@ -189,17 +190,15 @@
     <comp lib="5" loc="(330,420)" name="Button"/>
     <comp loc="(1330,310)" name="registradores"/>
     <comp loc="(1870,310)" name="ULA"/>
-    <wire from="(1070,330)" to="(1070,370)"/>
+    <wire from="(1020,350)" to="(1020,370)"/>
+    <wire from="(1020,350)" to="(1110,350)"/>
     <wire from="(1070,330)" to="(1110,330)"/>
-    <wire from="(1070,370)" to="(1110,370)"/>
     <wire from="(1080,410)" to="(1080,480)"/>
     <wire from="(1080,410)" to="(1110,410)"/>
     <wire from="(1080,480)" to="(1100,480)"/>
     <wire from="(1090,220)" to="(1090,310)"/>
     <wire from="(1090,220)" to="(1960,220)"/>
     <wire from="(1090,310)" to="(1110,310)"/>
-    <wire from="(1100,350)" to="(1100,360)"/>
-    <wire from="(1100,350)" to="(1110,350)"/>
     <wire from="(1330,310)" to="(1340,310)"/>
     <wire from="(1330,330)" to="(1440,330)"/>
     <wire from="(1330,350)" to="(1440,350)"/>
@@ -252,10 +251,9 @@
     <wire from="(890,520)" to="(920,520)"/>
     <wire from="(90,90)" to="(130,90)"/>
     <wire from="(960,520)" to="(1000,520)"/>
-    <wire from="(970,350)" to="(980,350)"/>
-    <wire from="(970,360)" to="(1100,360)"/>
-    <wire from="(980,330)" to="(1070,330)"/>
-    <wire from="(980,330)" to="(980,350)"/>
+    <wire from="(970,370)" to="(1020,370)"/>
+    <wire from="(970,380)" to="(970,460)"/>
+    <wire from="(970,460)" to="(990,460)"/>
   </circuit>
   <circuit name="registradores">
     <a name="appearance" val="logisim_evolution"/>
@@ -386,7 +384,6 @@
       <a name="appearance" val="classic"/>
       <a name="facing" val="north"/>
       <a name="label" val="rs1"/>
-      <a name="labelloc" val="north"/>
       <a name="width" val="3"/>
     </comp>
     <comp lib="0" loc="(1400,790)" name="Pin">
@@ -399,21 +396,21 @@
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="label" val="saidars1"/>
-      <a name="type" val="output"/>
+      <a name="output" val="true"/>
       <a name="width" val="18"/>
     </comp>
     <comp lib="0" loc="(1510,660)" name="Pin">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="label" val="saidars2"/>
-      <a name="type" val="output"/>
+      <a name="output" val="true"/>
       <a name="width" val="18"/>
     </comp>
     <comp lib="0" loc="(1510,920)" name="Pin">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="label" val="saidard"/>
-      <a name="type" val="output"/>
+      <a name="output" val="true"/>
       <a name="width" val="18"/>
     </comp>
     <comp lib="0" loc="(260,1170)" name="Pin">
@@ -429,7 +426,6 @@
     <comp lib="0" loc="(570,40)" name="Pin">
       <a name="appearance" val="classic"/>
       <a name="label" val="dado"/>
-      <a name="labelloc" val="center"/>
       <a name="width" val="18"/>
     </comp>
     <comp lib="0" loc="(790,1190)" name="Pin">
@@ -746,13 +742,13 @@
     <comp lib="0" loc="(1000,430)" name="Pin">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
-      <a name="type" val="output"/>
+      <a name="output" val="true"/>
       <a name="width" val="18"/>
     </comp>
     <comp lib="0" loc="(1180,260)" name="Pin">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
-      <a name="type" val="output"/>
+      <a name="output" val="true"/>
     </comp>
     <comp lib="0" loc="(130,450)" name="Tunnel">
       <a name="facing" val="east"/>
