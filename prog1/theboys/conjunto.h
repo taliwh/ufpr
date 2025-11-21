@@ -12,8 +12,7 @@
 #include <stdbool.h>
 
 // estrutura que implementa um conjunto de inteiros
-struct cjto_t
-{
+struct cjto_t {
   int cap ;			// Capacidade do conjunto
   int num ;			// Número de itens (cardinalidade)
   bool *flag ;			// Vetor de booleanos
