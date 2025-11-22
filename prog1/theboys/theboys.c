@@ -13,8 +13,7 @@
 // minimize o uso de variáveis globais
 
 // programa principal
-int main ()
-{
+int main () {
     // iniciar o mundo
 
     struct fila_t *fila;
@@ -45,6 +44,8 @@ int main ()
     fprio_imprime(filaprio);
     printf("\n");
     
+    // executar o laço de simulação
+
     // executar o laço de simulação
 
     // destruir o mundo :o

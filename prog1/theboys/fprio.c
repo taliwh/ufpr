@@ -7,10 +7,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/* 
-  * cria uma fila vazia e inicializa seus campos
-  * retorna ponteiro para a fila ou NULL se der erro
-*/
+
+// cria uma fila vazia e inicializa seus campos
+// retorna ponteiro para a fila ou NULL se der erro
 struct fprio_t *fprio_cria () {
     struct fprio_t *fila;
 
@@ -24,18 +23,17 @@ struct fprio_t *fprio_cria () {
     return fila;
 }
 
-/*
-  * retorna o numero de itens na fila
-  * caso a fila seja invalida, retorna -1
-*/
+
+// retorna o numero de itens na fila
+// caso a fila seja invalida, retorna -1
 int fprio_tamanho (struct fprio_t *f) {
 
     return f -> num;
 }
 
 /*
-  * libera de forma segura toda a memoria usada pela fila, com 2 variaveis auxiliares percorrendo a fila
-  * retorna NULL no final
+// libera de forma segura toda a memoria usada pela fila, com 2 variaveis auxiliares percorrendo a fila
+// retorna NULL no final
 */
 struct fprio_t *fprio_destroi (struct fprio_t *f) {
     struct fpnodo_t *aux;

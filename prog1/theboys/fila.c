@@ -26,12 +26,12 @@ struct fila_t *fila_destroi (struct fila_t *f) {
     if (!f)
         return NULL;
 
-    while (f -> prim) { // enquanto f -> prim for diferente de nulo
+    while (f -> prim) { /* enquanto f -> prim for diferente de nulo */
         filaprox = f -> prim -> prox;
         free(f -> prim);
         f -> prim = filaprox;
     }
-	free(f); /* o free devolve o espaco e tb deixa o ponteiro da fila nulo */
+	free(f); 
 
 	return NULL;
 }
@@ -117,9 +117,9 @@ void fila_imprime (struct fila_t *f) {
         return;
     aux = f -> prim;
     while (aux -> prox != NULL) {
-        printf("( %d )", aux -> item);
+        printf("%d ", aux -> item);
         aux = aux -> prox;
     }
 
-    printf("( %d )", aux -> item);
+    printf("%d", aux -> item);
 }
