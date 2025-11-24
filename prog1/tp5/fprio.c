@@ -7,21 +7,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// descreve um nodo da fila de prioridades
-// NAO altere estas estruturas
-struct fpnodo_t {   
-    void *item ;          // item associado ao nodo
-    int   tipo ;          // tipo do item
-    int   prio ;          // prioridade do item
-    struct fpnodo_t *prox;    // próximo nodo
-};
-
-// descreve uma fila de prioridades
-struct fprio_t {
-    struct fpnodo_t *prim ;   // primeiro nodo da fila
-    int num ;         // número de itens na fila
-};
-
 /* 
   * cria uma fila vazia e inicializa seus campos
   * retorna ponteiro para a fila ou NULL se der erro
@@ -30,7 +15,7 @@ struct fprio_t *fprio_cria () {
     struct fprio_t *fila;
 
     fila = malloc(sizeof(struct fprio_t));
-    if (!(fila))
+    if (!fila)
         return NULL;
 
     fila -> num = 0;
@@ -44,20 +29,8 @@ struct fprio_t *fprio_cria () {
   * caso a fila seja invalida, retorna -1
 */
 int fprio_tamanho (struct fprio_t *f) {
-    struct fpnodo_t *aux;
-    int qtd;
 
-    if (!f)
-        return -1;
-
-    aux = f -> prim;
-    qtd = 0;
-    while (aux != NULL) {
-        qtd++;
-        aux = aux -> prox;
-    }
-
-    return qtd;
+    return f -> num;
 }
 
 /*
@@ -77,7 +50,7 @@ struct fprio_t *fprio_destroi (struct fprio_t *f) {
         aux = aux_prox;
     }
     free(f);
-    f = NULL;
+
     return NULL;
 }
 
@@ -88,7 +61,7 @@ struct fprio_t *fprio_destroi (struct fprio_t *f) {
 int fprio_japertence (struct fprio_t *f, int tipo, int prio) {
     struct fpnodo_t *aux;
 
-    if (!(fprio_tamanho(f)) || fprio_tamanho(f) == -1)
+    if (!fprio_tamanho(f) || !f)
         return 0;
 
     aux = f -> prim;
@@ -112,44 +85,34 @@ int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio) {
     struct fpnodo_t *aux;
     struct fpnodo_t *aux_ant;
 
-    if (!(f) || !(item) || fprio_japertence(f, tipo, prio))
+    if (!f || !item || fprio_japertence(f, tipo, prio))
         return -1;
 
     novo = malloc(sizeof(struct fpnodo_t));
-    if (!(novo))
+    if (!novo)
         return -1;
 
     novo -> item = item;
     novo -> prio = prio;
     novo -> tipo = tipo;
 
-    if (!(fprio_tamanho(f))) { /* insere no comeco caso lista esteja vazia */
-        f -> prim = novo;
-        novo -> prox = NULL;
-        return 1;
-    }
-
+    aux_ant = NULL;
     aux = f -> prim;
 
-    while (aux -> prio <= prio && aux -> prox != NULL) {
+    while (aux -> prio <= prio && aux != NULL) { 
         aux_ant = aux;
         aux = aux -> prox;
     }
 
-    if (aux -> prio <= prio) { /* insere no final */
-        aux -> prox = novo;
-        novo -> prox = NULL;
-        return fprio_tamanho(f);
-    }
-
-    if (f -> prim -> prio > prio) {  /* insere no comeco */
+    if (!aux_ant) {  /* insere no comeco */
         novo -> prox = f -> prim;
         f -> prim = novo;
         return fprio_tamanho(f);
     }
 
-    novo -> prox = aux;        /* insere no meio */
+    novo -> prox = aux; /* insere no meio ou no fim */
     aux_ant -> prox = novo;
+    f -> num++; 
 
     return fprio_tamanho(f);
 }
@@ -163,7 +126,7 @@ void *fprio_retira (struct fprio_t *f, int *tipo, int *prio) {
     struct fpnodo_t *aux;
     void *item;
 
-    if (!(fprio_tamanho(f))|| fprio_tamanho(f) == -1 || !(tipo) || !(prio))
+    if (!fprio_tamanho(f)|| !f|| !tipo || !prio)
         return NULL;
 
     aux = f -> prim;
@@ -186,7 +149,7 @@ void *fprio_retira (struct fprio_t *f, int *tipo, int *prio) {
 void fprio_imprime (struct fprio_t *f) {
     struct fpnodo_t *aux;
 
-    if (fprio_tamanho(f) == 0 || fprio_tamanho(f) == -1)
+    if (!fprio_tamanho(f)|| !f)
         return;
 
     aux = f -> prim;
