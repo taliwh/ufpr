@@ -9,6 +9,7 @@
 #include "lista.h"
 #include "conjunto.h"
 #include "entidades.h"
+#include "eventos.h"
 
 // seus #defines vão aqui
 #define T_INICIO 0
@@ -21,38 +22,46 @@
 #define N_COMPOSTOS_V (N_HABILIDADES * 3)
 
 
+W *cria_mundo () {
+    W *mundo;
+
+    mundo = malloc(sizeof(W));
+    if (!mundo) {
+        printf("erro ao alocar mundo");
+        return NULL;
+    }
+
+    mundo -> hab = N_HABILIDADES;
+    mundo -> compstv = N_COMPOSTOS_V;
+    mundo -> qtd_H = N_HEROIS;
+    mundo -> qtd_B = N_BASES;
+    mundo -> qtd_M = N_MISSOES;
+
+    mundo -> clk = 0;
+
+    mundo -> local.x = 20000;
+    mundo -> local.y = 20000;
+
+    mundo -> vet_H = malloc(N_HEROIS * sizeof(struct heroi));
+    mundo -> vet_B = malloc(N_BASES * sizeof(struct base));
+    mundo -> vet_M = malloc(N_MISSOES * sizeof(struct missao));
+
+    if (!mundo -> vet_H || !mundo -> vet_B || !mundo -> vet_M) {
+        printf("erro alocando vetores do mundo\n");
+        return NULL;
+    }
+
+    return mundo;
+}
 
 
 // programa principal
 int main () {
     srand(0);
 
-    struct fprio_t *lef = fprio_cria();
-
-    // iniciar o mundo
-
-
-
-
-
-    // para cada her´oi H:
-    // base = n´umero aleat´orio [0...N_BASES-1]
-    // tempo = n´umero aleat´orio [0...4320] // 4320 = 60*24*3 = 3 dias
-    // criar e inserir na LEF o evento CHEGA (tempo, H, base)
-
-    for h to N_HEROIS
-
-
-
-
-
-
-
-
-
-
-
-
+    // struct fprio_t *lef = fprio_cria();
+    // W *mundo = cria_mundo ();
+    
     // executar o laço de simulação
 
     // executar o laço de simulação

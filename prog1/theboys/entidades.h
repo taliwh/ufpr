@@ -1,14 +1,14 @@
 #ifndef ENTIDADES
-#define ENTIDADES_EVENTOS
+#define ENTIDADES
 
 #include "fila.h"
 #include "conjunto.h"
 
 // coordenadas para localização do mundo
-typedef struct coord {
+struct coord {
     int x;
     int y;
-} coord;
+};
 
 // definições dos heróis
 typedef struct heroi {
@@ -25,41 +25,41 @@ typedef struct base {
     int id; // identificacao da base
     int lotacao; // numero maximo de herois 
     struct cjto_t *presenca; //conjunto de herois 
-    coord local;
+    struct coord local;
 } B;
 
 //definições das missões
 typedef struct missao {
     int id;
     struct cjto_t *habilidades;
-    coord local;
+    struct coord local;
 } M;
 
 
-/* DEFINICOES DO MUNDO, RESPECTIVAS QUANTIDADES:
+/* DEFINICOES DO MUNDO, RESPECTIVAS VARIAVEIS:
  *
  * habilidades disponiveis;
  * compostos v disponiveis;
  * herois disponíveis;
  * bases disponíveis;
  * missoes disponiveis;
- * vetor representando os herois
- * vetor representando as bases
- * vetor representando as missoes
- * tamanho do mundo
- * tempo atual do mundo
+ * tempo atual do mundo;
+ * dimensoes do mundo;
+ * vetor representando os herois;
+ * vetor representando as bases;
+ * vetor representando as missoes;
 */
 typedef struct world {
     int hab; 
     int compstv; 
     int qtd_H; 
     int qtd_B; 
-    int qtd_M
-    int *vet_H;
-    int *vet_B; 
-    int *vet_M; 
-    coord local; 
-    int clk; 
+    int qtd_M;
+    int clk;
+    struct coord local;
+    struct heroi *vet_H;
+    struct base *vet_B; 
+    struct missao *vet_M; 
 } W;
 
 #endif
