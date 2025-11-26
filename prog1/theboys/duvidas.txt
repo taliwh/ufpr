@@ -1,2 +1,0 @@
-perguntar como faz o rand, se de 0 ate x seria rand() % x + 1
-

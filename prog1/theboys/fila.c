@@ -31,8 +31,10 @@ struct fila_t *fila_destroi (struct fila_t *f) {
         free(f -> prim);
         f -> prim = filaprox;
     }
-	free(f); 
 
+	free(f); 
+    f = NULL;
+    
 	return NULL;
 }
 
@@ -93,7 +95,7 @@ int fila_insere (struct fila_t *f, int item) {
 int fila_retira (struct fila_t *f, int *item) {
     struct fila_nodo_t *aux;
 
-    if (!f || !fila_tamanho(f))
+    if (!f || !item || !fila_tamanho(f))
         return 0;
     
     aux = f -> prim;

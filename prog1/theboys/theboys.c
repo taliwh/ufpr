@@ -12,15 +12,7 @@
 #include "eventos.h"
 
 // seus #defines vão aqui
-#define T_INICIO 0
-#define T_FIM_DO_MUNDO 525600
-#define N_TAMANHO_MUNDO 20000
-#define N_HABILIDADES 10
-#define N_HEROIS (N_HABILIDADES * 5)
-#define N_BASES (N_HEROIS / 5)
-#define N_MISSOES (T_FIM_DO_MUNDO / 100)
-#define N_COMPOSTOS_V (N_HABILIDADES * 3)
-
+#include "define.h"
 
 W *cria_mundo () {
     W *mundo;
@@ -37,11 +29,10 @@ W *cria_mundo () {
     mundo -> qtd_B = N_BASES;
     mundo -> qtd_M = N_MISSOES;
 
-    mundo -> clk = 0;
+    mundo -> clk = T_INICIO;
 
-    mundo -> local.x = 20000;
-    mundo -> local.y = 20000;
-
+    mundo -> local.x = N_TAMANHO_MUNDO;
+    mundo -> local.y = N_TAMANHO_MUNDO;
     mundo -> vet_H = malloc(N_HEROIS * sizeof(struct heroi));
     mundo -> vet_B = malloc(N_BASES * sizeof(struct base));
     mundo -> vet_M = malloc(N_MISSOES * sizeof(struct missao));

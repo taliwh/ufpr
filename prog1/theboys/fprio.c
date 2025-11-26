@@ -3,10 +3,9 @@
 // Marcos Castilho, inclui as structs no arquivo.c, Out 2025
 // Implementação com lista encadeada simples
 
-#include "fprio.h"
 #include <stdlib.h>
 #include <stdio.h>
-
+#include "fprio.h"
 
 // cria uma fila vazia e inicializa seus campos
 // retorna ponteiro para a fila ou NULL se der erro
@@ -23,18 +22,14 @@ struct fprio_t *fprio_cria () {
     return fila;
 }
 
-
 // retorna o numero de itens na fila
 // caso a fila seja invalida, retorna -1
 int fprio_tamanho (struct fprio_t *f) {
-
     return f -> num;
 }
 
-/*
 // libera de forma segura toda a memoria usada pela fila, com 2 variaveis auxiliares percorrendo a fila
 // retorna NULL no final
-*/
 struct fprio_t *fprio_destroi (struct fprio_t *f) {
     struct fpnodo_t *aux;
     struct fpnodo_t *aux_prox;
@@ -48,14 +43,13 @@ struct fprio_t *fprio_destroi (struct fprio_t *f) {
         aux = aux_prox;
     }
     free(f);
+    f = NULL;
 
     return NULL;
 }
 
-/*
-  * verifica se ja existe um item com o mesmo tipo e prioridade na fila
-  * retorna 1 se ja existir ou 0 se nao
-*/
+// verifica se ja existe um item com o mesmo tipo e prioridade na fila
+// retorna 1 se ja existir ou 0 se nao
 int fprio_japertence (struct fprio_t *f, int tipo, int prio) {
     struct fpnodo_t *aux;
 
@@ -72,12 +66,11 @@ int fprio_japertence (struct fprio_t *f, int tipo, int prio) {
     return 0;
 }
     
-/*
-  * insere um novo item na fila respeitando a ordem de prioridade
-  * antes de inserir, verifica se este já foi inserido antes com a função fprio_japertence
-  * percorre a fila com as variaveis auxiliares e, dependendo da condicao, o item pode ser inserido no inicio, meio ou fim
-  * retorna -1 em casos de erro ou o tamanho da lista caso contrario
-*/
+
+// insere um novo item na fila respeitando a ordem de prioridade
+// antes de inserir, verifica se este já foi inserido antes com a função fprio_japertence
+// percorre a fila com as variaveis auxiliares e, dependendo da condicao, o item pode ser inserido no inicio, meio ou fim
+// retorna -1 em casos de erro ou o tamanho da lista caso contrario
 int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio) {
     struct fpnodo_t *novo;
     struct fpnodo_t *aux;
@@ -102,24 +95,22 @@ int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio) {
         aux = aux -> prox;
     }
 
-    if (!aux_ant) {  /* insere no comeco */
+    if (!aux_ant) {  // insere no comeco 
         novo -> prox = f -> prim;
         f -> prim = novo;
         return fprio_tamanho(f);
     }
 
-    novo -> prox = aux; /* insere no meio ou no fim */
+    novo -> prox = aux; // insere no meio ou no fim 
     aux_ant -> prox = novo;
     f -> num++; 
 
     return fprio_tamanho(f);
 }
 
-/*
-  * retira o primeiro item da fila e retorna ele
-  * tipo e prioridade sao retornados pelos parametros
-  * retorna NULL se a fila estiver vazia ou invalida
-*/
+// retira o primeiro item da fila e retorna ele
+// tipo e prioridade sao retornados pelos parametros
+// retorna NULL se a fila estiver vazia ou invalida
 void *fprio_retira (struct fprio_t *f, int *tipo, int *prio) {
     struct fpnodo_t *aux;
     void *item;
@@ -140,10 +131,9 @@ void *fprio_retira (struct fprio_t *f, int *tipo, int *prio) {
 
 }
 
-/*
-  * imprime o conteudo da fila no formato (tipo, prio)
-  * nao imprime nada se a fila estiver vazia ou invalida
-*/
+
+// imprime o conteudo da fila no formato (tipo, prio)
+// nao imprime nada se a fila estiver vazia ou invalida
 void fprio_imprime (struct fprio_t *f) {
     struct fpnodo_t *aux;
 

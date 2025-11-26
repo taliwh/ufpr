@@ -1,6 +1,6 @@
-#include "lista.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "lista.h"
 /* coloque demais includes aqui */
 
 /* ------------------- Nao altere estas structs ------------------------- */

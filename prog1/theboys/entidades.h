@@ -1,13 +1,14 @@
-#ifndef ENTIDADES
-#define ENTIDADES
+#ifndef ENTIDADES_H
+#define ENTIDADES_H
 
 #include "fila.h"
 #include "conjunto.h"
+#include "lista.h"
 
 // coordenadas para localização do mundo
 struct coord {
     int x;
-    int y;
+    int y;  
 };
 
 // definições dos heróis
@@ -24,8 +25,9 @@ typedef struct heroi {
 typedef struct base {
     int id; // identificacao da base
     int lotacao; // numero maximo de herois 
-    struct cjto_t *presenca; //conjunto de herois 
+    struct cjto_t *presenca; //conjunto de herois presentes
     struct coord local;
+    struct fila_t *espera;
 } B;
 
 //definições das missões
@@ -50,7 +52,7 @@ typedef struct missao {
  * vetor representando as missoes;
 */
 typedef struct world {
-    int hab; 
+    int hab;    
     int compstv; 
     int qtd_H; 
     int qtd_B; 
