@@ -66,14 +66,13 @@ struct evento *cria_evento (W *mundo, int tipo, int base, int baseprox, int hero
     evento_novo -> tempo = tempo;
     evento_novo -> base = base;
     evento_novo -> baseprox = baseprox;
-    evento_novo -> duracao = duracao;
     evento_novo -> missao = missao;
     evento_novo -> distancia = distancia;
 
     return evento_novo;
 }
 
-void printa_evento(W *mundo, struct evento *ev) {
+void printa_evento(W *mundo, struct evento *ev, int tempoaux) {
 
     if (!mundo || !ev) {
         printf("falha ao printar");   
@@ -83,18 +82,19 @@ void printa_evento(W *mundo, struct evento *ev) {
     switch (ev -> tipo) {
         case TIPO_CHEGA:
             printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) ESPERA", ev -> tempo, ev -> heroi, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base));
-            //printf("\n")
+            //printf("\n");
             break;
         case TIPO_CHEGA_DESISTE:
             printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) DESISTE", ev -> tempo, ev -> heroi, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base));
-            //printf("\n")
+            //printf("\n");
             break;
         case TIPO_ESPERA:
             printf("%6d: ESPERA HEROI %2d BASE %d (%2d)", ev -> tempo, ev -> heroi, ev -> base, QTD_FILA_ESPERA_B(mundo, ev -> base));
+            //printf("\n");
             break;
         case TIPO_DESISTE:
             printf("%6d: DESIST HEROI %2d BASE %d", ev -> tempo, ev -> heroi, ev -> base);
-            //printf("\n")
+            //printf("\n");
             break;
         case TIPO_AVISA:
             printf("%6d: AVISA PORTEIRO BASE %d (%2d/%2d) FILA [", ev -> tempo, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base));
@@ -105,7 +105,7 @@ void printa_evento(W *mundo, struct evento *ev) {
             //printf("\n");
             break;
         case TIPO_ENTRA:
-            printf("%6d: ENTRA HEROI %2d BASE %d (%2d/%2d) SAI %d", ev -> tempo, ev -> heroi, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base), ev -> tempoaux);
+            printf("%6d: ENTRA HEROI %2d BASE %d (%2d/%2d) SAI %d", ev -> tempo, ev -> heroi, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base), ev -> tempo + tempoaux);
             //printf("\n");
             break;
         case TIPO_SAI:
@@ -113,7 +113,7 @@ void printa_evento(W *mundo, struct evento *ev) {
             //printf("\n");
             break;
         case TIPO_VIAJA:
-            printf("%6d: VIAJA HEROI %2d BASE %d BASE %d DIST %f VEL %d CHEGA %d", ev -> tempo, ev -> heroi, ev -> base, ev -> baseprox, ev -> distancia, VELOCIDADE_H(mundo, ev -> heroi), ev -> duracao);
+            printf("%6d: VIAJA HEROI %2d BASE %d BASE %d DIST %f VEL %d CHEGA %d", ev -> tempo + tempoaux, ev -> heroi, ev -> base, ev -> baseprox, ev -> distancia, VELOCIDADE_H(mundo, ev -> heroi), ev -> tempo);
             //printf("\n");
             break;
         case TIPO_MORRE:
@@ -197,7 +197,7 @@ void funcao_evento_chega (W *mundo, struct fprio_t *lef, struct evento *ev) {
         ev -> tipo = TIPO_CHEGA_DESISTE;
     }
 
-    printa_evento(mundo, ev);
+    printa_evento(mundo, ev, 0);
 }
 
 void funcao_evento_espera (W *mundo, struct fprio_t *lef, struct evento *ev) {
@@ -213,21 +213,24 @@ void funcao_evento_espera (W *mundo, struct fprio_t *lef, struct evento *ev) {
     avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao); 
     fprio_insere(lef, avisa, TIPO_AVISA, TEMPO_ATUAL_W(mundo));
 
-    printa_evento(mundo, ev);
+    printa_evento(mundo, ev, 0);
 }
 
 void funcao_evento_desiste (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *viaja;
-    int baseprox;
-    
+    int baseproxnova;
+
     if (!mundo || !lef || !ev) {
         printf("falha na funcao evento desiste");
         return;
     }
 
-    baseprox = aleat (0, N_BASES - 1);
-    viaja = cria_evento(mundo, TIPO_VIAJA, ev -> base, baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> duracao, ev -> missao );
+    baseproxnova = aleat(0, N_BASES - 1);
+
+    viaja = cria_evento(mundo, TIPO_VIAJA, ev -> base, baseproxnova, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
     fprio_insere(lef, viaja, TIPO_VIAJA, TEMPO_ATUAL_W(mundo));
+
+    printa_evento(mundo, ev, 0);
 }
 
 void funcao_evento_avisa (W *mundo, struct fprio_t *lef, struct evento *ev) {
@@ -239,24 +242,77 @@ void funcao_evento_avisa (W *mundo, struct fprio_t *lef, struct evento *ev) {
         return;
     }
 
-
     while ((OCUPACAO_B(mundo, ev -> base)) < LOTACAO_B(mundo, ev -> base)) {
         fila_retira(FILA_ESPERA_B(mundo, ev -> base), &heroi);
         cjto_insere((PRESENCA_B(mundo, ev -> base)), heroi);
     }
 
-    entra = cria_evento(mundo, TIPO_ENTRA, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> duracao, ev -> missao, ev -> tempoaux);
-    fprio_insere(lef, entra, TIPO_ENTRA, ev -> tempo);
+    entra = cria_evento(mundo, TIPO_ENTRA, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
+    fprio_insere(lef, entra, TIPO_ENTRA, TEMPO_ATUAL_W(mundo));
+
+    printa_evento(mundo, ev, 0);
 }
 
 void funcao_evento_entra (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *sai;
+    int tpb;
 
     if (!mundo || !lef || !ev) {
         printf("falha na funcao evento entra");
         return;
     }   
 
+    tpb = 15 + PACIENCIA_H(mundo, ev -> heroi) * aleat(1, 20);
 
+    sai = cria_evento(mundo, TIPO_SAI, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo) + tpb, ev -> distancia, ev -> missao);
+    fprio_insere(lef, sai, TIPO_SAI, TEMPO_ATUAL_W(mundo));
+  
+    printa_evento(mundo, ev, tpb);
 
 }
+
+void funcao_evento_sai (W *mundo, struct fprio_t *lef, struct evento *ev) {
+    struct evento *viaja;
+    struct evento *avisa;
+    int baseproxnova;
+
+    if (!mundo || !lef || !ev) {
+        printf("falha na funcao evento sai");
+        return;
+    }   
+
+    baseproxnova = aleat(0, N_BASES - 1);
+    cjto_retira((PRESENCA_B(mundo, ev -> base)), ev -> heroi);
+
+    viaja = cria_evento(mundo, TIPO_VIAJA, ev -> base, baseproxnova, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
+    fprio_insere(lef, viaja, TIPO_VIAJA, TEMPO_ATUAL_W(mundo));
+
+    avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
+    fprio_insere(lef, avisa, TIPO_AVISA, TEMPO_ATUAL_W(mundo));
+
+    printa_evento(mundo, ev, 0);
+}
+
+void funcao_evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev) {
+    struct evento *chega;
+    double distancia;
+    int duracao;
+
+    if (!mundo || !lef || !ev) {
+        printf("falha na funcao evento viaja");
+        return;
+    }   
+
+    distancia = distancia_bases(mundo, ev);
+    ev -> distancia = distancia;
+    duracao = distancia / VELOCIDADE_H(mundo, ev -> heroi);
+
+    chega = cria_evento(mundo, TIPO_CHEGA, ev -> baseprox, -1, ev -> heroi, TEMPO_ATUAL_W(mundo) + duracao, ev -> distancia, ev -> missao);
+    fprio_insere(lef, chega, TIPO_CHEGA, TEMPO_ATUAL_W(mundo));
+
+    printa_evento (mundo, ev, duracao);
+}
+
+// void funcao_evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev) {
+
+// }
