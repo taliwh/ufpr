@@ -33,10 +33,17 @@ typedef struct base {
 //definições das missões
 typedef struct missao {
     int id;
+    int tentativas;
     struct cjto_t *habilidades;
     struct coord local;
 } M;
 
+// struct estatisticas {
+//     int missoes;
+//     int eventos;
+//     int mortes;
+
+// };
 
 /* DEFINICOES DO MUNDO, RESPECTIVAS VARIAVEIS:
  *
@@ -52,8 +59,8 @@ typedef struct missao {
  * vetor representando as missoes;
 */
 typedef struct world {
-    int hab;    
     int compstv; 
+    int hab;    
     int qtd_H; 
     int qtd_B; 
     int qtd_M;
@@ -61,6 +68,7 @@ typedef struct world {
     H *vet_H;
     B *vet_B; 
     M *vet_M; 
+    // struct estatistica dados;
     struct coord local;
 } W;
 

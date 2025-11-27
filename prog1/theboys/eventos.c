@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "define.h"
 #include "eventos.h"
+#include "define.h"
 #include "fprio.h"
-#include "fila.h"
 #include "entidades.h"
-#include "conjunto.h"
 
 struct evento {
     int tipo;
@@ -16,6 +14,7 @@ struct evento {
     int tempo;
     double distancia; //so usa com viaja e umas coisas ai
     int missao;
+
 };
 
 int aleat (int min, int max) {
@@ -26,8 +25,8 @@ int aleat (int min, int max) {
     return aleat;
 }
 
-//retorna -1 se erro
-double distancia_bases(W *mundo, struct evento *ev) {
+//retorna -1 se erro 
+double distancia_bases(W *mundo, int x1, int x2, int y1, int y2) {
     int x1;
     int x2;
     int y1;
@@ -39,12 +38,6 @@ double distancia_bases(W *mundo, struct evento *ev) {
         printf("falha ao calcular distancia");
         return -1;
     }
-
-    x1 = LOCAL_X_B(mundo, ev -> base);
-    x2 = LOCAL_X_B(mundo, ev -> baseprox);
-
-    y1 = LOCAL_Y_B(mundo, ev -> base);
-    y2 = LOCAL_Y_B(mundo, ev -> baseprox);
 
     soma = pow((x2 - x1), 2) + pow((y2 - y1), 2);
     distancia = sqrt(soma);
@@ -72,6 +65,7 @@ struct evento *cria_evento (W *mundo, int tipo, int base, int baseprox, int hero
     return evento_novo;
 }
 
+//o tempoaux pode ser utilizado para verificar se a missoa foi cumprida, 1 significa q sim e 0 significa q nao foi comprida
 void printa_evento(W *mundo, struct evento *ev, int tempoaux) {
 
     if (!mundo || !ev) {
@@ -79,53 +73,58 @@ void printa_evento(W *mundo, struct evento *ev, int tempoaux) {
         return;
     }
 
+    //aumenta a quantidade de evnetos
+
+    EVENTOS_QTD(mundo, ev -> base)++;
+
     switch (ev -> tipo) {
         case TIPO_CHEGA:
             printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) ESPERA", ev -> tempo, ev -> heroi, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base));
-            //printf("\n");
             break;
+
         case TIPO_CHEGA_DESISTE:
             printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) DESISTE", ev -> tempo, ev -> heroi, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base));
-            //printf("\n");
             break;
+
         case TIPO_ESPERA:
             printf("%6d: ESPERA HEROI %2d BASE %d (%2d)", ev -> tempo, ev -> heroi, ev -> base, QTD_FILA_ESPERA_B(mundo, ev -> base));
-            //printf("\n");
             break;
+
         case TIPO_DESISTE:
             printf("%6d: DESIST HEROI %2d BASE %d", ev -> tempo, ev -> heroi, ev -> base);
-            //printf("\n");
             break;
+
         case TIPO_AVISA:
             printf("%6d: AVISA PORTEIRO BASE %d (%2d/%2d) FILA [", ev -> tempo, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base));
             fila_imprime(FILA_ESPERA_B(mundo, ev -> base));
             printf("]");
-            //printf("\n");
+            printf("\n");
             printf("%6d: AVISA PORTEIRO BASE %d ADMITE %2d", ev -> tempo, ev -> base, ev -> heroi);
-            //printf("\n");
             break;
+
         case TIPO_ENTRA:
             printf("%6d: ENTRA HEROI %2d BASE %d (%2d/%2d) SAI %d", ev -> tempo, ev -> heroi, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base), ev -> tempo + tempoaux);
-            //printf("\n");
             break;
+
         case TIPO_SAI:
             printf("%6d: SAI HEROI %2d BASE %d (%2d/%2d)", ev -> tempo, ev -> heroi, ev -> base, OCUPACAO_B(mundo, ev -> base), LOTACAO_B(mundo, ev -> base));
-            //printf("\n");
             break;
+
         case TIPO_VIAJA:
             printf("%6d: VIAJA HEROI %2d BASE %d BASE %d DIST %f VEL %d CHEGA %d", ev -> tempo + tempoaux, ev -> heroi, ev -> base, ev -> baseprox, ev -> distancia, VELOCIDADE_H(mundo, ev -> heroi), ev -> tempo);
-            //printf("\n");
             break;
+
         case TIPO_MORRE:
             printf("%6d: MORRE HEROI %2d MISSAO %d",  ev -> tempo, ev -> heroi, ev -> missao);
-            //printf("\n");
             break;
-        // case TIPO_MISSAO:
+
+        case TIPO_MISSAO:
         //     printf("")
 
         // case TIPO_FIM:
  
 
+        printf("\n");
 
 
 
@@ -134,6 +133,19 @@ void printa_evento(W *mundo, struct evento *ev, int tempoaux) {
 
     }
 }
+
+void incrementa_xp(W *mundo, int idbase) {
+    if (!mundo)
+        return;
+
+    for(int i = 0; i < N_HEROIS; i++) {
+        if (cjto_pertence(PRESENCA_B(mundo, idbase), i) == 1);
+            HEROI(mundo, i).xp++;
+    }
+}
+
+
+
 
 void eventos_iniciais (W *mundo, struct fprio_t *lef) {
     struct evento *chega;
@@ -268,7 +280,6 @@ void funcao_evento_entra (W *mundo, struct fprio_t *lef, struct evento *ev) {
     fprio_insere(lef, sai, TIPO_SAI, TEMPO_ATUAL_W(mundo));
   
     printa_evento(mundo, ev, tpb);
-
 }
 
 void funcao_evento_sai (W *mundo, struct fprio_t *lef, struct evento *ev) {
@@ -303,7 +314,7 @@ void funcao_evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev) {
         return;
     }   
 
-    distancia = distancia_bases(mundo, ev);
+    distancia = distancia_bases(mundo, LOCAL_X_B(mundo, ev -> base), LOCAL_X_B(ev -> baseprox), LOCAL_Y_B(ev -> base), LOCAL_Y_B(ev -> baseprox));
     ev -> distancia = distancia;
     duracao = distancia / VELOCIDADE_H(mundo, ev -> heroi);
 
@@ -330,11 +341,42 @@ void funcao_evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev) {
 }
 
 void funcao_evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
-    struct evento
+    struct evento *morre;
+    struct evento *missao;
+    int menor;
+    int distancia;
+    int idbase;
+    int marcacao;
 
     if (!mundo || !lef || !ev) {
-        printf("falha na funcao evento morre");
+        printf("falha na funcao evento missao");
         return;
-    }   
+    }
+
+    menor = distancia - 1;
+
+    for (int i = 0; i < N_BASES; i++) {
+        distancia = distancia_bases(mundo, LOCAL_X_B(mundo, i), LOCAL_X_M(mundo, ev -> missao), LOCAL_Y_B(mundo, i), LOCAL_Y_B(mundo, ev -> missao));
+        if (distancia < menor) {
+            menor = distancia;
+            idbase = i;
+        }
+    }
+    if (distancia == menor) {
+        marcacao = 1; // cumprida
+        
+    }
+    else {
+        if (COMPOSTOS(mundo) && TEMPO_ATUAL_W(mundo) % 2500 == 0)  //verifica se tem composto v 
+            COMPOSTOS(w)--;
+            marcacao = 1; // cumprida
+
+    }
+        
+
+
+
+
 
 }
+

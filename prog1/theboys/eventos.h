@@ -21,6 +21,6 @@ void funcao_evento_entra (W *mundo, struct fprio_t *lef, struct evento *ev);
 void funcao_evento_sai (W *mundo, struct fprio_t *lef, struct evento *ev);
 void funcao_evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev);
 void funcao_evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev);
-void funcao_evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev);
+// void funcao_evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev);
 
 #endif

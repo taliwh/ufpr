@@ -2,27 +2,27 @@
 #define DEFINE_H
 
 // definições do trabalho:
-#define T_INICIO            0
-#define T_FIM_DO_MUNDO      525600
-#define N_TAMANHO_MUNDO     20000
-#define N_HABILIDADES       10
-#define N_HEROIS            (N_HABILIDADES * 5)
-#define N_BASES             (N_HEROIS / 5)
-#define N_MISSOES           (T_FIM_DO_MUNDO / 100)
-#define N_COMPOSTOS_V       (N_HABILIDADES * 3)
-
+#define T_INICIO                 0
+#define T_FIM_DO_MUNDO           525600
+#define N_TAMANHO_MUNDO          20000
+#define N_HABILIDADES            10
+#define N_HEROIS                 (N_HABILIDADES * 5)
+#define N_BASES                  (N_HEROIS / 5)
+#define N_MISSOES                (T_FIM_DO_MUNDO / 100)
+#define N_COMPOSTOS_V            (N_HABILIDADES * 3)
+ 
 // tipos dos eventos:
-#define TIPO_CHEGA          1
-#define TIPO_CHEGA_DESISTE  11
-#define TIPO_ESPERA         2
-#define TIPO_DESISTE        3
-#define TIPO_AVISA          4
-#define TIPO_ENTRA          5
-#define TIPO_SAI            6
-#define TIPO_VIAJA          7
-#define TIPO_MORRE          8
-#define TIPO_MISSAO         9
-#define TIPO_FIM            10
+#define TIPO_CHEGA               1
+#define TIPO_CHEGA_DESISTE       11
+#define TIPO_ESPERA              2
+#define TIPO_DESISTE             3
+#define TIPO_AVISA               4
+#define TIPO_ENTRA               5
+#define TIPO_SAI                 6
+#define TIPO_VIAJA               7
+#define TIPO_MORRE               8
+#define TIPO_MISSAO              9
+#define TIPO_FIM                 10
 
 // macros para o codigo ficar mais legivel:
 /*
@@ -52,8 +52,22 @@
 #define BASEATUAL_H(w, h)        (HEROI((w), (h)).baseatual)
 #define VELOCIDADE_H(w, h)       (HEROI((w), (h)).velocidade)
 #define STATUS_H(w, h)           (HEROI((w), (h)).status)
+#define HABILIDADES_H(w, h)      (HEROI((w), (h)).habilidades) 
+
+// campos das missoes
+#define LOCAL_X_M(w, m)          (MISSAO((w),(m)).local.x) 
+#define LOCAL_Y_M(w, m)          (MISSAO((w),(m)).local.y) 
+#define HABILIDADES_M(w, m)      (MISSAO((w), (m)).habilidades)
+
+// #define ESTATISTICAS(w)          ((w) -> dados)  
+#define COMPOSTOS(w)             ((w) -> compstv);
+
+// // camposa das estatisticas
+// #define MISSOES_QTD(w)           (ESTATISTICAS(w).missoes)
+// #define EVENTOS_QTD(w)           (ESTATISTICAS(w).eventos)
+// #define MORTES_QTD(w)            (ESTATISTICAS(w).mortes)
 
 //tempo do mundo:
-#define TEMPO_ATUAL_W(w)    ((w) -> clk)
+#define TEMPO_ATUAL_W(w)         ((w) -> clk)
 
 #endif
