@@ -3,7 +3,6 @@
 
 #include "fila.h"
 #include "conjunto.h"
-#include "lista.h"
 
 // coordenadas para localização do mundo
 struct coord {
@@ -58,10 +57,10 @@ typedef struct world {
     int qtd_B; 
     int qtd_M;
     int clk;
+    H *vet_H;
+    B *vet_B; 
+    M *vet_M; 
     struct coord local;
-    struct heroi *vet_H;
-    struct base *vet_B; 
-    struct missao *vet_M; 
 } W;
 
 #endif

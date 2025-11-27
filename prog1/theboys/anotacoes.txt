@@ -1,0 +1,7 @@
+// podia ter feito macro para struct evento, mas creio que ia ficar muito complicado entender algumas partes do codigo
+qnd for printar a ocupacao do entra, lembrar q vai ter q aumentar a ocupacao antes de chamar a funcao pra printa
+-1 significa que aquele evento nao precisa daquela variavel
+falar q pensou emfazer union ou outras structs, mas ficou mt confuso e achou mais pratico deixar so uma mesmo;-;
+perguntar comofazer tipo chega e tipo chega desiste sem ficare estranho com 1 e 11
+ver include conjunto.h pq ta dando erro
+nao entendi se e tempo atual ou tempo do evento q esta sendo passado por parametro
