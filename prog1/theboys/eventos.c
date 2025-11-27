@@ -322,8 +322,19 @@ void funcao_evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev) {
     }   
 
     cjto_retira((PRESENCA_B(mundo, ev -> base)), ev -> heroi);
-    STATUS_H(mundo, ev -> heroi) = 0;
+    STATUS_H(mundo, ev -> heroi) = 0;   
     avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
-;
+    fprio_insere(lef, avisa, TIPO_AVISA, TEMPO_ATUAL_W(mundo));
 
-}   
+    printa_evento (mundo, ev, 0);
+}
+
+void funcao_evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
+    struct evento
+
+    if (!mundo || !lef || !ev) {
+        printf("falha na funcao evento morre");
+        return;
+    }   
+
+}
