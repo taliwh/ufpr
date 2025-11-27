@@ -13,6 +13,7 @@ struct coord {
 // definições dos heróis
 typedef struct heroi {
     int id;
+    int status; //0 se morto e 1 se vivo
     struct cjto_t *habilidades;
     int paciencia;
     int velocidade;

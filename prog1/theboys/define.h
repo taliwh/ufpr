@@ -51,7 +51,7 @@
 #define PACIENCIA_H(w, h)        (HEROI((w), (h)).paciencia)
 #define BASEATUAL_H(w, h)        (HEROI((w), (h)).baseatual)
 #define VELOCIDADE_H(w, h)       (HEROI((w), (h)).velocidade)
-
+#define STATUS_H(w, h)           (HEROI((w), (h)).status)
 
 //tempo do mundo:
 #define TEMPO_ATUAL_W(w)    ((w) -> clk)
