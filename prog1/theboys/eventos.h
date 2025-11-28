@@ -1,10 +1,12 @@
 #ifndef EVENTOS_H
 #define EVENTOS_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include "entidades.h"
 #include "fprio.h"
-#include "fila.h"
-#include "conjunto.h"
+#include "define.h"
 
 struct evento;
 
@@ -22,5 +24,6 @@ void evento_sai (W *mundo, struct fprio_t *lef, struct evento *ev);
 void evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev);
 void evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev);
 void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev);
+void evento_fim (W *mundo, struct fprio_t *lef, struct evento *ev);
 
 #endif

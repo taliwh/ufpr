@@ -3,9 +3,9 @@
 
 // seus #includes vão aqui
 #include <stdlib.h>
-#include "eventos.h"
 #include "iniciarmundo.h"
 #include "lef.h"
+
 // seus #defines vão aqui
 #include "define.h"
 

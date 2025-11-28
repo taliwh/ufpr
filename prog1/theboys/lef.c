@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "eventos.h"
-#include "define.h"
-#include "fprio.h"
-#include "entidades.h"
-#include "conjunto.h"
+#include "lef.h"
 
 void comecar_lef(W *mundo, struct fprio_t *lef) {
     struct evento *ev;

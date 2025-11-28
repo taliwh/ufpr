@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "fprio.h"
-#include "entidades.h"
-#include "eventos.h"
-#include "conjunto.h"
+#include "iniciarmundo.h"
 
 W *cria_mundo () {
     W *mundo;
@@ -14,21 +9,20 @@ W *cria_mundo () {
         return NULL;
     }
 
-    COMPOSTOS_V(mundo) = N_COMPOSTOS_V;
+    COMPOSTOS_W(mundo) = N_COMPOSTOS_V;
     QTD_HAB_W(mundo) = N_HABILIDADES;    
     QTD_H_W(mundo) = N_HEROIS;
     QTD_B_W(mundo) = N_BASES;
     QTD_M_W(mundo) = N_MISSOES;
     QTD_E_W(mundo) = ZERADO;
     QTD_MI_W(mundo) = ZERADO;
-    QTD_MI_W(mundo) = ZERADO;
-    QTD_MORTE_w(mundo) = ZERADO;
+    QTD_MORTE_W(mundo) = ZERADO;
     TEMPO_ATUAL_W(mundo) = T_INICIO;
     LOCAL_X_W(mundo) = N_TAMANHO_MUNDO;
     LOCAL_Y_W(mundo) = N_TAMANHO_MUNDO;
-    HEROI_W(mundo) = malloc(N_HEROIS * sizeof(struct heroi));
-    BASE_W(mundo) = malloc(N_BASES * sizeof(struct base));
-    MISSAO_W(mundo) = malloc(N_MISSOES * sizeof(struct missao));
+    mundo -> vet_H = malloc(N_HEROIS * sizeof(struct heroi));
+    mundo -> vet_B = malloc(N_BASES * sizeof(struct base));
+    mundo -> vet_M = malloc(N_MISSOES * sizeof(struct missao));
 
     if (!mundo -> vet_H || !mundo -> vet_B || !mundo -> vet_M) {
         printf("erro alocando vetores do mundo\n");
@@ -67,6 +61,5 @@ void inicializacao (W *mundo) {
         LOCAL_Y_M(mundo, m) = aleat(0, N_TAMANHO_MUNDO - 1);
         HABILIDADES_M(mundo, m) = cjto_aleat(aleat (6, 10), N_HABILIDADES);
     }
-
 }
 

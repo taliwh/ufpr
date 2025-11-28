@@ -36,10 +36,10 @@
 
 // acesso a vetores do mundo, para implementacao dos outros defines
 #define COMPOSTOS_W(w)           ((w) -> qtd_compstv)
-#define QTD_HAB_W                ((w) -> qtd_hab)
-#define QTD_H_W                  ((w) -> qtd_H)
-#define QTD_B_W                  ((w) -> qtd_B)
-#define QTD_M_W                  ((w) -> qtd_M)
+#define QTD_HAB_W(w)             ((w) -> qtd_hab)
+#define QTD_H_W(w)               ((w) -> qtd_H)
+#define QTD_B_W(w)               ((w) -> qtd_B)
+#define QTD_M_W(w)               ((w) -> qtd_M)
 #define QTD_E_W(w)               ((w) -> qtd_ev)
 #define QTD_MI_W(w)              ((w) -> qtd_mi) 
 #define QTD_MORTE_W(w)           ((w) -> qtd_morte)
@@ -50,8 +50,8 @@
 #define BASE_W(w, b)             ((w) -> vet_B[(b)])
 #define MISSAO_W(w, m)           ((w) -> vet_M[(m)])
 #define TEMPO_ATUAL_W(w)         ((w) -> clk)
-#define LOCAL_X_W                ((w) -> local.x)
-#define LOCAL_Y_W                ((w) -> local.y)
+#define LOCAL_X_W(w)             ((w) -> local.x)
+#define LOCAL_Y_W(w)             ((w) -> local.y)
 
 // campos das bases
 #define LOTACAO_B(w, b)          (BASE_W((w), (b)).lotacao)
