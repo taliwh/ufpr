@@ -10,5 +10,5 @@
 
 W *cria_mundo ();
 void inicializacao (W *mundo);
-
+void destroi_mundo(W *mundo);
 // #endif

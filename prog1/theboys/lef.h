@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "eventos.h"
 #include "conjunto.h"
+#include "iniciarmundo.h"
 
 void comecar_lef(W *mundo, struct fprio_t *lef);
 

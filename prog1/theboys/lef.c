@@ -58,4 +58,5 @@ void comecar_lef(W *mundo, struct fprio_t *lef) {
                 break;
         }
     }
+    destroi_mundo(mundo);
 }

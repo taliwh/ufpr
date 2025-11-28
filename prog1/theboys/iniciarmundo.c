@@ -24,6 +24,14 @@ W *cria_mundo () {
     mundo -> vet_B = malloc(N_BASES * sizeof(struct base));
     mundo -> vet_M = malloc(N_MISSOES * sizeof(struct missao));
 
+    for (int b = 0; b < N_BASES; b++) {
+        mundo->vet_B[b].espera   = malloc(sizeof(struct cjto_t));
+        mundo->vet_B[b].presenca = malloc(sizeof(struct cjto_t));
+
+        mundo->vet_B[b].espera->num   = ZERADO;
+        mundo->vet_B[b].presenca->num = ZERADO;
+    }
+
     if (!mundo -> vet_H || !mundo -> vet_B || !mundo -> vet_M) {
         printf("erro alocando vetores do mundo\n");
         return NULL;
@@ -63,3 +71,22 @@ void inicializacao (W *mundo) {
     }
 }
 
+void destroi_mundo(W *mundo) {
+    
+    for (int h = 0; h < QTD_H_W(mundo); h++) {
+        cjto_destroi(HABILIDADES_H(mundo, h));
+    }
+    
+    for (int b = 0 ; b < QTD_B_W(mundo) ; b++) {
+        cjto_destroi(PRESENCA_B(mundo, b));
+        fila_destroi(FILA_ESPERA_B(mundo, b));
+    }
+
+    for (int m = 0 ; QTD_M_W(mundo); m++) {
+        cjto_destroi(HABILIDADES_M(mundo, m));
+    }
+    free(mundo -> vet_B);
+    free(mundo -> vet_B);
+    free(mundo -> vet_M);       
+    free(mundo);
+}
