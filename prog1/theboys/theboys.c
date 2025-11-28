@@ -7,6 +7,7 @@
 #include "fprio.h"
 #include "entidades.h"
 #include "eventos.h"
+#include "conjunto.h"
 
 // seus #defines vão aqui
 #include "define.h"
@@ -45,31 +46,31 @@ W *cria_mundo () {
 void inicializacao (W *mundo, H ) {
 
     //inicializacao dos herois
-    for (int i = 0; i < N_HEROIS; i++) {
-        HEROI(mundo, i).id = i; 
-        HEROI(mundo, i).xp = 0;
-        PACIENCIA_H(mundo, i) = aleat(0, 100);
-        VELOCIDADE_H(mundo, i) = aleat(50, 5000);
-        HABILIDADES_H(mundo, i) = cjto_cria(aleat(1, 3), N_HABILIDADES);
+    for (int heroi = 0; heroi < N_HEROIS; heroi++) {
+        ID_H(mundo, heroi) = heroi; 
+        XP_H(mundo, heroi) = 0;
+        PACIENCIA_H(mundo, heroi) = aleat(0, 100);
+        VELOCIDADE_H(mundo, heroi) = aleat(50, 5000);
+        HABILIDADES_H(mundo, heroi) = cjto_aleat(aleat(1, 3), N_HABILIDADES);
     }
 
     //inicializacao das bases
-    for (int i = 0; i < N_BASES; i++) {
-        BASE(mundo, i).id = i; 
-        LOCAL_X_B(mundo, i) = aleat(0, N_TAMANHO_MUNDO - 1);
-        LOCAL_Y_B(mundo, i) = aleat(0, N_TAMANHO_MUNDO - 1);
-        LOTACAO_B(mundo, i) = aleat(3, 10);
-        PRESENCA_B(mundo, i) = cjto_cria(N_HEROIS);
-        OCUPACAO_B(mundo, i) = 0;
-        QTD_FILA_ESPERA_B(mundo, i) = 0; 
+    for (int base = 0; base < N_BASES; base++) {
+        ID_B(mundo, base) = base; 
+        LOCAL_X_B(mundo, base) = aleat(0, N_TAMANHO_MUNDO - 1);
+        LOCAL_Y_B(mundo, base) = aleat(0, N_TAMANHO_MUNDO - 1);
+        LOTACAO_B(mundo, base) = aleat(3, 10);
+        PRESENCA_B(mundo, base) = cjto_cria(N_HEROIS);
+        OCUPACAO_B(mundo, base) = 0;
+        QTD_FILA_ESPERA_B(mundo, base) = 0; 
     }
 
     //inicializacao das missoes
-    for (int i = 0; i < N_MISSOES; i++) {
-        MISSAO(mundo, i).id = i;
-        LOCAL_X_M(mundo, i) = aleat(0, N_TAMANHO_MUNDO - 1);
-        LOCAL_Y_M(mundo, i) = aleat(0, N_TAMANHO_MUNDO - 1);
-        HABILIDADES_M(mundo, i) = cjto_aleat(aleat (6, 10), N_HABILIDADES);
+    for (int missao = 0; missao < N_MISSOES; missao++) {
+        ID_M(mundo, missao) = missao;
+        LOCAL_X_M(mundo, missao) = aleat(0, N_TAMANHO_MUNDO - 1);
+        LOCAL_Y_M(mundo, missao) = aleat(0, N_TAMANHO_MUNDO - 1);
+        HABILIDADES_M(mundo, missao) = cjto_aleat(aleat (6, 10), N_HABILIDADES);
     }
 
 }

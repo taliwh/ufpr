@@ -33,7 +33,7 @@ typedef struct base {
 //definições das missões
 typedef struct missao {
     int id;
-    int tentativas;
+    int tentativa;
     struct cjto_t *habilidades;
     struct coord local;
 } M;
@@ -64,6 +64,9 @@ typedef struct world {
     int qtd_H; 
     int qtd_B; 
     int qtd_M;
+    int qtd_ev; //qtd ev concluido
+    int qtd_mi; //qtd misao concliuda
+    int qtd_tent; //qtd de tentativas
     int clk;
     H *vet_H;
     B *vet_B; 

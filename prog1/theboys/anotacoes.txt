@@ -1,19 +1,2 @@
-// podia ter feito macro para struct evento, mas creio que ia ficar muito complicado entender algumas partes do codigo, eusonao queria
-seta onde tem o mundo
-tentei cria variavel mas fico mt poluido, achei macro melhor
-qnd for printar a ocupacao do entra, lembrar q vai ter q aumentar a ocupacao antes de chamar a funcao pra printa
--1 significa que aquele evento nao precisa daquela variavel
-falar q pensou emfazer union ou outras structs, mas ficou mt confuso e achou mais pratico deixar so uma mesmo;-;
-
-perguntar comofazer tipo chega e tipo chega desiste sem ficare estranho com 1 e 11
-ver include conjunto.h pq ta dando erro
-nao entendi se e tempo atual ou tempo do evento q esta sendo passado por parametro
-talvez fazer um .h de inicializacao do mundo? naosei
-
-na funcao evento viaja, a variavel duracao tem q ser int ou tem que ser float seilaoque\
-
-lembrar de colocar atalho vs code cltrl k s pra salva tudo se naovaise esquecer
-ver como q faz as tentativas das missoes
-perguntar se tem q contabilizar os eventos ate nos eventos iniciais (eventos_qtd) //nao!!!!!!!!!!
-perguntar comofaz tentativas/ missao
-perguntar se inicializar as coisas no theboys.c fere o principio de tad, e se sim, em q arquivo deve botar as inicializacoes
+temq imprimir tentativa mesmo se a missao for impossivel? n entendi
+nao sei quando acessar desde o ponteiro do mundo, ou se acesso a partir da struct em si,

@@ -13,7 +13,6 @@
  
 // tipos dos eventos:
 #define TIPO_CHEGA               1
-#define TIPO_CHEGA_DESISTE       11
 #define TIPO_ESPERA              2
 #define TIPO_DESISTE             3
 #define TIPO_AVISA               4
@@ -34,6 +33,10 @@
 */
 
 // acesso a vetores do mundo, para implementacao dos outros defines
+#define COMPOSTOS(w)             ((w) -> compstv)
+#define TEMPO_ATUAL_W(w)         ((w) -> clk)
+#define QTD_E(w)                 ((w) -> qtd_ev)
+#define QTD_MI(w)                ((w) -> qtd_mi) 
 #define BASE(w, b)               ((w) -> vet_B[(b)])
 #define HEROI(w, h)              ((w) -> vet_H[(h)])
 #define MISSAO(w, m)             ((w) -> vet_M[(m)])
@@ -46,6 +49,7 @@
 #define QTD_FILA_ESPERA_B(w, b)  (BASE((w), (b)).espera -> num)
 #define LOCAL_X_B(w, b)          (BASE((w), (b)).local.x)
 #define LOCAL_Y_B(w, b)          (BASE((w), (b)).local.y)
+#define ID_B(w, b)               (BASE((w), (b)).id)
 
 // campos dos herois
 #define PACIENCIA_H(w, h)        (HEROI((w), (h)).paciencia)
@@ -53,21 +57,14 @@
 #define VELOCIDADE_H(w, h)       (HEROI((w), (h)).velocidade)
 #define STATUS_H(w, h)           (HEROI((w), (h)).status)
 #define HABILIDADES_H(w, h)      (HEROI((w), (h)).habilidades) 
+#define ID_H(w, h)               (HEROI((w), (h)).id)
+#define XP_H(w, h)               (HEROI((w), (h)).xp)
 
 // campos das missoes
-#define LOCAL_X_M(w, m)          (MISSAO((w),(m)).local.x) 
-#define LOCAL_Y_M(w, m)          (MISSAO((w),(m)).local.y) 
+#define LOCAL_X_M(w, m)          (MISSAO((w), (m)).local.x) 
+#define LOCAL_Y_M(w, m)          (MISSAO((w), (m)).local.y) 
 #define HABILIDADES_M(w, m)      (MISSAO((w), (m)).habilidades)
-
-// #define ESTATISTICAS(w)          ((w) -> dados)  
-#define COMPOSTOS(w)             ((w) -> compstv);
-
-// // camposa das estatisticas
-// #define MISSOES_QTD(w)           (ESTATISTICAS(w).missoes)
-// #define EVENTOS_QTD(w)           (ESTATISTICAS(w).eventos)
-// #define MORTES_QTD(w)            (ESTATISTICAS(w).mortes)
-
-//tempo do mundo:
-#define TEMPO_ATUAL_W(w)         ((w) -> clk)
+#define ID_M(w, m)               (MISSAO((w), (m)).id)
+#define TENTATIVA_M(w, m)        (MISSAO((w), (m)).tentativa)
 
 #endif
