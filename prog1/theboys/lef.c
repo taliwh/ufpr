@@ -15,6 +15,8 @@ void comecar_lef(W *mundo, struct fprio_t *lef) {
 
         if (!ev) 
             break;
+        
+        mundo -> clk = prio_evento;
 
         switch (tipo_evento) {
             case TIPO_CHEGA:

@@ -20,17 +20,12 @@ W *cria_mundo () {
     TEMPO_ATUAL_W(mundo) = T_INICIO;
     LOCAL_X_W(mundo) = N_TAMANHO_MUNDO;
     LOCAL_Y_W(mundo) = N_TAMANHO_MUNDO;
+    mundo -> max_tent = ZERADO;
+    mundo -> min_tent = ZERADO;
+    mundo -> soma_tent = ZERADO;
     mundo -> vet_H = malloc(N_HEROIS * sizeof(struct heroi));
     mundo -> vet_B = malloc(N_BASES * sizeof(struct base));
     mundo -> vet_M = malloc(N_MISSOES * sizeof(struct missao));
-
-    for (int b = 0; b < N_BASES; b++) {
-        mundo->vet_B[b].espera   = malloc(sizeof(struct cjto_t));
-        mundo->vet_B[b].presenca = malloc(sizeof(struct cjto_t));
-
-        mundo->vet_B[b].espera->num   = ZERADO;
-        mundo->vet_B[b].presenca->num = ZERADO;
-    }
 
     if (!mundo -> vet_H || !mundo -> vet_B || !mundo -> vet_M) {
         printf("erro alocando vetores do mundo\n");
@@ -49,6 +44,8 @@ void inicializacao (W *mundo) {
         PACIENCIA_H(mundo, h) = aleat(0, 100);
         VELOCIDADE_H(mundo, h) = aleat(50, 5000);
         HABILIDADES_H(mundo, h) = cjto_aleat(aleat(1, 3), N_HABILIDADES);
+        BASEATUAL_H(mundo, h) = -1;
+        STATUS_H(mundo, h) = 1;
     }
 
     //inicializacao das bases
@@ -58,8 +55,11 @@ void inicializacao (W *mundo) {
         LOCAL_Y_B(mundo, b) = aleat(0, N_TAMANHO_MUNDO - 1);
         LOTACAO_B(mundo, b) = aleat(3, 10);
         PRESENCA_B(mundo, b) = cjto_cria(N_HEROIS);
-        OCUPACAO_B(mundo, b) = 0;
-        QTD_FILA_ESPERA_B(mundo, b) = 0; 
+        FILA_ESPERA_B(mundo, b) = fila_cria ();
+        QTD_M_B(mundo, b) = ZERADO;
+        OCUPACAO_B(mundo, b) = ZERADO;
+        QTD_FILA_ESPERA_B(mundo, b) = ZERADO; 
+        MAX_FILA_B(mundo, b) = ZERADO;
     }
 
     //inicializacao das missoes
@@ -67,6 +67,7 @@ void inicializacao (W *mundo) {
         ID_M(mundo, m) = m;
         LOCAL_X_M(mundo, m) = aleat(0, N_TAMANHO_MUNDO - 1);
         LOCAL_Y_M(mundo, m) = aleat(0, N_TAMANHO_MUNDO - 1);
+        TENTATIVA_M(mundo, m) = ZERADO;
         HABILIDADES_M(mundo, m) = cjto_aleat(aleat (6, 10), N_HABILIDADES);
     }
 }
