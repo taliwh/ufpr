@@ -25,6 +25,8 @@ typedef struct heroi {
 typedef struct base {
     int id; // identificacao da base
     int lotacao; // numero maximo de herois 
+    int qtd_m; // qtd de missoes realizadas
+    int max_fila; // max da fila de espera
     struct cjto_t *presenca; //conjunto de herois presentes
     struct coord local;
     struct fila_t *espera;
@@ -59,14 +61,18 @@ typedef struct missao {
  * vetor representando as missoes;
 */
 typedef struct world {
-    int compstv; 
-    int hab;    
-    int qtd_H; 
-    int qtd_B; 
-    int qtd_M;
+    int N_COMPOSTOS_V; 
+    int N_HABILIDADES;    
+    int N_HEROIS; 
+    int N_BASES; 
+    int N_MISSOES;
+    int N_TAMANHO_MUNDO´
     int qtd_ev; //qtd ev concluido
     int qtd_mi; //qtd misao concliuda
     int qtd_tent; //qtd de tentativas
+    int qtd_morte;
+    int max_tent;
+    int min_tent;
     int clk;
     H *vet_H;
     B *vet_B; 

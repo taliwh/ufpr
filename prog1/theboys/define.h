@@ -37,9 +37,13 @@
 #define TEMPO_ATUAL_W(w)         ((w) -> clk)
 #define QTD_E(w)                 ((w) -> qtd_ev)
 #define QTD_MI(w)                ((w) -> qtd_mi) 
+#define QTD_MORTE(w)             ((w) -> qtd_morte)
+#define MIN_TENT_M(w)            ((w) -> min_tent)
+#define MAX_TENT_M(w)            ((w) -> max_tent) 
 #define BASE(w, b)               ((w) -> vet_B[(b)])
 #define HEROI(w, h)              ((w) -> vet_H[(h)])
 #define MISSAO(w, m)             ((w) -> vet_M[(m)])
+
 
 // campos das bases
 #define LOTACAO_B(w, b)          (BASE((w), (b)).lotacao)
@@ -47,9 +51,11 @@
 #define OCUPACAO_B(w, b)         (BASE((w), (b)).presenca -> num)
 #define FILA_ESPERA_B(w, b)      (BASE((w), (b)).espera)
 #define QTD_FILA_ESPERA_B(w, b)  (BASE((w), (b)).espera -> num)
+#define MAX_FILA_B(w, b)         (BASE((w), (b)).max_fila)
 #define LOCAL_X_B(w, b)          (BASE((w), (b)).local.x)
 #define LOCAL_Y_B(w, b)          (BASE((w), (b)).local.y)
 #define ID_B(w, b)               (BASE((w), (b)).id)
+#define QTD_M_B(w, b)            (BASE((w), (b)).qtd_m)
 
 // campos dos herois
 #define PACIENCIA_H(w, h)        (HEROI((w), (h)).paciencia)
@@ -66,5 +72,6 @@
 #define HABILIDADES_M(w, m)      (MISSAO((w), (m)).habilidades)
 #define ID_M(w, m)               (MISSAO((w), (m)).id)
 #define TENTATIVA_M(w, m)        (MISSAO((w), (m)).tentativa)
+
 
 #endif
