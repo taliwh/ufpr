@@ -40,13 +40,6 @@ typedef struct missao {
     struct coord local;
 } M;
 
-// struct estatisticas {
-//     int missoes;
-//     int eventos;
-//     int mortes;
-
-// };
-
 /* DEFINICOES DO MUNDO, RESPECTIVAS VARIAVEIS:
  *
  * habilidades disponiveis;
@@ -61,22 +54,21 @@ typedef struct missao {
  * vetor representando as missoes;
 */
 typedef struct world {
-    int N_COMPOSTOS_V; 
-    int N_HABILIDADES;    
-    int N_HEROIS; 
-    int N_BASES; 
-    int N_MISSOES;
-    int N_TAMANHO_MUNDO´
+    int qtd_compstv; 
+    int qtd_hab;    
+    int qtd_H; 
+    int qtd_B; 
+    int qtd_M;
     int qtd_ev; //qtd ev concluido
-    int qtd_mi; //qtd misao concliuda
-    int qtd_tent; //qtd de tentativas
+    int qtd_mi; //qtd missao concliuda
     int qtd_morte;
     int max_tent;
     int min_tent;
-    int clk;
+    int soma_tent; //qtd de tentativas
     H *vet_H;
     B *vet_B; 
     M *vet_M; 
+    int clk;
     // struct estatistica dados;
     struct coord local;
 } W;
