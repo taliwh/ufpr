@@ -49,6 +49,7 @@ struct evento *cria_evento (W *mundo, int tipo, int base, int baseprox, int hero
     return evento_novo;
 }
 
+
 //o tempoaux pode ser utilizado para verificar se a missoa foi cumprida, 1 significa q sim e 0 significa q nao foi comprida
 void printa_evento(W *mundo, struct evento *ev, int aux) {
 
@@ -124,7 +125,7 @@ void printa_evento(W *mundo, struct evento *ev, int aux) {
             printf("TAXA DE MORTALIDADE: %.1f%%\n", (QTD_MORTE_W(mundo) * 100.0) / QTD_H_W(mundo));
             break;
 
-        // printf("\n");
+
     }
 }
 
@@ -230,13 +231,13 @@ void evento_chega (W *mundo, struct fprio_t *lef, struct evento *ev) {
     }
 
     if (vai_esperar) {
-        espera = cria_evento(mundo, TIPO_ESPERA, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
-        fprio_insere(lef, espera, TIPO_ESPERA, TEMPO_ATUAL_W(mundo));
+        espera = cria_evento(mundo, TIPO_ESPERA, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> distancia, ev -> missao);
+        fprio_insere(lef, espera, TIPO_ESPERA, ev -> tempo); 
         printa_evento(mundo, ev, vai_esperar);
     }   
     else {
-        desiste = cria_evento(mundo, TIPO_DESISTE, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao); 
-        fprio_insere(lef, desiste, TIPO_DESISTE, TEMPO_ATUAL_W(mundo));
+        desiste = cria_evento(mundo, TIPO_DESISTE, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> distancia, ev -> missao); 
+        fprio_insere(lef, desiste, TIPO_DESISTE, ev -> tempo);
         printa_evento(mundo, ev, vai_esperar);
     }
 }
@@ -256,8 +257,8 @@ void evento_espera (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
     fila_insere(FILA_ESPERA_B(mundo, ev -> base), ev -> heroi);
 
-    avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao); 
-    fprio_insere(lef, avisa, TIPO_AVISA, TEMPO_ATUAL_W(mundo));
+    avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> distancia, ev -> missao); 
+    fprio_insere(lef, avisa, TIPO_AVISA, ev -> tempo);
 
     printa_evento(mundo, ev, 0);
 }
@@ -273,8 +274,8 @@ void evento_desiste (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
     baseproxnova = aleat(0, QTD_B_W(mundo) - 1);
 
-    viaja = cria_evento(mundo, TIPO_VIAJA, ev -> base, baseproxnova, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
-    fprio_insere(lef, viaja, TIPO_VIAJA, TEMPO_ATUAL_W(mundo));
+    viaja = cria_evento(mundo, TIPO_VIAJA, ev -> base, baseproxnova, ev -> heroi, ev -> tempo, ev -> distancia, ev -> missao);
+    fprio_insere(lef, viaja, TIPO_VIAJA, ev -> tempo);
 
     printa_evento(mundo, ev, 0);
 }
@@ -293,8 +294,8 @@ void evento_avisa (W *mundo, struct fprio_t *lef, struct evento *ev) {
         cjto_insere((PRESENCA_B(mundo, ev -> base)), heroi);
     }
 
-    entra = cria_evento(mundo, TIPO_ENTRA, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
-    fprio_insere(lef, entra, TIPO_ENTRA, TEMPO_ATUAL_W(mundo));
+    entra = cria_evento(mundo, TIPO_ENTRA, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> distancia, ev -> missao);
+    fprio_insere(lef, entra, TIPO_ENTRA, ev -> tempo);
 
     printa_evento(mundo, ev, 0);
 }
@@ -310,8 +311,8 @@ void evento_entra (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
     tpb = 15 + PACIENCIA_H(mundo, ev -> heroi) * aleat(1, 20);
 
-    sai = cria_evento(mundo, TIPO_SAI, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo) + tpb, ev -> distancia, ev -> missao);
-    fprio_insere(lef, sai, TIPO_SAI, TEMPO_ATUAL_W(mundo));
+    sai = cria_evento(mundo, TIPO_SAI, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo + tpb, ev -> distancia, ev -> missao);
+    fprio_insere(lef, sai, TIPO_SAI, ev -> tempo + tpb);
   
     printa_evento(mundo, ev, tpb);
 }
@@ -329,11 +330,11 @@ void evento_sai (W *mundo, struct fprio_t *lef, struct evento *ev) {
     baseproxnova = aleat(0, QTD_B_W(mundo) - 1);
     cjto_retira((PRESENCA_B(mundo, ev -> base)), ev -> heroi);
 
-    viaja = cria_evento(mundo, TIPO_VIAJA, ev -> base, baseproxnova, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
-    fprio_insere(lef, viaja, TIPO_VIAJA, TEMPO_ATUAL_W(mundo));
+    viaja = cria_evento(mundo, TIPO_VIAJA, ev -> base, baseproxnova, ev -> heroi, ev -> tempo, ev -> distancia, ev -> missao);
+    fprio_insere(lef, viaja, TIPO_VIAJA, ev -> tempo);
 
-    avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
-    fprio_insere(lef, avisa, TIPO_AVISA, TEMPO_ATUAL_W(mundo));
+    avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> distancia, ev -> missao);
+    fprio_insere(lef, avisa, TIPO_AVISA, ev -> tempo);
 
     printa_evento(mundo, ev, 0);
 }
@@ -352,8 +353,8 @@ void evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev) {
     ev -> distancia = distancia;
     duracao = distancia / VELOCIDADE_H(mundo, ev -> heroi);
 
-    chega = cria_evento(mundo, TIPO_CHEGA, ev -> baseprox, -1, ev -> heroi, TEMPO_ATUAL_W(mundo) + duracao, ev -> distancia, ev -> missao);
-    fprio_insere(lef, chega, TIPO_CHEGA, TEMPO_ATUAL_W(mundo));
+    chega = cria_evento(mundo, TIPO_CHEGA, ev -> baseprox, -1, ev -> heroi, ev -> tempo + duracao, ev -> distancia, ev -> missao);
+    fprio_insere(lef, chega, TIPO_CHEGA, ev -> tempo + duracao);
 
     printa_evento (mundo, ev, duracao);
 }
@@ -369,8 +370,8 @@ void evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev) {
     cjto_retira((PRESENCA_B(mundo, ev -> base)), ev -> heroi);
     QTD_MORTE_W(mundo)++;
     STATUS_H(mundo, ev -> heroi) = 0;   
-    avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
-    fprio_insere(lef, avisa, TIPO_AVISA, TEMPO_ATUAL_W(mundo));
+    avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> distancia, ev -> missao);
+    fprio_insere(lef, avisa, TIPO_AVISA, ev -> tempo);
 
     printa_evento (mundo, ev, 0);
 }
@@ -380,7 +381,6 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *missao;
     struct cjto_t *cjto_hab;
     struct cjto_t *cjto_hab_dabase;
-    struct cjto_t *aux;
 
     int menor;
     int distancia;
@@ -392,6 +392,11 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
         return;
     }
 
+ /* valida índice da missão antes de usar */
+    if (ev->missao < 0 || ev->missao >= QTD_M_W(mundo)) {
+       printf("missao inválida: %d\n", ev->missao);
+       return;
+    }
     cjto_hab = cjto_cria(QTD_HAB_W(mundo));
 
     if (!cjto_hab) {
@@ -400,6 +405,7 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
     }
 
     menor = 99999999;
+    idbase = -1;
 
     for (int b = 0; b < QTD_B_W(mundo); b++) {
         distancia = distancia_bases(LOCAL_X_B(mundo, b), LOCAL_X_M(mundo, ev -> missao), LOCAL_Y_B(mundo, b), LOCAL_Y_B(mundo, ev -> missao));
@@ -420,9 +426,7 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
         
         for(int h = 0; h < QTD_H_W(mundo); h++) {
             if (cjto_pertence(PRESENCA_B(mundo, b), h)) {
-                aux = cjto_uniao(cjto_hab, HABILIDADES_H(mundo, h));
-                cjto_destroi(cjto_hab);
-                cjto_hab = aux;
+                cjto_hab = cjto_uniao(cjto_hab, HABILIDADES_H(mundo, h));
             }
         }
 
@@ -444,9 +448,7 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
     for (int h = 0; h < QTD_H_W(mundo); h++) {
         if (cjto_pertence(PRESENCA_B(mundo, idbase), h)) {
-            aux = cjto_uniao(cjto_hab_dabase, HABILIDADES_H(mundo, h));
-            cjto_destroi(cjto_hab_dabase);
-            cjto_hab_dabase = aux;
+            cjto_hab_dabase = cjto_uniao(cjto_hab_dabase, HABILIDADES_H(mundo, h));
         }
     }
     
@@ -457,18 +459,18 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
         QTD_M_B(mundo, idbase)++;
     }
     else {
-        if (COMPOSTOS_W(mundo) && !(TEMPO_ATUAL_W(mundo) % 2500)) {
+        if (COMPOSTOS_W(mundo) && !(ev -> tempo % 2500)) {
             COMPOSTOS_W(mundo)--;
             cumprida = 1;
             QTD_MI_W(mundo)++;
             QTD_M_B(mundo, idbase)++;        
-            morre = cria_evento(mundo, TIPO_MORRE, idbase, ev -> baseprox, acha_experiente(mundo), TEMPO_ATUAL_W(mundo), ev -> distancia, ev -> missao);
-            fprio_insere(lef, morre, TIPO_MORRE, TEMPO_ATUAL_W(mundo));
+            morre = cria_evento(mundo, TIPO_MORRE, idbase, ev -> baseprox, acha_experiente(mundo), ev -> tempo, ev -> distancia, ev -> missao);
+            fprio_insere(lef, morre, TIPO_MORRE, ev -> tempo);
             incrementa_xp(mundo, idbase);
         }
         else {
-            missao = cria_evento(mundo, TIPO_MISSAO, idbase, ev -> baseprox, ev -> heroi, TEMPO_ATUAL_W(mundo) + 24*60, ev-> distancia, ev -> missao);
-            fprio_insere(lef, missao, TIPO_MISSAO, TEMPO_ATUAL_W(mundo) + 24*60);
+            missao = cria_evento(mundo, TIPO_MISSAO, idbase, ev -> baseprox, ev -> heroi, ev -> tempo + 24*60, ev-> distancia, ev -> missao);
+            fprio_insere(lef, missao, TIPO_MISSAO, ev -> tempo + 24*60);
             cumprida = 0;
         }
     }

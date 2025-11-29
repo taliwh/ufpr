@@ -1,5 +1,5 @@
 #include "iniciarmundo.h"
-
+#include "eventos.h"
 W *cria_mundo () {
     W *mundo;
 
@@ -14,15 +14,15 @@ W *cria_mundo () {
     QTD_H_W(mundo) = N_HEROIS;
     QTD_B_W(mundo) = N_BASES;
     QTD_M_W(mundo) = N_MISSOES;
-    QTD_E_W(mundo) = ZERADO;
-    QTD_MI_W(mundo) = ZERADO;
-    QTD_MORTE_W(mundo) = ZERADO;
+    QTD_E_W(mundo) = 0;
+    QTD_MI_W(mundo) = 0;
+    QTD_MORTE_W(mundo) = 0;
     TEMPO_ATUAL_W(mundo) = T_INICIO;
     LOCAL_X_W(mundo) = N_TAMANHO_MUNDO;
     LOCAL_Y_W(mundo) = N_TAMANHO_MUNDO;
-    mundo -> max_tent = ZERADO;
-    mundo -> min_tent = ZERADO;
-    mundo -> soma_tent = ZERADO;
+    mundo -> max_tent = 0;
+    mundo -> min_tent = 0;
+    mundo -> soma_tent = 0;
     mundo -> vet_H = malloc(N_HEROIS * sizeof(struct heroi));
     mundo -> vet_B = malloc(N_BASES * sizeof(struct base));
     mundo -> vet_M = malloc(N_MISSOES * sizeof(struct missao));
@@ -44,7 +44,7 @@ void inicializacao (W *mundo) {
         PACIENCIA_H(mundo, h) = aleat(0, 100);
         VELOCIDADE_H(mundo, h) = aleat(50, 5000);
         HABILIDADES_H(mundo, h) = cjto_aleat(aleat(1, 3), N_HABILIDADES);
-        BASEATUAL_H(mundo, h) = -1;
+        BASEATUAL_H(mundo, h) = -1; 
         STATUS_H(mundo, h) = 1;
     }
 
@@ -56,10 +56,10 @@ void inicializacao (W *mundo) {
         LOTACAO_B(mundo, b) = aleat(3, 10);
         PRESENCA_B(mundo, b) = cjto_cria(N_HEROIS);
         FILA_ESPERA_B(mundo, b) = fila_cria ();
-        QTD_M_B(mundo, b) = ZERADO;
-        OCUPACAO_B(mundo, b) = ZERADO;
-        QTD_FILA_ESPERA_B(mundo, b) = ZERADO; 
-        MAX_FILA_B(mundo, b) = ZERADO;
+        QTD_M_B(mundo, b) = 0;
+        OCUPACAO_B(mundo, b) = 0;
+        QTD_FILA_ESPERA_B(mundo, b) = 0; 
+        MAX_FILA_B(mundo, b) = 0;
     }
 
     //inicializacao das missoes
@@ -67,7 +67,7 @@ void inicializacao (W *mundo) {
         ID_M(mundo, m) = m;
         LOCAL_X_M(mundo, m) = aleat(0, N_TAMANHO_MUNDO - 1);
         LOCAL_Y_M(mundo, m) = aleat(0, N_TAMANHO_MUNDO - 1);
-        TENTATIVA_M(mundo, m) = ZERADO;
+        TENTATIVA_M(mundo, m) = 0;
         HABILIDADES_M(mundo, m) = cjto_aleat(aleat (6, 10), N_HABILIDADES);
     }
 }
@@ -83,11 +83,12 @@ void destroi_mundo(W *mundo) {
         fila_destroi(FILA_ESPERA_B(mundo, b));
     }
 
-    for (int m = 0 ; QTD_M_W(mundo); m++) {
+    for (int m = 0 ; m < QTD_M_W(mundo); m++) {
         cjto_destroi(HABILIDADES_M(mundo, m));
     }
+
     free(mundo -> vet_B);
-    free(mundo -> vet_B);
+    free(mundo -> vet_H);
     free(mundo -> vet_M);       
     free(mundo);
 }

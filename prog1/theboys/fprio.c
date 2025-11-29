@@ -26,6 +26,8 @@ struct fprio_t *fprio_cria () {
 // retorna o numero de itens na fila
 // caso a fila seja invalida, retorna -1
 int fprio_tamanho (struct fprio_t *f) {
+    if (!f)
+        return -1;
     return f -> num;
 }
 
@@ -99,6 +101,7 @@ int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio) {
     if (!aux_ant) {  // insere no comeco 
         novo -> prox = f -> prim;
         f -> prim = novo;
+        f -> num++;
         return fprio_tamanho(f);
     }
 
@@ -126,6 +129,7 @@ void *fprio_retira (struct fprio_t *f, int *tipo, int *prio) {
     *tipo = aux -> tipo;
     *prio = aux -> prio;
 
+    f -> num--;
     free(aux);
 
     return item;

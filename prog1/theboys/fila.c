@@ -69,11 +69,11 @@ int fila_insere (struct fila_t *f, int item) {
     struct fila_nodo_t *novo;
 
     if (!f || item_japertence(f, item))
-        return -1;
+        return 0;
 
     novo = malloc(sizeof(struct fila_nodo_t));
     if (!novo)
-        return -1;
+        return 0;
 
     novo -> item = item;
     novo -> prox =  NULL;
@@ -103,10 +103,9 @@ int fila_retira (struct fila_t *f, int *item) {
     *item = aux -> item;
     free(aux);
 
+    f -> num--;
     if (!fila_tamanho(f)) /* fila ficou vazia */
         f -> ult = NULL;
-
-    f -> num--;
     
     return 1;
 }
@@ -114,7 +113,7 @@ int fila_retira (struct fila_t *f, int *item) {
 // Imprime o conteúdo da fila 
 void fila_imprime (struct fila_t *f) {
     struct fila_nodo_t *aux;
-
+    
     if (!f || !fila_tamanho(f))
         return;
     aux = f -> prim;
