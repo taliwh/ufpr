@@ -1,4 +1,5 @@
 #include "lef.h"
+#include "eventos.h"
 
 void comecar_lef(W *mundo, struct fprio_t *lef) {
     struct evento *ev;
@@ -57,8 +58,12 @@ void comecar_lef(W *mundo, struct fprio_t *lef) {
 
             case TIPO_FIM:
                 evento_fim(mundo, lef, ev);
+                fim = 1;
                 break;
         }
+        free(ev);
+        ev = NULL;
     }
+
     destroi_mundo(mundo);
 }

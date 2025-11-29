@@ -1,5 +1,6 @@
-
-
+#include "conjunto.h"
+#include <stdlib.h> 
+#include "entidades.h"
 
 void destroi_mundo(W *mundo) {
     

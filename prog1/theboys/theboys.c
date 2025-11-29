@@ -21,7 +21,6 @@ int main () {
     eventos_iniciais(mundo, lef);
     comecar_lef(mundo, lef);
 
-    
     // executar o laço de simulação
 
     // executar o laço de simulação

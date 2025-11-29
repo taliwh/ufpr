@@ -18,7 +18,8 @@ struct fprio_t *fprio_cria () {
 
     fila -> num = 0;
     fila -> prim = NULL;
-
+    fila -> fim = NULL;
+    
     return fila;
 }
 
@@ -53,7 +54,7 @@ struct fprio_t *fprio_destroi (struct fprio_t *f) {
 int fprio_japertence (struct fprio_t *f, int tipo, int prio) {
     struct fpnodo_t *aux;
 
-    if (!fprio_tamanho(f) || !f)
+    if (!(fprio_tamanho(f)) || fprio_tamanho(f) == -1)
         return 0;
 
     aux = f -> prim;
