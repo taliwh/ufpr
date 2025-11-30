@@ -10,7 +10,7 @@ struct evento {
     int missao;
 };
 
-// retorna um numero aleatorio entre um intervalo utilizando rand ().
+// retorna um numero aleatorio entre um intervalo inclusivo utilizando rand ().
 int aleat (int min, int max) {
     int aleat;
 
@@ -166,8 +166,8 @@ struct evento *cria_evento (W *mundo, int tipo, int base, int baseprox, int hero
 // printa todos os eventos, com excessao do evento missao, que eh o mais complicado;
 // antes, eh necessario a verificacao dos ponteiros para retornar falha;
 // a quantidade total de eventos completos eh aumentada;
-// o aux é utilizado para eventos especificos, nos casos em que temos que printar 
-// o tempo + um adicional, ou alguma formula especifica, ou a distancia.
+// o aux representa a distancia no evento viaja ou o tempo de permanencia 
+// no evento entra. tambem pode ser usado para condicoes e outras coisas.
 void printa_evento(W *mundo, struct evento *ev, int aux) {
 
     if (!mundo || !ev) {
@@ -175,7 +175,6 @@ void printa_evento(W *mundo, struct evento *ev, int aux) {
         return;
     }
 
-    //aumenta a quantidade de eventos
     QTD_E_W(mundo)++;
 
     switch (ev -> tipo) {
@@ -469,22 +468,14 @@ void evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev) {
 }
 
 // funcao responsavel pelo evento missao:
-// primeiro eh impresso a tentativa n da missao;
-// depois, eh inserido no vetor de distancias (vet_dist) todas as distancias das bases ate a missao;
-// apos isso, ordenamos as distancias com a funcao do algoritmo recursivo merge_sort;
-
-// enquanto ainda nao achamos a base perfeita (com a menor distancia e com as habilidades requeridas):
-// as depuracoes sao impressas;
-// eh criado uma variavel chamada habs_base, com as habilidades da base de menor distancia (vet_dist[0]);
-// imprimimos mais uma depuracao, imprimindo as habilidades da base (habs_base que foi criada recem);
-
-// se a base de menor distancia nao tiver as habilidades requeridas, percorremos 
-// mais uma vez o laco, fazendo "b++" para pegar a segunda base mais proxima e assim por diante, ate achar
-// a base com habilidades requeridas ou ate acabar o tamanho do vetor (N_BASES);
-
-// habs_base eh destruida para evitar vazamentos de memoria;
-
-
+// inicia imprimindo o cabecalho com a tentativa e as habilidades necessarias;
+// calcula a distancia de todas as bases ate a missao e ordena o vetor para priorizar as mais proximas;
+// percorre as bases ordenadas buscando a primeira que possua todas as habilidades requeridas (a bmp);
+// se encontrar a bmp, marca a missao como cumprida, incrementa xp dos herois e imprime o sucesso;
+// se nao encontrar, verifica se pode usar composto v (estoque disponivel e tempo correto);
+// se usar composto v, pega a base mais proxima de todas, sacrifica o heroi mais experiente e cumpre a missao;
+// caso contrario, a missao eh reagendada para o dia seguinte e incrementa o contador de tentativas;
+// ao final, se a missao foi concluida com sucesso, atualiza as estatisticas de min, max e soma de tentativas.
 void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
     int idbase_proxima, b, heroitop, cumprida, existe_bmp;
     struct cjto_t *habs_base;
@@ -591,6 +582,7 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
     SOMA_TENT_W(mundo) = SOMA_TENT_W(mundo) + TENTATIVA_M(mundo, ev->missao);
 }
 
+// evento fim: utilizado para quando a simulacao acabar, ele destroi a lef e imprime o evento fim.
 void evento_fim (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
     if (!mundo || !lef || !ev) 
