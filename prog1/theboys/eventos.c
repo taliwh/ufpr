@@ -431,8 +431,8 @@ void evento_sai (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
 // funcao responsavel pelo evento viaja:
 // calcula-se a distancia da base atual do heroi para a base proxima,
-// utilizando a funcao distancia_bases. A duracao eh calculada com a formula dada pelo enunciado.
-// cria e insere na lef o evento chega com a base destino
+// utilizando a funcao distancia_bases. a duracao eh calculada com a formula dada pelo enunciado.
+// cria e insere na lef o evento chega com a base destino.
 void evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *chega;
     int distancia, duracao;
@@ -449,6 +449,9 @@ void evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev) {
     printa_evento (mundo, ev, distancia);
 }
 
+// funcao responsavel pelo evento morre:
+// o heroi é retirado da base e sua morte eh contabilizada, com seu status atualizado.
+// o evento avisa e criado e inserido na lef para avisar o porteiro da morte.
 void evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *avisa;
 
@@ -466,6 +469,15 @@ void evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev) {
     printa_evento (mundo, ev, 0);
 }
 
+// funcao responsavel pelo evento missao:
+// primeiro eh impresso a tentativa n da missao.
+// depois, eh inserido no vetor de distancias (vet_dist) todas as distancias das bases ate a missao.
+// apos isso, ordenamos as distancias com a funcao do algoritmo recursivo merge_sort.
+// enquanto ainda nao achamos a base perfeita (com a menor distancia e com as habilidades requeridas):
+// imprimos as depuracoes;
+// eh criado uma variavel chamada habs_base, com as habilidades da base de menor distancia obtidas pela funcao habilidades_base;
+// imprimimos mais uma depuracao, imprimindo habs_base
+// se a base d emenor distancia nao tiver as habilidades requeridas, percorremos mais uma vez o laco fazendo b_+ pra pegar a segunda base mais perto e assim pordiantekkafmeu
 void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
     int idbase_proxima, b, heroitop, cumprida, existe_bmp;
     struct cjto_t *habs_base;
