@@ -9,16 +9,13 @@ void comecar_lef(W *mundo, struct fprio_t *lef) {
         printf("erro: mundo ou lef nulos\n");
         return;
     }
-
+    // ev -> herois >= 0
     while(!fim && fprio_tamanho(lef)) {
         ev = fprio_retira(lef, &tipo_evento, &prio_evento);
 
         if (!ev) 
             break;
-        if (ev -> heroi >= 0 && !STATUS_H(mundo, ev -> heroi)) {
-            
-        }
-        else {
+        if (status_vida(mundo, ev)) {
             TEMPO_ATUAL_W(mundo) = prio_evento; 
 
             switch (tipo_evento) {

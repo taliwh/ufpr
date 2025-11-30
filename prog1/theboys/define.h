@@ -11,8 +11,6 @@
 #define N_MISSOES                (T_FIM_DO_MUNDO / 100)
 #define N_COMPOSTOS_V            (N_HABILIDADES * 3)
 
-//525600
-
 // tipos dos eventos:
 #define TIPO_CHEGA               1
 #define TIPO_ESPERA              2
@@ -27,10 +25,10 @@
 
 // macros para o codigo ficar mais legivel:
 /*
- * H: heroi
- * B: base
- * W: world (mundo)
- * M: missao
+ * _H: heroi
+ * _B: base
+ * _W: world (mundo)
+ * _M: missao
  *
 */
 

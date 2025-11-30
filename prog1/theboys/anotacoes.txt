@@ -1,7 +1,0 @@
-temq imprimir tentativa mesmo se a missao for impossivel? n entendi
-nao sei quando acessar desde o ponteiro do mundo, ou se acesso a partir da struct em si,
-
-trocar ev -> tempo na funcao printa por tempoatual
-nas funcoes de evento trocar tempo atual por ev -> tempo ? 
-
-verifica se heroimorreu (?)

@@ -76,7 +76,7 @@ int fprio_japertence (struct fprio_t *f, void *item) {
 int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio) {
     struct fpnodo_t *novo, *aux, *aux_ant;
 
-    if (!f || !item) 
+    if (!f || !item || fprio_japertence(f, item)) 
         return -1; 
 
     novo = malloc(sizeof(struct fpnodo_t));

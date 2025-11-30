@@ -20,8 +20,8 @@ W *cria_mundo () {
     TEMPO_ATUAL_W(mundo) = T_INICIO;
     LOCAL_X_W(mundo) = N_TAMANHO_MUNDO;
     LOCAL_Y_W(mundo) = N_TAMANHO_MUNDO;
-    MAX_TENT_W(mundo) = 0;
-    MIN_TENT_W(mundo) = 0;
+    MAX_TENT_W(mundo) = -1;
+    MIN_TENT_W(mundo) = -1;
     SOMA_TENT_W(mundo) = 0;
 
     mundo -> vet_H = malloc(N_HEROIS * sizeof(struct heroi));

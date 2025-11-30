@@ -2,20 +2,22 @@
 #define EVENTOS_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include "entidades.h"
 #include "fprio.h"
 #include "define.h"
-#include "funcoes.h"
 
-struct evento {
-    int tipo;
-    int base;
-    int baseprox; 
-    int heroi;
-    int tempo;
-    int missao;
-};
+struct evento;
+
+int aleat (int min, int max);
+int distancia_bases(int x1, int x2, int y1, int y2);
+struct distancia *intercala (struct distancia *vetor, int a, int meio, int b);
+struct distancia *merge_sort(struct distancia *vetor, int ini, int fim);
+void incrementa_xp(W *mundo, int idbase);
+int status_vida(W *mundo, struct evento *ev);
+int acha_experiente(W *mundo, int idbase);
+struct cjto_t *habilidades_base (W *mundo, int idbase);
 
 struct evento *cria_evento (W *mundo, int tipo, int base, int baseprox, int heroi, int tempo, int missao);
 void printa_evento(W *mundo, struct evento *ev, int aux);
