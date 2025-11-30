@@ -10,15 +10,23 @@ struct coord {
     int y;  
 };
 
+// struct contendo a distancia de uma base ate uma missao, 
+// e o id da base correspondente.
 struct distancia {
     int dist;
     int id_base;
 };
 
-// definições dos heróis
+// definições dos heróis:
+// id do heroi;
+// status (vida);
+// paciencia;
+// velocidade;
+// experiencia;
+// base em que esta localizado.
 typedef struct heroi {
     int id;
-    int status; //0 se morto e 1 se vivo
+    int status; 
     struct cjto_t *habilidades;
     int paciencia;
     int velocidade;
@@ -26,19 +34,30 @@ typedef struct heroi {
     int baseatual;
 } H;
 
-// definições da base
+// definições da base:
+// id da base;
+// numero maximo de herois;
+// o maximo da fila de espera;
+// o conjunto de herois presentes;
+// o conjunto das habilidades dos herois presentes;
+// a fila de espera;
+// as coordenadas.
 typedef struct base {
-    int id; // identificacao da base
-    int lotacao; // numero maximo de herois 
-    int qtd_m; // qtd de missoes realizadas
-    int max_fila; // max da fila de espera
-    struct cjto_t *presenca; //conjunto de herois presentes
-    struct cjto_t *habilidades; //conjunto das habilidades dos herois presentes
+    int id; 
+    int lotacao; 
+    int qtd_m; 
+    int max_fila; 
+    struct cjto_t *presenca; 
+    struct cjto_t *habilidades; 
     struct fila_t *espera;
     struct coord local;
 } B;
 
-//definições das missões
+// definições das missões:
+// id da missao;
+// quantidade de tentativas da missao;
+// conjunton de habilidades requeridas pela missao;
+// coordenadas
 typedef struct missao {
     int id;
     int tentativa;
@@ -46,31 +65,35 @@ typedef struct missao {
     struct coord local;
 } M;
 
-/* DEFINICOES DO MUNDO, RESPECTIVAS VARIAVEIS:
- *
- * habilidades disponiveis;
- * compostos v disponiveis;
- * herois disponíveis;
- * bases disponíveis;
- * missoes disponiveis;
- * tempo atual do mundo;
- * dimensoes do mundo;
- * vetor representando os herois;
- * vetor representando as bases;
- * vetor representando as missoes;
-*/
+// definicoes gerais da struct mundo:
+// compostos v disponiveis;
+// habilidades disponiveis;
+// herois disponíveis;
+// bases disponíveis;
+// missoes disponiveis;
+// quantidade de eventos completos;
+// quantidade de missoes completas;
+// qual a tentativa maxima por missao;
+// qual a tentativa minima por missao;
+// soma das tentativas por missao;
+// vetor representando os herois;
+// vetor representando as bases;
+// vetor representando as missoes.
+// tempo atual do mundo;
+// vetor representando as distancias;
+// dimensoes do mundo.
 typedef struct world {
     int qtd_compstv; 
     int qtd_hab;    
     int qtd_H; 
     int qtd_B; 
     int qtd_M;
-    int qtd_ev; //qtd ev concluido
-    int qtd_mi; //qtd missao concliuda
+    int qtd_ev; 
+    int qtd_mi;
     int qtd_morte;
     int max_tent;
     int min_tent;
-    int soma_tent; //qtd de tentativas
+    int soma_tent;
     H *vet_H;
     B *vet_B; 
     M *vet_M; 

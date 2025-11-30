@@ -1,5 +1,7 @@
 #include "lef.h"
 
+// retira o evento da lef: se ele for válido e seu heroi estiver vivo,
+// realiza os eventos até o fim ser 1, ou o tamanho da lef acabar.
 void comecar_lef(W *mundo, struct fprio_t *lef) {
     struct evento *ev;
     int tipo_evento, prio_evento, fim;
@@ -9,7 +11,6 @@ void comecar_lef(W *mundo, struct fprio_t *lef) {
         printf("erro: mundo ou lef nulos\n");
         return;
     }
-    // ev -> herois >= 0
     while(!fim && fprio_tamanho(lef) ) {
         ev = fprio_retira(lef, &tipo_evento, &prio_evento);
 

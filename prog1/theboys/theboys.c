@@ -15,11 +15,18 @@ int main () {
     struct fprio_t *lef;
     srand(0);
 
+    // cria o mundo e a lef
     mundo = cria_mundo();
     lef = fprio_cria();
+
+    // inicializa as structs e eventos
     inicializacao(mundo);
     eventos_iniciais(mundo, lef);
+
+    // comeca a simulacao do mundo
     comecar_lef(mundo, lef);
+
+    // destroi o mundo, acaba a simulacao
     destroi_mundo(mundo);
 
     return 0;

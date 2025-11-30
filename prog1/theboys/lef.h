@@ -7,6 +7,7 @@
 #include "conjunto.h"
 #include "iniciarmundo.h"
 
+// a simulacao comeca com essa funcao, retirando os eventos da lef
 void comecar_lef(W *mundo, struct fprio_t *lef);
 
 #endif

@@ -1,5 +1,9 @@
 #include "iniciarmundo.h"
 
+// aloca a struct mundo, inicializando suas variaveis com 
+// defines, numeros nulos ou não inicializados.
+// aloca cada um dos vetores pertencentes a struct mundo, 
+// retornando a struct mundo em caso de sucesso
 W *cria_mundo () {
     W *mundo;
 
@@ -37,6 +41,8 @@ W *cria_mundo () {
     return mundo;
 }
 
+// inicializa todas as entidades do mundo (herois, bases e missoes), atribuindo valores
+// padroes ou aleatorios para seus atributos e alocando as estruturas internas necessarias
 void inicializacao (W *mundo) {
 
     //inicializacao dos herois
@@ -67,11 +73,12 @@ void inicializacao (W *mundo) {
         ID_M(mundo, m) = m;
         LOCAL_X_M(mundo, m) = aleat(0, N_TAMANHO_MUNDO - 1);
         LOCAL_Y_M(mundo, m) = aleat(0, N_TAMANHO_MUNDO - 1);
-        TENTATIVA_M(mundo, m) = 1; //antes tava 0 aqui, dar uma olhada no printf
+        TENTATIVA_M(mundo, m) = 1; 
         HABILIDADES_M(mundo, m) = cjto_aleat(aleat (6, 10), N_HABILIDADES);
     }
 }
 
+// destroi o mundo, desalocando cada um dos conjuntos e filas 
 void destroi_mundo(W *mundo) {
     
     for (int h = 0; h < QTD_H_W(mundo); h++) 
