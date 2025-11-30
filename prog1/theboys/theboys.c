@@ -20,12 +20,7 @@ int main () {
     inicializacao(mundo);
     eventos_iniciais(mundo, lef);
     comecar_lef(mundo, lef);
-
-    // executar o laço de simulação
-
-    // executar o laço de simulação
-
-    // destruir o mundo :o
+    destroi_mundo(mundo);
 
     return 0;
 }

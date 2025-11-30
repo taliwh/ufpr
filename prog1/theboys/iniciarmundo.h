@@ -1,5 +1,5 @@
-// #ifndef INICIARMUNDO_H
-// #define INICIARMUNDO_H
+#ifndef INICIARMUNDO_H
+#define INICIARMUNDO_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,4 +11,5 @@
 W *cria_mundo ();
 void inicializacao (W *mundo);
 void destroi_mundo(W *mundo);
-// #endif
+
+#endif

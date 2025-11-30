@@ -10,6 +10,11 @@ struct coord {
     int y;  
 };
 
+struct distancia {
+    int dist;
+    int id_base;
+};
+
 // definições dos heróis
 typedef struct heroi {
     int id;
@@ -28,8 +33,9 @@ typedef struct base {
     int qtd_m; // qtd de missoes realizadas
     int max_fila; // max da fila de espera
     struct cjto_t *presenca; //conjunto de herois presentes
-    struct coord local;
+    struct cjto_t *habilidades; //conjunto das habilidades dos herois presentes
     struct fila_t *espera;
+    struct coord local;
 } B;
 
 //definições das missões
@@ -69,7 +75,7 @@ typedef struct world {
     B *vet_B; 
     M *vet_M; 
     int clk;
-    // struct estatistica dados;
+    struct distancia *vet_dist;
     struct coord local;
 } W;
 

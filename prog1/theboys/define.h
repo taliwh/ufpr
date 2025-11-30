@@ -3,7 +3,7 @@
 
 // definições do trabalho:
 #define T_INICIO                 0
-#define T_FIM_DO_MUNDO           10000
+#define T_FIM_DO_MUNDO           525600
 #define N_TAMANHO_MUNDO          20000
 #define N_HABILIDADES            10
 #define N_HEROIS                 (N_HABILIDADES * 5)
@@ -43,22 +43,23 @@
 #define QTD_E_W(w)               ((w) -> qtd_ev)
 #define QTD_MI_W(w)              ((w) -> qtd_mi) 
 #define QTD_MORTE_W(w)           ((w) -> qtd_morte)
-#define MIN_TENT_M(w)            ((w) -> min_tent)
-#define MAX_TENT_M(w)            ((w) -> max_tent) 
-#define SOMA_TENT_M(w)           ((w) -> soma_tent)
+#define MIN_TENT_W(w)            ((w) -> min_tent)
+#define MAX_TENT_W(w)            ((w) -> max_tent) 
+#define SOMA_TENT_W(w)           ((w) -> soma_tent)
 #define HEROI_W(w, h)            ((w) -> vet_H[(h)])
 #define BASE_W(w, b)             ((w) -> vet_B[(b)])
 #define MISSAO_W(w, m)           ((w) -> vet_M[(m)])
 #define TEMPO_ATUAL_W(w)         ((w) -> clk)
 #define LOCAL_X_W(w)             ((w) -> local.x)
 #define LOCAL_Y_W(w)             ((w) -> local.y)
-
+#define DISTANCIAS_W(w, d)       ((w) -> vet_dist[(d)])
+#define DIST_ID_B(w, d)          (DISTANCIAS_W((w), (d)).id_base)
+#define DIST_DIST(w, d)          (DISTANCIAS_W((w), (d)).dist)    
+                                    
 // campos das bases
 #define LOTACAO_B(w, b)          (BASE_W((w), (b)).lotacao)
 #define PRESENCA_B(w, b)         (BASE_W((w), (b)).presenca)
-#define OCUPACAO_B(w, b)         (BASE_W((w), (b)).presenca -> num)
 #define FILA_ESPERA_B(w, b)      (BASE_W((w), (b)).espera)
-#define QTD_FILA_ESPERA_B(w, b)  (BASE_W((w), (b)).espera -> num)
 #define MAX_FILA_B(w, b)         (BASE_W((w), (b)).max_fila)
 #define LOCAL_X_B(w, b)          (BASE_W((w), (b)).local.x)
 #define LOCAL_Y_B(w, b)          (BASE_W((w), (b)).local.y)

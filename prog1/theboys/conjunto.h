@@ -1,4 +1,4 @@
-// Tipo abstrato de dado "conjunto de inteiros"
+    // Tipo abstrato de dado "conjunto de inteiros"
 // Prof. Carlos Maziero - DINF/UFPR, Out 2024
 //
 // Este TAD implementa um conjunto de números inteiros com capacidade para
