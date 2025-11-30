@@ -24,12 +24,10 @@
 #define TIPO_FIM                 10
 
 // definicoes das macros para legibilidade do codigo:
-/*
- * _H: heroi
- * _B: base
- * _W: world (mundo)
- * _M: missao
-*/
+// _H: struct heroi
+// _W: struct mundo
+// _B: struct base
+// _M: struct missao
 
 // campos do mundo
 #define COMPOSTOS_W(w)           ((w) -> qtd_compstv)

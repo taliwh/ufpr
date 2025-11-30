@@ -1,6 +1,6 @@
 #include "eventos.h"
 
-// struct dos eventos opaca para o usuário
+// struct dos eventos, opaca para o usuario.
 struct evento {
     int tipo;
     int base;
@@ -10,6 +10,7 @@ struct evento {
     int missao;
 };
 
+// retorna um numero aleatorio entre um intervalo utilizando rand ().
 int aleat (int min, int max) {
     int aleat;
 
@@ -18,6 +19,8 @@ int aleat (int min, int max) {
     return aleat;
 }
 
+// calcula a distancia baseada na seguinte formula euclidiana:
+// distancia = raiz de [(x2 - x1)² + (y2 - y1)²].
 int distancia_bases(int x1, int x2, int y1, int y2) {
     int dx, dy;
 
@@ -27,6 +30,8 @@ int distancia_bases(int x1, int x2, int y1, int y2) {
     return hypot(dx, dy);
 }
 
+// retorna o vetor modificado de tal forma que v[a, b] eh um vetor ordenado.
+// essa funcao é utilizada como auxiliar para a funcao merge_sort.
 struct distancia *intercala(struct distancia *vetor, int a, int meio, int b) {
     int i, j;
     struct distancia *u;
@@ -60,6 +65,9 @@ struct distancia *intercala(struct distancia *vetor, int a, int meio, int b) {
     return vetor;
 }
 
+// o merge sort divide o vetor em várias partes recursivamente, 
+// e ordena cada parte utilizando a funcao intercala.
+// faz isso até retornar o vetor completo ordenado.
 struct distancia *merge_sort(struct distancia *vetor, int ini, int fim) {
     int meio;
 
@@ -73,6 +81,9 @@ struct distancia *merge_sort(struct distancia *vetor, int ini, int fim) {
     return intercala(vetor, ini, meio, fim);
 }   
 
+// incrementa o xp dos herois da base:
+// percorre os herois e verifica se aquele heroi pertence na base dada por parametro e se está vivo.
+// caso seja verdade, incrementa seu xp em 1.
 void incrementa_xp(W *mundo, int idbase) {
     if (!mundo)
         return;
@@ -82,6 +93,9 @@ void incrementa_xp(W *mundo, int idbase) {
             HEROI_W(mundo, h).xp++;
 }
 
+// retorna o id do heroi mais top ( o mais experiente, com mais xp acumulado ).
+// se o heroi pertence a base dada por parametro, compara ele com o maior xp ja encontrado.
+// em seguida, guarda o id do heroi com mais experiencia utilizando a variavel idheroi.
 int acha_experiente(W *mundo, int idbase) {
     int maior, idheroi;
 
@@ -101,6 +115,9 @@ int acha_experiente(W *mundo, int idbase) {
     return idheroi;
 }
 
+// retorna a uniao das habilidades dos herois pertencentes a base dada como parametro.
+// percorre os herois e verifica se eles pertencem aquela base, se sim, eh utilizada uma
+// variavel aux para evitar vazamento de memoria, para nao sobrescrever a variavel cjto_hab.
 struct cjto_t *habilidades_base (W *mundo, int idbase)  {
     struct cjto_t *cjto_hab, *aux;
 
@@ -116,12 +133,18 @@ struct cjto_t *habilidades_base (W *mundo, int idbase)  {
     return cjto_hab;
 }
 
+// retorna o status da vida de um heroi, verifica isso utilizando a macro status_h.
+// utiliza tambem (ev -> heroi < 0), para verificar se o evento eh uma missao e nao 
+// tem o heroi inicializado (-1).
 int status_vida (W *mundo, struct evento *ev) {
     if (STATUS_H(mundo, ev -> heroi) || ev -> heroi < 0)
         return 1;
     return 0;
 }
 
+// aloca um evento e o retorna.
+// atribui valores com base no que a funcao recebe por parametro.
+// se falhar a alocacao, retorna null.
 struct evento *cria_evento (W *mundo, int tipo, int base, int baseprox, int heroi, int tempo, int missao) {
     struct evento *evento_novo;
 
@@ -141,6 +164,11 @@ struct evento *cria_evento (W *mundo, int tipo, int base, int baseprox, int hero
     return evento_novo;
 }
 
+// printa todos os eventos, com excessao do evento missao, que eh o mais complicado.
+// antes, eh necessario a verificacao dos ponteiros para retornar falha.
+// a quantidade total de eventos completos eh aumentada.
+// o aux é utilizado para eventos especificos, nos casos em que temos que printar 
+// o tempo + um adicional, ou alguma formula especifica, ou a distancia.
 void printa_evento(W *mundo, struct evento *ev, int aux) {
 
     if (!mundo || !ev) {
@@ -217,6 +245,9 @@ void printa_evento(W *mundo, struct evento *ev, int aux) {
     }
 }
 
+// printa somente o evento missao, sem incluir as depuracoes, pois estas sao incluidas no propio evento.
+// aumenta a quantidade de eventos completos do mundo e analisa se a missao foi cumprida,
+// para imprimir conforme o seu estado.
 void printa_missao (W *mundo, struct evento *ev, struct cjto_t *hab, int cumprida){
     if (!mundo || !ev)
         return;
@@ -232,6 +263,9 @@ void printa_missao (W *mundo, struct evento *ev, struct cjto_t *hab, int cumprid
         printf("%6d: MISSAO %d IMPOSSIVEL\n", ev -> tempo, ev -> missao);
 }
 
+// inclui na lef os eventos iniciais, inicializando os campos com os dados que foram passados pelo trabalho.
+// eventos nos quais nao precisam de certo parametro para serem criados, sao inicializados com -1.
+// o evento fim eh agendado com o tempo do fim do mundo.
 void eventos_iniciais (W *mundo, struct fprio_t *lef) {
     struct evento *chega, *missao, *fim;
     int tempo;
@@ -261,6 +295,10 @@ void eventos_iniciais (W *mundo, struct fprio_t *lef) {
     fprio_insere(lef, fim, TIPO_FIM, T_FIM_DO_MUNDO);
 }
 
+// funcao responsavel pelo evento chega : 
+// atualiza a base do heroi inserindo a base do evento na struct do heroi.
+// se o heroi for esperar, insere o evento espera na lef e imprime.
+// caso contrario, insere o evento desiste na lef e imprime.
 void evento_chega (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *espera, *desiste;
     int vai_esperar;
@@ -290,6 +328,11 @@ void evento_chega (W *mundo, struct fprio_t *lef, struct evento *ev) {
     }
 }
 
+// funcao responsavel pelo evento espera:
+// insere o heroi na fila de espera usando a funcao fila_insere.
+// printa o evento antes de inserir o evento avisa, pois se inserissemos 
+// antes de printar, o tamanho da fila apareceria errado (com 1 pessoa a mais).
+// cria e insere o evento avisa na lef.
 void evento_espera (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *avisa;
     int atual;
@@ -309,6 +352,9 @@ void evento_espera (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
 }
 
+// funcao responsavel pelo evento desiste:
+// aleatoriza uma base destino para o heroi poder viajar para la com o evento viaja
+// cria e insere o evento viaja na lef
 void evento_desiste (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *viaja;
     int baseproxnova;

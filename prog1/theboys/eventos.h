@@ -36,9 +36,11 @@ struct cjto_t *habilidades_base (W *mundo, int idbase);
 // cria uma struct de eventos alocada
 struct evento *cria_evento (W *mundo, int tipo, int base, int baseprox, int heroi, int tempo, int missao);
 
-// imprime 
+// funcoes que imprimem os eventos
 void printa_evento(W *mundo, struct evento *ev, int aux);
 void printa_missao (W *mundo, struct evento *ev, struct cjto_t *hab, int cumprida);
+
+// funcoes que implementam os eventos da simulacao
 void eventos_iniciais (W *mundo, struct fprio_t *lef);
 void evento_chega (W *mundo, struct fprio_t *lef, struct evento *ev);
 void evento_espera(W *mundo, struct fprio_t *lef, struct evento *ev);
