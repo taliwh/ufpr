@@ -23,16 +23,15 @@
 #define TIPO_MISSAO              9
 #define TIPO_FIM                 10
 
-// macros para o codigo ficar mais legivel:
+// definicoes das macros para legibilidade do codigo:
 /*
  * _H: heroi
  * _B: base
  * _W: world (mundo)
  * _M: missao
- *
 */
 
-// acesso a vetores do mundo, para implementacao dos outros defines
+// campos do mundo
 #define COMPOSTOS_W(w)           ((w) -> qtd_compstv)
 #define QTD_HAB_W(w)             ((w) -> qtd_hab)
 #define QTD_H_W(w)               ((w) -> qtd_H)

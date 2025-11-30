@@ -1,5 +1,6 @@
 #include "eventos.h"
 
+// struct dos eventos opaca para o usuário
 struct evento {
     int tipo;
     int base;
@@ -116,7 +117,7 @@ struct cjto_t *habilidades_base (W *mundo, int idbase)  {
 }
 
 int status_vida (W *mundo, struct evento *ev) {
-    if (STATUS_H(mundo, ev -> heroi))
+    if (STATUS_H(mundo, ev -> heroi) || ev -> heroi < 0)
         return 1;
     return 0;
 }
@@ -153,13 +154,13 @@ void printa_evento(W *mundo, struct evento *ev, int aux) {
     switch (ev -> tipo) {
         case TIPO_CHEGA:
             if (aux)
-                printf("%6d: CHEGA  HEROI %2d BASE %d (%2d/%2d) ESPERA\n", ev -> tempo, ev -> heroi, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base));
+                printf("%6d: CHEGA  HEROI %2d BASE %d (%2d /%2d ) ESPERA\n", ev -> tempo, ev -> heroi, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base));
             else
-                printf("%6d: CHEGA  HEROI %2d BASE %d (%2d/%2d) DESISTE\n", ev -> tempo, ev -> heroi, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base));
+                printf("%6d: CHEGA  HEROI %2d BASE %d (%2d /%2d ) DESISTE\n", ev -> tempo, ev -> heroi, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base));
             break;
 
         case TIPO_ESPERA:
-            printf("%6d: ESPERA HEROI %2d BASE %d (%2d)\n", ev -> tempo, ev -> heroi, ev -> base, fila_tamanho(FILA_ESPERA_B(mundo, ev -> base)));
+            printf("%6d: ESPERA HEROI %2d BASE %d (%2d )\n", ev -> tempo, ev -> heroi, ev -> base, fila_tamanho(FILA_ESPERA_B(mundo, ev -> base)));
             break;
 
         case TIPO_DESISTE:
@@ -167,18 +168,18 @@ void printa_evento(W *mundo, struct evento *ev, int aux) {
             break;
 
         case TIPO_AVISA:
-            printf("%6d: AVISA  PORTEIRO BASE %d (%2d/%2d) FILA [ ", ev -> tempo, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base));
+            printf("%6d: AVISA  PORTEIRO BASE %d (%2d /%2d ) FILA [ ", ev -> tempo, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base));
             fila_imprime(FILA_ESPERA_B(mundo, ev -> base));
             printf(" ]\n");
             printf("%6d: AVISA  PORTEIRO BASE %d ADMITE %2d\n", ev -> tempo, ev -> base, ev -> heroi);
             break;
 
         case TIPO_ENTRA:
-            printf("%6d: ENTRA  HEROI %2d BASE %d (%2d/%2d) SAI %d\n", ev -> tempo, ev -> heroi, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base), ev -> tempo + aux);
+            printf("%6d: ENTRA  HEROI %2d BASE %d (%2d /%2d ) SAI %d\n", ev -> tempo, ev -> heroi, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base), ev -> tempo + aux);
             break;
 
         case TIPO_SAI:
-            printf("%6d: SAI    HEROI %2d BASE %d (%2d/%2d)\n", ev -> tempo, ev -> heroi, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base));
+            printf("%6d: SAI    HEROI %2d BASE %d (%2d /%2d )\n", ev -> tempo, ev -> heroi, ev -> base, cjto_card(PRESENCA_B(mundo, ev -> base)), LOTACAO_B(mundo, ev -> base));
             break;
 
         case TIPO_VIAJA:
@@ -219,6 +220,8 @@ void printa_evento(W *mundo, struct evento *ev, int aux) {
 void printa_missao (W *mundo, struct evento *ev, struct cjto_t *hab, int cumprida){
     if (!mundo || !ev)
         return;
+
+    QTD_E_W(mundo)++;
     
     if (cumprida) {
         printf("%6d: MISSAO %d CUMPRIDA BASE %d HABS: [ ", ev -> tempo, ev -> missao, ev -> base);
@@ -262,20 +265,19 @@ void evento_chega (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *espera, *desiste;
     int vai_esperar;
 
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
 
     BASEATUAL_H(mundo, ev -> heroi) = ev -> base;
 
     if (cjto_card(PRESENCA_B(mundo, ev -> base)) < LOTACAO_B(mundo, ev -> base) && !fila_tamanho(FILA_ESPERA_B(mundo, ev -> base)))
         vai_esperar = 1;
-    else {
+    else 
         if (PACIENCIA_H(mundo, ev -> heroi) > (10 * fila_tamanho(FILA_ESPERA_B(mundo, ev -> base))))
             vai_esperar = 1;
         else
             vai_esperar = 0;
-    }
-
+    
     if (vai_esperar) {
         espera = cria_evento(mundo, TIPO_ESPERA, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> missao);
         fprio_insere(lef, espera, TIPO_ESPERA, ev -> tempo); 
@@ -292,14 +294,16 @@ void evento_espera (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *avisa;
     int atual;
 
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
 
     fila_insere(FILA_ESPERA_B(mundo, ev -> base), ev -> heroi);
     printa_evento(mundo, ev, 0);
+
     atual = fila_tamanho(FILA_ESPERA_B(mundo, ev -> base));
     if (atual > MAX_FILA_B(mundo, ev -> base))
         MAX_FILA_B(mundo, ev -> base) = atual;
+
     avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> missao); 
     fprio_insere(lef, avisa, TIPO_AVISA, ev -> tempo);
 
@@ -309,7 +313,7 @@ void evento_desiste (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *viaja;
     int baseproxnova;
 
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
 
     baseproxnova = aleat(0, QTD_B_W(mundo) - 1);
@@ -321,10 +325,10 @@ void evento_desiste (W *mundo, struct fprio_t *lef, struct evento *ev) {
 }
 
 void evento_avisa (W *mundo, struct fprio_t *lef, struct evento *ev) {
-    int heroi;
     struct evento *entra;
+    int heroi;
 
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
 
     while ((cjto_card(PRESENCA_B(mundo, ev -> base))) < LOTACAO_B(mundo, ev -> base) && fila_tamanho(FILA_ESPERA_B(mundo, ev -> base))) {
@@ -340,7 +344,7 @@ void evento_entra (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *sai;
     int tpb;
 
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
 
     tpb = 15 + PACIENCIA_H(mundo, ev -> heroi) * aleat(1, 20);
@@ -355,11 +359,10 @@ void evento_sai (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *viaja, *avisa;
     int baseproxnova;
     
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
 
     baseproxnova = aleat(0, QTD_B_W(mundo) - 1);
-    
     cjto_retira((PRESENCA_B(mundo, ev -> base)), ev -> heroi);
 
     viaja = cria_evento(mundo, TIPO_VIAJA, ev -> base, baseproxnova, ev -> heroi, ev -> tempo, ev -> missao);
@@ -375,7 +378,7 @@ void evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *chega;
     int distancia, duracao;
 
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
 
     distancia = distancia_bases(LOCAL_X_B(mundo, ev -> base), LOCAL_X_B(mundo, ev -> baseprox), LOCAL_Y_B(mundo, ev -> base), LOCAL_Y_B(mundo, ev -> baseprox));
@@ -390,12 +393,14 @@ void evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev) {
 void evento_morre (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *avisa;
 
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
 
     cjto_retira((PRESENCA_B(mundo, ev -> base)), ev -> heroi);
+
     QTD_MORTE_W(mundo)++;
     STATUS_H(mundo, ev -> heroi) = 0;   
+
     avisa = cria_evento(mundo, TIPO_AVISA, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo, ev -> missao);
     fprio_insere(lef, avisa, TIPO_AVISA, ev -> tempo);
 
@@ -408,13 +413,14 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *morre;
     struct evento *missao;
 
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
 
     b = 0;
     idbase_proxima = -1;
     cumprida = 0;
     existe_bmp = 0;
+
     printf("%6d: MISSAO %d TENT %d HAB REQ: [ ", ev -> tempo, ev -> missao, TENTATIVA_M(mundo, ev -> missao));
     cjto_imprime(HABILIDADES_M(mundo, ev -> missao));
     printf(" ]\n");
@@ -429,7 +435,6 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
     b = 0;
 
     while (!existe_bmp && b < QTD_B_W(mundo)) {
-
         printf("%6d: MISSAO %d BASE %d DIST %d HEROIS [ ", ev->tempo, ev->missao, DIST_ID_B(mundo, b), DIST_DIST(mundo, b));
         cjto_imprime(PRESENCA_B(mundo, DIST_ID_B(mundo, b)));
         printf(" ]\n");
@@ -452,7 +457,9 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
             existe_bmp = 1;
             idbase_proxima = DIST_ID_B(mundo, b);
         }
+
         cjto_destroi(habs_base);
+
         b++;
     }
 
@@ -461,36 +468,41 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
         incrementa_xp(mundo, idbase_proxima);
         QTD_MI_W(mundo)++;
         QTD_M_B(mundo, idbase_proxima)++;
+
         habs_base = habilidades_base(mundo, idbase_proxima);
         ev -> base = idbase_proxima;
+
         printa_missao(mundo, ev, habs_base, cumprida);
         cjto_destroi(habs_base);
     }
-    else {
+    else 
         if (COMPOSTOS_W(mundo) && !(ev -> tempo % 2500)) {
             COMPOSTOS_W(mundo)--;
             cumprida++;
             ev -> base = DIST_ID_B(mundo, 0);
+
             heroitop = acha_experiente(mundo, DIST_ID_B(mundo, 0));
             if (heroitop != -1) {
                 morre = cria_evento(mundo, TIPO_MORRE, DIST_ID_B(mundo, 0), ev -> baseprox, heroitop, ev -> tempo, ev -> missao);
                 fprio_insere(lef, morre, TIPO_MORRE, ev -> tempo);
             }
+
             incrementa_xp(mundo, DIST_ID_B(mundo, 0));
             QTD_MI_W(mundo)++;
             QTD_M_B(mundo, DIST_ID_B(mundo, 0))++;
+
             habs_base = habilidades_base(mundo, DIST_ID_B(mundo, 0));
+
             printa_missao(mundo, ev, habs_base, cumprida);
             cjto_destroi(habs_base);
         }
         else {
             missao = cria_evento(mundo, TIPO_MISSAO, ev -> base, ev -> baseprox, ev -> heroi, ev -> tempo + 24*60, ev -> missao);
             fprio_insere(lef, missao, TIPO_MISSAO, ev -> tempo + 24*60);
-            printa_missao(mundo, ev, NULL, cumprida);
-            TENTATIVA_M(mundo, ev -> missao)++;
 
+            printa_missao(mundo, ev, NULL, cumprida);
+            TENTATIVA_M(mundo, ev -> missao)++; 
         }
-    }
 
     if (TENTATIVA_M(mundo, ev -> missao) < MIN_TENT_W(mundo) || MIN_TENT_W(mundo) == -1)
         MIN_TENT_W(mundo) = TENTATIVA_M(mundo, ev -> missao);
@@ -498,12 +510,12 @@ void evento_missao (W *mundo, struct fprio_t *lef, struct evento *ev) {
     if (TENTATIVA_M(mundo, ev -> missao) > MAX_TENT_W(mundo) || MAX_TENT_W(mundo) == -1)
         MAX_TENT_W(mundo) = TENTATIVA_M(mundo, ev -> missao);
     
-    SOMA_TENT_W(mundo)++;
+    SOMA_TENT_W(mundo) = SOMA_TENT_W(mundo) + TENTATIVA_M(mundo, ev->missao);
 }
 
 void evento_fim (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
-    if (!mundo || !lef || !ev ) 
+    if (!mundo || !lef || !ev) 
         return;
     
     fprio_destroi(lef);

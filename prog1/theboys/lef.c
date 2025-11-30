@@ -10,7 +10,7 @@ void comecar_lef(W *mundo, struct fprio_t *lef) {
         return;
     }
     // ev -> herois >= 0
-    while(!fim && fprio_tamanho(lef)) {
+    while(!fim && fprio_tamanho(lef) ) {
         ev = fprio_retira(lef, &tipo_evento, &prio_evento);
 
         if (!ev) 

@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include "fila.h"
 
-// Cria uma fila vazia.
-// Retorno: ponteiro para a fila criada ou NULL se erro.
+// retorna fila vazia, se falhar retorna null
 struct fila_t *fila_cria () {
     struct fila_t *fila;
 
@@ -18,15 +17,14 @@ struct fila_t *fila_cria () {
 	return fila;
 }
 
-// Libera todas as estruturas de dados da fila, inclusive os itens.
-// Retorno: NULL.
+// destroi a fila desalocando sua memoria
 struct fila_t *fila_destroi (struct fila_t *f) {
 	struct fila_nodo_t *filaprox;
 
     if (!f)
         return NULL;
 
-    while (f -> prim) { /* enquanto f -> prim for diferente de nulo */
+    while (f -> prim) { 
         filaprox = f -> prim -> prox;
         free(f -> prim);
         f -> prim = filaprox;
@@ -38,8 +36,7 @@ struct fila_t *fila_destroi (struct fila_t *f) {
 	return NULL;
 }
 
-// Informa o número de itens na fila.
-// Retorno: N >= 0 ou -1 se erro.
+// informa o tamanho da fila
 int fila_tamanho (struct fila_t *f) {
     if (!f)
         return -1;
@@ -47,6 +44,7 @@ int fila_tamanho (struct fila_t *f) {
     return f -> num;
 }
 
+// verifica se o item ja esta contido na fila
 int item_japertence(struct fila_t *f, int item) {
     struct fila_nodo_t *aux;
 
@@ -63,8 +61,7 @@ int item_japertence(struct fila_t *f, int item) {
     return 0;
 }
 
-// Insere um item no final da fila (politica FIFO).
-// Retorno: 1 se tiver sucesso ou 0 se falhar.
+// insere um item no final da fila respeitando a prioridade
 int fila_insere (struct fila_t *f, int item) {
     struct fila_nodo_t *novo;
 
@@ -78,9 +75,9 @@ int fila_insere (struct fila_t *f, int item) {
     novo -> item = item;
     novo -> prox =  NULL;
 
-    if (!fila_tamanho(f))   /* fila vazia */
+    if (!fila_tamanho(f))   
         f -> prim = novo;
-    else                  /* fila nao vazia*/
+    else               
         f -> ult -> prox = novo;
    
     f -> ult = novo;
@@ -90,8 +87,7 @@ int fila_insere (struct fila_t *f, int item) {
     return fila_tamanho(f);
 }
 
-// Retira o primeiro item da fila e o devolve
-// Retorno 1 se a operação foi bem sucedida e 0 caso contrário
+// retira o primeiro item da fila e o devolve no parametro item
 int fila_retira (struct fila_t *f, int *item) {
     struct fila_nodo_t *aux;
 
@@ -104,13 +100,13 @@ int fila_retira (struct fila_t *f, int *item) {
     free(aux);
 
     f -> num--;
-    if (!fila_tamanho(f)) /* fila ficou vazia */
+    if (!fila_tamanho(f))
         f -> ult = NULL;
     
     return 1;
 }
 
-// Imprime o conteúdo da fila 
+// imprime todo o conteudo da fila
 void fila_imprime (struct fila_t *f) {
     struct fila_nodo_t *aux;
     
