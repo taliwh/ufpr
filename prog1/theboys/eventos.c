@@ -353,8 +353,8 @@ void evento_espera (W *mundo, struct fprio_t *lef, struct evento *ev) {
 }
 
 // funcao responsavel pelo evento desiste:
-// aleatoriza uma base destino para o heroi poder viajar para la com o evento viaja
-// cria e insere o evento viaja na lef
+// aleatoriza uma base destino, para o heroi poder viajar para la com o evento viaja
+// cria e insere o evento viaja com a nova base aleatorizada na lef
 void evento_desiste (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *viaja;
     int baseproxnova;
@@ -370,6 +370,9 @@ void evento_desiste (W *mundo, struct fprio_t *lef, struct evento *ev) {
     printa_evento(mundo, ev, 0);
 }
 
+// funcao responsavel pelo evento avisa:
+// enquanto a base nao esta vazia, o heroi e retirado da fila de espera e inserido na base.
+// isso eh realizado com o cjto_insere e com a insercao do evento entra na lef.
 void evento_avisa (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *entra;
     int heroi;
@@ -386,6 +389,9 @@ void evento_avisa (W *mundo, struct fprio_t *lef, struct evento *ev) {
     }
 }
 
+// funcao responsavel pelo evento entra:
+// calcula o tempo de permanencia (tpb) do heroi na base.
+// cria e insere na lef o evento sai para o heroi sair após o tempo de permanencia.
 void evento_entra (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *sai;
     int tpb;
@@ -401,6 +407,9 @@ void evento_entra (W *mundo, struct fprio_t *lef, struct evento *ev) {
     printa_evento(mundo, ev, tpb);
 }
 
+// funcao responsavel pelo evento sai:
+// o heroi vai se dirigir para uma outra base, por isso aleatorizamos sua proxima base.
+// inserimos na lef o evento viaja para a proxima base, e o evento avisa para avisar o porteiro.
 void evento_sai (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *viaja, *avisa;
     int baseproxnova;
@@ -420,6 +429,10 @@ void evento_sai (W *mundo, struct fprio_t *lef, struct evento *ev) {
     printa_evento(mundo, ev, 0);
 }
 
+// funcao responsavel pelo evento viaja:
+// calcula-se a distancia da base atual do heroi para a base proxima,
+// utilizando a funcao distancia_bases. A duracao eh calculada com a formula dada pelo enunciado.
+// cria e insere na lef o evento chega com a base destino
 void evento_viaja (W *mundo, struct fprio_t *lef, struct evento *ev) {
     struct evento *chega;
     int distancia, duracao;
