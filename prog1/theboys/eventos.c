@@ -587,6 +587,8 @@ void evento_fim (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
     if (!mundo || !lef || !ev) 
         return;
+
+    QTD_E_W(mundo)++;
     
     fprio_destroi(lef);
     printa_evento(mundo, ev, 0);
