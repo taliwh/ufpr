@@ -136,7 +136,7 @@ struct cjto_t *habilidades_base (W *mundo, int idbase)  {
 // utiliza tambem (ev -> heroi < 0), para verificar se o evento eh uma missao e nao 
 // tem o heroi inicializado (-1).
 int status_vida (W *mundo, struct evento *ev) {
-    if (STATUS_H(mundo, ev -> heroi) || ev -> heroi < 0)
+    if (ev -> heroi < 0 || STATUS_H(mundo, ev -> heroi))
         return 1;
     return 0;
 }
@@ -587,8 +587,6 @@ void evento_fim (W *mundo, struct fprio_t *lef, struct evento *ev) {
 
     if (!mundo || !lef || !ev) 
         return;
-
-    QTD_E_W(mundo)++;
     
     fprio_destroi(lef);
     printa_evento(mundo, ev, 0);
