@@ -1,6 +1,6 @@
 #include "lef.h"
 
-// retira o evento da lef: se ele for válido e seu heroi estiver vivo,
+// retira o evento da lef: se ele for válido e se o heroi estiver vivo,
 // realiza os eventos até o fim ser 1, ou o tamanho da lef acabar.
 void comecar_lef(W *mundo, struct fprio_t *lef) {
     struct evento *ev;
