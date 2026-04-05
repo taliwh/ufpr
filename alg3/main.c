@@ -1,4 +1,4 @@
-/* arquivo de testes */
+/* Arquivo de testes */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,39 +21,48 @@ main()
   struct arvoreB* arv = criarArvoreB(T);
 
   /* Deixa a raiz cheia */
-  inserirArvoreB(arv, 3);
-  inserirArvoreB(arv, 5);
-  inserirArvoreB(arv, 2);
-  imprimirArvoreB(arv);
-
-  printf("\n");
-  
-  /* Divide a raiz, e arvore aumenta um nivel */
   inserirArvoreB(arv, 1);
+  inserirArvoreB(arv, 2);
+  inserirArvoreB(arv, 3);
   imprimirArvoreB(arv);
 
   printf("\n");
-  
+
+  /* Divide a raiz, e arvore aumenta um nivel */
+  inserirArvoreB(arv, 4);
+  imprimirArvoreB(arv);
+
+  printf("\n");
+
   /* Deixa o filho direito da raiz cheio */
-  inserirArvoreB(arv, 8);
-  inserirArvoreB(arv, 9);
-  imprimirArvoreB(arv);
-
-  printf("\n");
-  
-  /* Divide o filho direito e passa o 10 pra raiz */
-  inserirArvoreB(arv, 10);
+  inserirArvoreB(arv, 5);
   imprimirArvoreB(arv);
 
   printf("\n");
 
+  /* Divide o filho direito e leva mais uma chave para a raiz */
+  inserirArvoreB(arv, 6);
+  imprimirArvoreB(arv);
+
+  printf("\n");
+
+  /* Imprime todas as chaves da arvore de maneira ordenada */
   imprimirEmOrdem(arv);
+
   printf("\n");
 
-  buscarArvoreB(arv, 2, &id);
-  printf("%d\n", id);
+  /* Busca de uma chave especifica */
+  buscarArvoreB(arv, 7, &id);
+  if (id == -1)
+    {
+      printf("Essa chave nao esta presente na arvore.\n");
+    }
+  else
+    {
+      printf("O indice em que a chave 9 esta presente eh o: %d\n.", id);
+    }
 
-  // Liberar memoria da arvore
+  /* Libera memoria da arvore */
   deletarArvore(arv);
 
   return 0;

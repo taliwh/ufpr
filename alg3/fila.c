@@ -3,7 +3,7 @@
 #include "arvoreB.h"
 #include "fila.h"
 
-//fila adaptada de prog1,l
+// fila adaptada de prog1,l
 struct nodo_fila
 {
   struct nodo* nodo_arvore;
@@ -12,7 +12,7 @@ struct nodo_fila
 
 struct fila
 {
-  struct nodo_fila* ini;  
+  struct nodo_fila* ini;
   int32_t tamanho;
 };
 
@@ -147,4 +147,3 @@ fila_tamanho(struct fila* fila)
 {
   return fila->tamanho;
 }
-

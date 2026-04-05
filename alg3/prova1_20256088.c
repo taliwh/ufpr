@@ -42,7 +42,8 @@ criarArvoreB(int32_t t_arvore)
 }
 
 /*
- *
+ * Retorna a nova raiz de uma arvore b, apos ter sido dividida
+ * Atualiza o ponteiro da raiz para a nova raiz
  */
 struct nodo*
 divideRaiz(struct arvoreB* arvore)
@@ -176,7 +177,7 @@ inserirNaoCheio(struct arvoreB* arvore, struct nodo* no, int32_t chave)
     }
 }
 
-/*
+/* metodo bstcorman
  * Insere uma chave na arvore, desde que a arvore seja valida
  * Se a raiz estiver cheia, divide a raiz com a funcao divideraiz
  * Insere a chave a partir da raiz nao cheia
@@ -315,8 +316,8 @@ imprimirEmOrdem(struct arvoreB* arvore)
 /*
  * Realiza uma busca binaria entre os nodos da arvore
  * Percorre um nodo por nivel
-*/
-struct nodo* 
+ */
+struct nodo*
 buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
 {
   if (!arvore || !arvore->raiz)
