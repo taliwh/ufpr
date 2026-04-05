@@ -135,7 +135,7 @@ inserirNaoCheio(struct arvoreB* arvore, struct nodo* no, int32_t chave)
   else
     {
       /* procura a posicao q a chave se encontra para achar o filho
-       * correpsondente p encaixa*/
+       * correspondente p encaixa*/
       while (i >= 0 && chave < no->chaves[i])
         {
           i--;
@@ -162,7 +162,7 @@ inserirArvoreB(struct arvoreB* arvore, int32_t chave)
   if (!arvore || !arvore->raiz)
     {
       fprint(stderr, "Ponteiro nulo recebido.");
-      return NULL;
+      exit(1);
     }
 
   if (arvore->raiz->eh_cheio)
@@ -177,37 +177,114 @@ inserirArvoreB(struct arvoreB* arvore, int32_t chave)
 }
 
 void
+imprimirNodo(struct nodo* no)
+{
+  if (no->eh_folha)
+    {
+      printf("F");
+    }
+  else
+    {
+      printf("I");
+    }
+
+  printf(" (n:%d) ", no->qtd_chav);
+
+  printf("[");
+  for (int32_t i = 0; i <= no->qtd_chav - 1; i++)
+    {
+      printf("%d", no->chaves[i]);
+      if (i < no->qtd_chav - 1)
+        {
+          printf(" ");
+        }
+    }
+
+  printf("%d", no->chaves[no->qtd_chav - 1], "]");
+}
+
+void
 imprimirArvoreB(struct arvoreB* arvore)
 {
   if (!arvore || !arvore->raiz)
     {
       fprintf(stderr, "Ponteiro nulo recebido.");
-      return NULL;
+      exit(1);
     }
-  
-  int32_t qtd_chav = arvore->raiz->chaves
 
   struct fila* f = fila_cria();
-  for (int32_t i = 0; i < qtd_chav - 1; i++)
-    {
-      fila_insere_inicio(f, arvore->raiz->chaves[i]);
-    }
+  struct nodo* no;
+
+  fila_insere_inicio(f, arvore->raiz);
+  fila_insere_fim(f, NULL);
+  int32_t n = 0;
+
+  printf("----//----\n");
+  printf("Nivel %d\n", n);
 
   while (!fila_vazia(fila))
     {
-      for (int32_t i = 0; i < qtd_chav) 
-        {
+      fila_remove_inicio(f, &no);
 
+      if (no)
+        {
+          imprimirNodo(no);
+          printf(" ");
+
+          if (!no->eh_folha)
+            {
+              for (int32_t i = 0; i <= no->qtd_chav; i++)
+                {
+                  fila_insere_fim(f, no->filhos[i]);
+                }
+            }
         }
-      for (int32_t i = 0 )
-      qtd_chav = 
+      else
+        {
+          printf("\n");
+
+          if (!fila_vazia(f))
+            {
+              n++;
+              printf("----//----\n");
+              printf("Nivel %d\n", n);
+              fila_insere_fim(f, NULL);
+            }
+        }
     }
-  arvore->raiz
+
+  fila_destroi(&f);
+}
+
+void
+imprimeOrdenado(struct nodo* no)
+{
+  int32_t i;
+  for (i = 0; i < no->qtd_chave; i++)
+    {
+      if (!no->eh_folha)
+        {
+          imprimeOrdenado(no->filhos[i]);
+        }
+
+      printf("%d ", no->chaves[i]);
+    }
+  if (!no->eh_folha)
+    {
+      imprimeOrdenado(no->filhos[i]);
+    }
 }
 
 void
 imprimirEmOrdem(struct arvoreB* arvore)
 {
+  printf("Em ordem: ");
+
+  if (arvore && arvore->raiz)
+    {
+      imprimeOrdenado(arvore->raiz);
+      printf("\n");
+    }
 }
 
 struct nodo* // busca binaria inspirado slide vignatti a b vetor etc ,
@@ -218,7 +295,8 @@ buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
     {
       *idxEncontrado = -1;
       fprintf(stderr, "Ponteiro nulo recebido.");
-      return NULL;
+      // exit(1)?
+      // return NULL; ?
     }
 
   int32_t a;
@@ -254,13 +332,30 @@ buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
   return NULL;
 }
 
+void
+deletarNodo(struct nodo* no)
+{
+  if (!no->folha)
+    {
+      for (int32_t i = 0; i <= no->qtd_chav; i++)
+        {
+          deletarNodo(no->filhos[i]);
+        }
+    }
+
+  free(no);
+}
+
 void // ver se da pra deletar arvore no estilo pos ordem q nem na arvore
      // binaria
 deletarArvore(struct arvoreB* arvore)
 {
-  if (!arvore->raiz)
+  if (!arvore || !arvore->raiz)
     {
       fprintf("Ponteiro nulo recebido.");
-      return NULL;
+      return; // exit(1)?
     }
+
+  deletarNodo(arvore->raiz);
+  free(arvore);
 }

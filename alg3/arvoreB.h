@@ -38,5 +38,7 @@ void deletarArvore(struct arvoreB* arvore);
 // funcoes auxiliares
 void divideRaiz(struct arvoreB*);
 void divideFilho(struct arvoreB*);
+void imprimirNodo(struct nodo *no);
+void imprimeOrdenado(struct nodo *no);
 
 #endif

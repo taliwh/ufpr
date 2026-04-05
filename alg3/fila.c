@@ -3,6 +3,7 @@
 #include "arvoreB.h"
 #include "fila.h"
 
+//fila adaptada de prog1,l
 struct nodo_fila
 {
   struct nodo* nodo_arvore;
@@ -84,13 +85,13 @@ fila_insere_inicio(struct fila* fila, struct nodo* nodoarv)
  * elementos da fila, e atualiza o seu tamanho.
  */
 int32_t
-fila_insere_fim(struct fila* fila, int32_t chave)
+fila_insere_fim(struct fila* fila, struct nodo* nodoarv)
 {
   struct nodo_fila* novo;
   struct nodo_fila* aux;
 
   if (fila_vazia(fila))
-    return fila_insere_inicio(fila, chave);
+    return fila_insere_inicio(fila, nodoarv);
 
   novo = malloc(sizeof(struct nodo_fila));
 
@@ -102,7 +103,7 @@ fila_insere_fim(struct fila* fila, int32_t chave)
   while (aux->prox != NULL)
     aux = aux->prox;
 
-  novo->chave = chave;
+  novo->nodo_arvore = nodoarv;
   novo->prox = NULL;
   aux->prox = novo;
   fila->tamanho++;
@@ -126,7 +127,7 @@ fila_vazia(struct fila* fila)
  * o ultimo elemento recebe free e o tamanho da fila eh atualizado.
  */
 int32_t
-fila_remove_inicio(struct fila* fila, int32_t* chave)
+fila_remove_inicio(struct fila* fila, struct nodo** nodoarv)
 {
   struct nodo_fila* aux;
 
@@ -135,7 +136,7 @@ fila_remove_inicio(struct fila* fila, int32_t* chave)
 
   aux = fila->ini;
   fila->ini = fila->ini->prox;
-  *chave = aux->chave;
+  *nodoarv = aux->nodo_arvore;
   free(aux);
   fila->tamanho--;
 
@@ -158,12 +159,12 @@ fila_inicia_iterador(struct fila* fila)
 
 /* move a posicao do iterador e declara qual chave está sendo apontada */
 int32_t
-fila_incrementa_iterador(struct fila* fila, int32_t* chave)
+fila_incrementa_iterador(struct fila* fila, struct nodo** nodoarv)
 {
   if (!(fila->ptr))
     return 0;
 
-  *chave = fila->ptr->chave;
+  *nodoarv = fila->ptr->nodo_arvore;
   fila->ptr = fila->ptr->prox;
 
   return 1;
