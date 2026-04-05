@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <stdio.h>
+#include <stdint.h>
 #include "arvoreB.h"
 #include "fila.h"
 
@@ -12,8 +12,7 @@ struct nodo_fila
 
 struct fila
 {
-  struct nodo_fila* ini;
-  struct nodo_fila* ptr; /* ponteiro para algum nodo_fila da fila (iterador) */
+  struct nodo_fila* ini;  
   int32_t tamanho;
 };
 
@@ -29,7 +28,6 @@ fila_cria()
     return NULL;
 
   fila->ini = NULL;
-  fila->ptr = NULL;
   fila->tamanho = 0;
 
   return fila;
@@ -150,22 +148,3 @@ fila_tamanho(struct fila* fila)
   return fila->tamanho;
 }
 
-/* inicia o iterador */
-void
-fila_inicia_iterador(struct fila* fila)
-{
-  fila->ptr = fila->ini;
-}
-
-/* move a posicao do iterador e declara qual chave está sendo apontada */
-int32_t
-fila_incrementa_iterador(struct fila* fila, struct nodo** nodoarv)
-{
-  if (!(fila->ptr))
-    return 0;
-
-  *nodoarv = fila->ptr->nodo_arvore;
-  fila->ptr = fila->ptr->prox;
-
-  return 1;
-}

@@ -1,4 +1,9 @@
-// arquivo referente a papapapapapapa
+/*
+ * prova1_20256088
+ * Trabalho de alg3 feito por: Thalisia
+ * Estilo GNU
+ * Implementacao de operacoes numa arvoreb
+ */
 
 #include <stdio.h>
 #include <stdint.h>
@@ -7,9 +12,9 @@
 #include "fila.h"
 
 /*
-  retorna uma arvoreB alocada juntamente com um nodo
-  o nodo presente sera a raiz
-*/
+ * Aloca uma arvore b e sua respectiva raiz
+ * Caso nao haja memoria o suficiente, termina o programa
+ */
 struct arvoreB*
 criarArvoreB(int32_t t_arvore)
 {
@@ -36,10 +41,12 @@ criarArvoreB(int32_t t_arvore)
   return arv;
 }
 
+/*
+ *
+ */
 struct nodo*
 divideRaiz(struct arvoreB* arvore)
 {
-
   struct nodo* nova_raiz = malloc(sizeof(struct nodo));
   if (!nova_raiz)
     {
@@ -57,7 +64,9 @@ divideRaiz(struct arvoreB* arvore)
 
   return nova_raiz;
 }
-
+/*
+  nodao: nodo cheio
+*/
 void
 divideFilho(struct arvoreB* arvore, struct nodo* pai, int32_t i)
 {
@@ -116,7 +125,6 @@ divideFilho(struct arvoreB* arvore, struct nodo* pai, int32_t i)
     {
       pai->eh_cheio = true;
     }
-
 }
 
 void
@@ -168,6 +176,11 @@ inserirNaoCheio(struct arvoreB* arvore, struct nodo* no, int32_t chave)
     }
 }
 
+/*
+ * Insere uma chave na arvore, desde que a arvore seja valida
+ * Se a raiz estiver cheia, divide a raiz com a funcao divideraiz
+ * Insere a chave a partir da raiz nao cheia
+ */
 void
 inserirArvoreB(struct arvoreB* arvore, int32_t chave)
 {
@@ -299,8 +312,11 @@ imprimirEmOrdem(struct arvoreB* arvore)
     }
 }
 
-struct nodo* // busca binaria inspirado slide vignatti a b vetor etc ,
-             // facilitar o custo de cpu.
+/*
+ * Realiza uma busca binaria entre os nodos da arvore
+ * Percorre um nodo por nivel
+*/
+struct nodo* 
 buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
 {
   if (!arvore || !arvore->raiz)
@@ -356,8 +372,7 @@ deletarNodo(struct nodo* no)
   free(no);
 }
 
-void // ver se da pra deletar arvore no estilo pos ordem q nem na arvore
-     // binaria
+void
 deletarArvore(struct arvoreB* arvore)
 {
   if (!arvore || !arvore->raiz)
