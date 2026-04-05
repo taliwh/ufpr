@@ -1,13 +1,13 @@
 
-CC = gcc
+CC = gcc-14
 CFLAGS = -Wall -Wextra -Werror -g -std=c23
-MAIN = prova1_20256088
-# OBJ = possiveis arquivos objetos
-HDR = arvoreB.h
+MAIN = main
+OBJ = main.o prova1_20256088.o fila.o
+HDR = arvoreB.h fila.h
 
 
 
-$(MAIN): $(MAIN).o # $(OBJ)
+$(MAIN): $(OBJ)
 
 $(MAIN).o: $(MAIN).c $(HDR)
 

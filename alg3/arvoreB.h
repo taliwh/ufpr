@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#define T 2
+
 /*
   struct que armazena:
   quantidade de chaves;
@@ -18,7 +20,7 @@ struct nodo
   int32_t chaves[2 * T - 1];
   struct nodo* filhos[2 * T];
   bool eh_folha;
-  bool eh_cheio; 
+  bool eh_cheio;
 };
 
 struct arvoreB
@@ -36,9 +38,10 @@ struct nodo* buscarArvoreB(struct arvoreB* arvore, int32_t chave,
 void deletarArvore(struct arvoreB* arvore);
 
 // funcoes auxiliares
-void divideRaiz(struct arvoreB*);
-void divideFilho(struct arvoreB*);
-void imprimirNodo(struct nodo *no);
-void imprimeOrdenado(struct nodo *no);
+struct nodo* divideRaiz(struct arvoreB*);
+void divideFilho(struct arvoreB*, struct nodo* pai, int32_t i);
+void imprimirNodo(struct nodo* no);
+void imprimeOrdenado(struct nodo* no);
+void inserirNaoCheio(struct arvoreB* arvore, struct nodo* no, int32_t chave);
 
 #endif

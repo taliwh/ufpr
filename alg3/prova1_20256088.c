@@ -1,6 +1,7 @@
 // arquivo referente a papapapapapapa
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include "arvoreB.h"
 #include "fila.h"
@@ -20,7 +21,7 @@ criarArvoreB(int32_t t_arvore)
       exit(1);
     }
 
-  arv->raiz = calloc(sizeof(1, struct nodo));
+  arv->raiz = calloc(1, sizeof(struct nodo));
 
   if (!arv->raiz)
     {
@@ -52,7 +53,7 @@ divideRaiz(struct arvoreB* arvore)
   nova_raiz->filhos[0] = arvore->raiz;
 
   arvore->raiz = nova_raiz;
-  divideFilho(arvore->raiz, 0);
+  divideFilho(arvore, arvore->raiz, 0);
 
   return nova_raiz;
 }
@@ -72,6 +73,7 @@ divideFilho(struct arvoreB* arvore, struct nodo* pai, int32_t i)
 
   novo_nodo->eh_folha = nodao->eh_folha;
   novo_nodo->qtd_chav = t - 1;
+  novo_nodo->eh_cheio = false;
 
   /* copia as chaves da segunda metade do nodao para o novo nodo */
   for (int32_t j = 0; j < t - 1; j++)
@@ -114,6 +116,7 @@ divideFilho(struct arvoreB* arvore, struct nodo* pai, int32_t i)
     {
       pai->eh_cheio = true;
     }
+
 }
 
 void
@@ -131,6 +134,15 @@ inserirNaoCheio(struct arvoreB* arvore, struct nodo* no, int32_t chave)
         }
       no->chaves[i + 1] = chave;
       no->qtd_chav++;
+
+      if (no->qtd_chav == 2 * arvore->t_arvore - 1)
+        {
+          no->eh_cheio = true;
+        }
+      else
+        {
+          no->eh_cheio = false;
+        }
     }
   else
     {
@@ -152,7 +164,7 @@ inserirNaoCheio(struct arvoreB* arvore, struct nodo* no, int32_t chave)
             }
         }
 
-      inserirNaoCheio(no->filhos[i], chave);
+      inserirNaoCheio(arvore, no->filhos[i], chave);
     }
 }
 
@@ -161,18 +173,18 @@ inserirArvoreB(struct arvoreB* arvore, int32_t chave)
 {
   if (!arvore || !arvore->raiz)
     {
-      fprint(stderr, "Ponteiro nulo recebido.");
+      fprintf(stderr, "Ponteiro nulo recebido.");
       exit(1);
     }
 
   if (arvore->raiz->eh_cheio)
     {
       struct nodo* nova_raiz = divideRaiz(arvore);
-      inserirNaoCheio(nova_raiz, chave);
+      inserirNaoCheio(arvore, nova_raiz, chave);
     }
   else
     {
-      inserirNaoCheio(arvore->raiz, chave);
+      inserirNaoCheio(arvore, arvore->raiz, chave);
     }
 }
 
@@ -200,7 +212,7 @@ imprimirNodo(struct nodo* no)
         }
     }
 
-  printf("%d", no->chaves[no->qtd_chav - 1], "]");
+  printf("]");
 }
 
 void
@@ -221,15 +233,15 @@ imprimirArvoreB(struct arvoreB* arvore)
 
   printf("----//----\n");
   printf("Nivel %d\n", n);
-
-  while (!fila_vazia(fila))
+  printf("----//----\n");
+  while (!fila_vazia(f))
     {
       fila_remove_inicio(f, &no);
 
       if (no)
         {
           imprimirNodo(no);
-          printf(" ");
+          printf("  ");
 
           if (!no->eh_folha)
             {
@@ -260,7 +272,7 @@ void
 imprimeOrdenado(struct nodo* no)
 {
   int32_t i;
-  for (i = 0; i < no->qtd_chave; i++)
+  for (i = 0; i < no->qtd_chav; i++)
     {
       if (!no->eh_folha)
         {
@@ -295,13 +307,11 @@ buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
     {
       *idxEncontrado = -1;
       fprintf(stderr, "Ponteiro nulo recebido.");
-      // exit(1)?
-      // return NULL; ?
+      exit(1);
     }
 
   int32_t a;
   int32_t b;
-  int32_t meio;
   struct nodo* nodo_atual = arvore->raiz;
 
   while (nodo_atual)
@@ -314,7 +324,7 @@ buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
           if (chave == nodo_atual->chaves[meio])
             {
               *idxEncontrado = meio;
-              return arvore->raiz;
+              return nodo_atual;
             }
           if (chave > nodo_atual->chaves[meio])
             {
@@ -335,7 +345,7 @@ buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
 void
 deletarNodo(struct nodo* no)
 {
-  if (!no->folha)
+  if (!no->eh_folha)
     {
       for (int32_t i = 0; i <= no->qtd_chav; i++)
         {
@@ -352,8 +362,8 @@ deletarArvore(struct arvoreB* arvore)
 {
   if (!arvore || !arvore->raiz)
     {
-      fprintf("Ponteiro nulo recebido.");
-      return; // exit(1)?
+      fprintf(stderr, "Ponteiro nulo recebido.");
+      exit(1);
     }
 
   deletarNodo(arvore->raiz);
