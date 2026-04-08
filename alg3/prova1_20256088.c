@@ -2,7 +2,7 @@
  * prova1_20256088
  * Trabalho de alg3 feito por: Thalisia
  * Estilo GNU
- * Implementacao de operacoes numa arvoreb
+ * Implementacao de operacoes numa arvore B
  */
 
 #include <stdio.h>
@@ -12,7 +12,7 @@
 #include "fila.h"
 
 /*
- * Aloca uma arvore b e sua respectiva raiz
+ * Retorna uma arvore b alocada e sua respectiva raiz
  * Caso nao haja memoria o suficiente, termina o programa
  */
 struct arvoreB*
@@ -40,6 +40,10 @@ criarArvoreB(int32_t t_arvore)
   return arv;
 }
 
+/* 
+ * Retorna somente um nodo alocado para a arvore 
+ * Em caso de falta de memoria, retorna null
+ */
 struct nodo*
 alocarNodo(int32_t t_arvore)
 {
@@ -68,8 +72,8 @@ alocarNodo(int32_t t_arvore)
 }
 
 /*
- * Retorna a nova raiz de uma arvore b, apos ter sido dividida
- * Atualiza o ponteiro da raiz para a nova raiz
+ * Retorna a nova raiz de uma arvore b, apos a raiz antiga ter sido dividida
+ * Atualiza o ponteiro da raiz da arvore para a nova raiz alocada
  */
 struct nodo*
 divideRaiz(struct arvoreB* arvore)
@@ -89,8 +93,9 @@ divideRaiz(struct arvoreB* arvore)
   return nova_raiz;
 }
 /*
-  nodao: nodo cheio
-*/
+ * Divide em dois nodos o filho de um certo pai dado por parametro da funcao
+ *
+ */
 void
 divideFilho(struct arvoreB* arvore, struct nodo* pai, int32_t i)
 {
