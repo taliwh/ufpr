@@ -4,9 +4,6 @@
 #include <stdio.h>
 #include <stdint.h>
 
-/* Define para o T da arvore */
-#define T 2
-
 /*
  * Nodo da arvore, que contem:
  *  qtd_chav: quantidade de chaves;
@@ -18,8 +15,8 @@
 struct nodo
 {
   int32_t qtd_chav;
-  int32_t chaves[2 * T - 1];
-  struct nodo* filhos[2 * T];
+  int32_t* chaves;
+  struct nodo** filhos;
   bool eh_folha;
   bool eh_cheio;
 };
@@ -40,6 +37,7 @@ void deletarArvore(struct arvoreB* arvore);
 
 /* Funcoes auxiliares */
 struct nodo* divideRaiz(struct arvoreB*);
+struct nodo* alocarNodo(int32_t t_arvore);
 void divideFilho(struct arvoreB*, struct nodo* pai, int32_t i);
 void imprimirNodo(struct nodo* no);
 void imprimeOrdenado(struct nodo* no);

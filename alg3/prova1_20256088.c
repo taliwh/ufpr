@@ -19,14 +19,13 @@ struct arvoreB*
 criarArvoreB(int32_t t_arvore)
 {
   struct arvoreB* arv = malloc(sizeof(struct arvoreB));
-
   if (!arv)
     {
       fprintf(stderr, "Falha ao alocar memoria.");
       exit(1);
     }
 
-  arv->raiz = calloc(1, sizeof(struct nodo));
+  arv->raiz = alocarNodo(t_arvore);
 
   if (!arv->raiz)
     {
@@ -41,6 +40,33 @@ criarArvoreB(int32_t t_arvore)
   return arv;
 }
 
+struct nodo*
+alocarNodo(int32_t t_arvore)
+{
+  struct nodo* no = calloc(1, sizeof(struct nodo));
+  if (!no)
+    {
+      return NULL;
+    }
+
+  no->chaves = calloc(2 * t_arvore - 1, sizeof(int32_t));
+  if (!no->chaves)
+    {
+      free(no);
+      return NULL;
+    }
+
+  no->filhos = calloc(2 * t_arvore, sizeof(struct nodo*));
+  if (!no->filhos)
+    {
+      free(no->chaves);
+      free(no);
+      return NULL;
+    }
+
+  return no;
+}
+
 /*
  * Retorna a nova raiz de uma arvore b, apos ter sido dividida
  * Atualiza o ponteiro da raiz para a nova raiz
@@ -48,16 +74,13 @@ criarArvoreB(int32_t t_arvore)
 struct nodo*
 divideRaiz(struct arvoreB* arvore)
 {
-  struct nodo* nova_raiz = malloc(sizeof(struct nodo));
+  struct nodo* nova_raiz = alocarNodo(arvore->t_arvore);
   if (!nova_raiz)
     {
       fprintf(stderr, "Falha ao alocar memoria.");
       exit(1);
     }
 
-  nova_raiz->eh_folha = false;
-  nova_raiz->eh_cheio = false;
-  nova_raiz->qtd_chav = 0;
   nova_raiz->filhos[0] = arvore->raiz;
 
   arvore->raiz = nova_raiz;
@@ -71,7 +94,7 @@ divideRaiz(struct arvoreB* arvore)
 void
 divideFilho(struct arvoreB* arvore, struct nodo* pai, int32_t i)
 {
-  struct nodo* novo_nodo = calloc(1, sizeof(struct nodo));
+  struct nodo* novo_nodo = alocarNodo(arvore->t_arvore);
   if (!novo_nodo)
     {
       fprintf(stderr, "Falha ao alocar memoria.");
@@ -187,8 +210,7 @@ inserirArvoreB(struct arvoreB* arvore, int32_t chave)
 {
   if (!arvore || !arvore->raiz)
     {
-      fprintf(stderr, "Ponteiro nulo recebido.");
-      exit(1);
+      return;
     }
 
   if (arvore->raiz->eh_cheio)
@@ -234,24 +256,23 @@ imprimirArvoreB(struct arvoreB* arvore)
 {
   if (!arvore || !arvore->raiz)
     {
-      fprintf(stderr, "Ponteiro nulo recebido.");
-      exit(1);
+      return;
     }
 
   struct fila* f = fila_cria();
   struct nodo* no;
+  int32_t n = 0;
 
   fila_insere_inicio(f, arvore->raiz);
   fila_insere_fim(f, NULL);
-  int32_t n = 0;
 
   printf("----//----\n");
   printf("Nivel %d\n", n);
   printf("----//----\n");
+
   while (!fila_vazia(f))
     {
       fila_remove_inicio(f, &no);
-
       if (no)
         {
           imprimirNodo(no);
@@ -304,8 +325,12 @@ imprimeOrdenado(struct nodo* no)
 void
 imprimirEmOrdem(struct arvoreB* arvore)
 {
-  printf("Em ordem: ");
+  if (!arvore || !arvore->raiz)
+    {
+      return;
+    }
 
+  printf("Em ordem: ");
   if (arvore && arvore->raiz)
     {
       imprimeOrdenado(arvore->raiz);
@@ -323,8 +348,7 @@ buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
   if (!arvore || !arvore->raiz)
     {
       *idxEncontrado = -1;
-      fprintf(stderr, "Ponteiro nulo recebido.");
-      exit(1);
+      return NULL;
     }
 
   int32_t a;
@@ -370,6 +394,8 @@ deletarNodo(struct nodo* no)
         }
     }
 
+  free(no->chaves);
+  free(no->filhos);
   free(no);
 }
 
@@ -378,8 +404,7 @@ deletarArvore(struct arvoreB* arvore)
 {
   if (!arvore || !arvore->raiz)
     {
-      fprintf(stderr, "Ponteiro nulo recebido.");
-      exit(1);
+      return;
     }
 
   deletarNodo(arvore->raiz);

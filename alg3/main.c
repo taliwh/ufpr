@@ -1,24 +1,29 @@
-/* Arquivo de testes */
+/* Arquivo de testes
+ * Os comentarios valem somente para as instancias especificas ja colocadas nesse arquivo 
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include "arvoreB.h"
-#define T 2
 
 int
 main()
 {
   int32_t id;
+  int32_t t;
+
+  printf("Digite o valor de t para a arvore\n");
+  scanf("%d", &t);
 
   /* Verifica se o valor de T eh valido */
-  if (T > 1073741823 || T < 2)
+  if (t > 1073741823 || t < 2)
     {
       fprintf(stderr, "Valor de t invalido.");
       exit(1);
     }
 
-  struct arvoreB* arv = criarArvoreB(T);
+  struct arvoreB* arv = criarArvoreB(t);
 
   /* Deixa a raiz cheia */
   inserirArvoreB(arv, 1);
