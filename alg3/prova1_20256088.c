@@ -78,6 +78,12 @@ alocarNodo(int32_t t_arvore)
 struct nodo*
 divideRaiz(struct arvoreB* arvore)
 {
+  if (!arvore || !arvore->raiz) 
+    {
+      fprintf(stderr, "Ponteiro invalido.");
+      exit(1);
+    }
+
   struct nodo* nova_raiz = alocarNodo(arvore->t_arvore);
   if (!nova_raiz)
     {
@@ -100,6 +106,12 @@ divideRaiz(struct arvoreB* arvore)
 void
 divideFilho(struct arvoreB* arvore, struct nodo* pai, int32_t i)
 {
+  if (!arvore || !pai) 
+    {
+      fprintf(stderr, "Ponteiro invalido.");
+      exit(1);
+    }
+
   struct nodo* novo_nodo = alocarNodo(arvore->t_arvore);
   if (!novo_nodo)
     {
@@ -160,6 +172,12 @@ divideFilho(struct arvoreB* arvore, struct nodo* pai, int32_t i)
 void
 inserirNaoCheio(struct arvoreB* arvore, struct nodo* no, int32_t chave)
 {
+  if (!arvore || !no) 
+    {
+      fprintf(stderr, "Ponteiro invalido.");
+      exit(1);
+    }
+
   int32_t i = no->qtd_chav - 1;
 
   if (no->eh_folha)
@@ -214,11 +232,12 @@ inserirNaoCheio(struct arvoreB* arvore, struct nodo* no, int32_t chave)
 void
 inserirArvoreB(struct arvoreB* arvore, int32_t chave)
 {
-  if (!arvore || !arvore->raiz)
+  if (!arvore || !arvore->raiz) 
     {
-      return;
+      fprintf(stderr, "Ponteiro invalido.");
+      exit(1);
     }
-
+  
   if (arvore->raiz->eh_cheio)
     {
       struct nodo* nova_raiz = divideRaiz(arvore);
@@ -233,6 +252,11 @@ inserirArvoreB(struct arvoreB* arvore, int32_t chave)
 void
 imprimirNodo(struct nodo* no)
 {
+  if (!no) 
+    {
+      return;
+    }
+
   if (no->eh_folha)
     {
       printf("F");
@@ -260,7 +284,7 @@ imprimirNodo(struct nodo* no)
 void
 imprimirArvoreB(struct arvoreB* arvore)
 {
-  if (!arvore || !arvore->raiz)
+  if (!arvore)
     {
       return;
     }
@@ -312,6 +336,11 @@ imprimirArvoreB(struct arvoreB* arvore)
 void
 imprimeOrdenado(struct nodo* no)
 {
+  if (!no)
+    {
+      return;
+    }
+
   int32_t i;
   for (i = 0; i < no->qtd_chav; i++)
     {
@@ -331,7 +360,7 @@ imprimeOrdenado(struct nodo* no)
 void
 imprimirEmOrdem(struct arvoreB* arvore)
 {
-  if (!arvore || !arvore->raiz)
+  if (!arvore)
     {
       return;
     }
@@ -392,6 +421,11 @@ buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
 void
 deletarNodo(struct nodo* no)
 {
+  if (!no)
+    {
+      return;
+    }
+
   if (!no->eh_folha)
     {
       for (int32_t i = 0; i <= no->qtd_chav; i++)
@@ -408,8 +442,8 @@ deletarNodo(struct nodo* no)
 void
 deletarArvore(struct arvoreB* arvore)
 {
-  if (!arvore || !arvore->raiz)
-    {
+  if (!arvore) 
+    { //arvore ja vazia
       return;
     }
 
