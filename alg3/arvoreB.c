@@ -18,6 +18,13 @@
 struct arvoreB*
 criarArvoreB(int32_t t_arvore)
 {
+  /* Verifica se o valor de T eh valido */
+  if (t_arvore > (int32_t)sizeof(int32_t) || t_arvore < 2)
+    {
+      fprintf(stderr, "Valor de t invalido.\n");
+      exit(1);
+    }
+
   struct arvoreB* arv = malloc(sizeof(struct arvoreB));
   if (!arv)
     {
