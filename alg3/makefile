@@ -1,12 +1,20 @@
 CC = gcc-14
 CFLAGS = -Wall -Wextra -Werror -g -std=c23
-MAIN = main
-OBJ = main.o prova1_20256088.o fila.o
+MAIN = prova1_20256088
+OBJ = main.o arvoreB.o fila.o
 HDR = arvoreB.h fila.h
 
 $(MAIN): $(OBJ)
+	$(CC) $(CFLAGS) -o $(MAIN) $(OBJ)
 
-$(MAIN).o: $(MAIN).c $(HDR)
+main.o: main.c $(HDR)
+	$(CC) $(CFLAGS) -c main.c
+
+arvoreB.o: arvoreB.c arvoreB.h 
+	$(CC) $(CFLAGS) -c arvoreB.c
+
+fila.o: fila.c fila.h
+	$(CC) $(CFLAGS) -c fila.c
 
 run: $(MAIN)
 	./$(MAIN)

@@ -2,7 +2,7 @@
  * prova1_20256088
  * Trabalho de alg3 feito por: Thalisia
  * Estilo GNU
- * Implementacao de operacoes numa arvore B
+ * Implementacao de operacoes numa arvore b
  */
 
 #include <stdio.h>
@@ -21,7 +21,7 @@ criarArvoreB(int32_t t_arvore)
   struct arvoreB* arv = malloc(sizeof(struct arvoreB));
   if (!arv)
     {
-      fprintf(stderr, "Falha ao alocar memoria.");
+      fprintf(stderr, "Falha ao alocar memoria.\n");
       exit(1);
     }
 
@@ -29,7 +29,7 @@ criarArvoreB(int32_t t_arvore)
 
   if (!arv->raiz)
     {
-      fprintf(stderr, "Falha ao alocar memoria.");
+      fprintf(stderr, "Falha ao alocar memoria.\n");
       free(arv);
       exit(1);
     }
@@ -80,14 +80,14 @@ divideRaiz(struct arvoreB* arvore)
 {
   if (!arvore || !arvore->raiz) 
     {
-      fprintf(stderr, "Ponteiro invalido.");
+      fprintf(stderr, "Ponteiro invalido.\n");
       exit(1);
     }
 
   struct nodo* nova_raiz = alocarNodo(arvore->t_arvore);
   if (!nova_raiz)
     {
-      fprintf(stderr, "Falha ao alocar memoria.");
+      fprintf(stderr, "Falha ao alocar memoria.\n");
       exit(1);
     }
 
@@ -108,14 +108,14 @@ divideFilho(struct arvoreB* arvore, struct nodo* pai, int32_t i)
 {
   if (!arvore || !pai) 
     {
-      fprintf(stderr, "Ponteiro invalido.");
+      fprintf(stderr, "Ponteiro invalido.\n");
       exit(1);
     }
 
   struct nodo* novo_nodo = alocarNodo(arvore->t_arvore);
   if (!novo_nodo)
     {
-      fprintf(stderr, "Falha ao alocar memoria.");
+      fprintf(stderr, "Falha ao alocar memoria.\n");
       exit(1);
     }
 
@@ -179,7 +179,7 @@ inserirNaoCheio(struct arvoreB* arvore, struct nodo* no, int32_t chave)
 {
   if (!arvore || !no) 
     {
-      fprintf(stderr, "Ponteiro invalido.");
+      fprintf(stderr, "Ponteiro invalido.\n");
       exit(1);
     }
 
@@ -239,7 +239,7 @@ inserirArvoreB(struct arvoreB* arvore, int32_t chave)
 {
   if (!arvore || !arvore->raiz) 
     {
-      fprintf(stderr, "Ponteiro invalido.");
+      fprintf(stderr, "Ponteiro invalido.\n");
       exit(1);
     }
   
@@ -254,9 +254,7 @@ inserirArvoreB(struct arvoreB* arvore, int32_t chave)
     }
 }
 
-/*
- * Imprime as informacoes de um nodo(tipo e suas chaves) 
- */
+/* Imprime as informacoes de um nodo(tipo e suas chaves) */
 void
 imprimirNodo(struct nodo* no)
 {
@@ -289,9 +287,7 @@ imprimirNodo(struct nodo* no)
   printf("]");
 }
 
-/* 
- * Imprime a arvore por niveis (largura), utilizando fila
- */
+/* Imprime a arvore por niveis (largura), utilizando fila */
 void
 imprimirArvoreB(struct arvoreB* arvore)
 {
@@ -344,9 +340,7 @@ imprimirArvoreB(struct arvoreB* arvore)
   fila_destroi(&f);
 }
 
-/*
- * Percorre a arvore em ordem e imprime as chaves ordenadas
- */
+/* Percorre a arvore em ordem e imprime as chaves ordenadas */
 void
 imprimeOrdenado(struct nodo* no)
 {
@@ -371,9 +365,7 @@ imprimeOrdenado(struct nodo* no)
     }
 }
 
-/* 
- * Imprime as chaves presentes na arvore de forma ordenada
- */
+/* Imprime as chaves presentes na arvore de forma ordenada */
 void
 imprimirEmOrdem(struct arvoreB* arvore)
 {
@@ -430,9 +422,7 @@ buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado)
   return NULL;
 }
 
-/*
- * Libera recursivamente a memoria de um nodo e seus filhos
- */
+/* Libera recursivamente a memoria de um nodo e seus filhos */
 void
 deletarNodo(struct nodo* no)
 {
@@ -454,9 +444,7 @@ deletarNodo(struct nodo* no)
   free(no);
 }
 
-/*
- * Libera toda a memoria da arvore B
- */
+/* Libera toda a memoria da arvore B */
 void
 deletarArvore(struct arvoreB* arvore)
 {

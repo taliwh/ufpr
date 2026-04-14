@@ -1,4 +1,5 @@
-/* Arquivo de testes
+/* 
+ * Arquivo de testes
  * Os comentarios valem somente para as instancias especificas ja colocadas
  * nesse arquivo
  */
@@ -18,14 +19,14 @@ main()
   scanf("%d", &t);
 
   /* Verifica se o valor de T eh valido */
-  if (t > 1073741823 || t < 2)
+  if (t > (int32_t)sizeof(int32_t) || t < 2)
     {
-      fprintf(stderr, "Valor de t invalido.");
+      fprintf(stderr, "Valor de t invalido.\n");
       exit(1);
     }
 
   struct arvoreB* arv = criarArvoreB(t);
-
+    
   /* Deixa a raiz cheia */
   inserirArvoreB(arv, 1);
   inserirArvoreB(arv, 2);
@@ -58,14 +59,14 @@ main()
   printf("\n");
 
   /* Busca de uma chave especifica */
-  buscarArvoreB(arv, 7, &id);
+  buscarArvoreB(arv, 3, &id);
   if (id == -1)
     {
       printf("Essa chave nao esta presente na arvore.\n");
     }
   else
     {
-      printf("O indice em que a chave 9 esta presente eh o: %d\n.", id);
+      printf("O indice em que a chave esta presente dentrro do nodo eh o: %d\n", id);
     }
 
   /* Libera memoria da arvore */

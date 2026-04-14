@@ -1,9 +1,10 @@
+/* Fila para armazenar os nodos da arvore B */
+
 #include <stdlib.h>
 #include <stdint.h>
 #include "arvoreB.h"
 #include "fila.h"
 
-// fila adaptada de prog1,l
 struct nodo_fila
 {
   struct nodo* nodo_arvore;
@@ -16,7 +17,7 @@ struct fila
   int32_t tamanho;
 };
 
-/* cria uma fila inicial alocada de tamanho nulo */
+/* Cria uma fila inicial alocada de tamanho nulo */
 struct fila*
 fila_cria()
 {
@@ -34,9 +35,9 @@ fila_cria()
 }
 
 /*
- * desaloca todas as memorias e os ponteiros correspondentes recebem NULL;
- * com a variavel aux, percorre toda a fila;
- * utiliza-se a variavel aux_prox para nao haver perca de elementos da fila.
+ * Desaloca todas as memorias e os ponteiros correspondentes recebem NULL;
+ * Percorre a fila com a variavel aux;
+ * Utiliza-se a variavel aux_prox para nao haver perca de elementos da fila.
  */
 void
 fila_destroi(struct fila** fila)
@@ -57,7 +58,7 @@ fila_destroi(struct fila** fila)
   *fila = NULL;
 }
 
-/* insere um novo nodo_fila alocado com a chave escolhida no começo da fila */
+/* Insere um novo nodo_fila alocado com a chave escolhida no começo da fila */
 int32_t
 fila_insere_inicio(struct fila* fila, struct nodo* nodoarv)
 {
@@ -77,8 +78,8 @@ fila_insere_inicio(struct fila* fila, struct nodo* nodoarv)
 }
 
 /*
- * insere um novo nodo_fila alocado no final da fila;
- * se a fila for vazia, é preferível inserir a chave com a função
+ * Insere um novo nodo_fila alocado no final da fila;
+ * Se a fila for vazia, é preferível inserir a chave com a função
  * insere_inicio, pois não terá elementos antecessores; insere sem perca de
  * elementos da fila, e atualiza o seu tamanho.
  */
@@ -109,7 +110,7 @@ fila_insere_fim(struct fila* fila, struct nodo* nodoarv)
   return 1;
 }
 
-/* indica se a fila está sem elementos */
+/* Indica se a fila está sem elementos */
 int32_t
 fila_vazia(struct fila* fila)
 {
@@ -120,9 +121,9 @@ fila_vazia(struct fila* fila)
 }
 
 /*
- * remove o primeiro elemento e indica a chave que foi retirada;
- * verifica se a fila esta vazia;
- * o ultimo elemento recebe free e o tamanho da fila eh atualizado.
+ * Remove o primeiro elemento e indica a chave que foi retirada;
+ * Verifica se a fila esta vazia;
+ * O ultimo elemento recebe free e o tamanho da fila eh atualizado.
  */
 int32_t
 fila_remove_inicio(struct fila* fila, struct nodo** nodoarv)
@@ -141,7 +142,7 @@ fila_remove_inicio(struct fila* fila, struct nodo** nodoarv)
   return 1;
 }
 
-/* retorna quantidade de elementos da fila */
+/* Retorna quantidade de elementos da fila */
 int32_t
 fila_tamanho(struct fila* fila)
 {
