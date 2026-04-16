@@ -172,20 +172,10 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
     return 1;
   }
 
-  //procura se tem um arquivo com mesmo nome
-  int i;
-  gbv_finder(lib, docname, &i);
-  if (i == -1) {
-    //aumenta o vetor de docs da lib caso o arquivo seja novo
-    Document *rlc = realloc(lib -> docs, sizeof(Document) * (lib -> count + 1));
-    if (!rlc) {
-      perror("erro: falta de memoria");
-      fclose(doc);
-      fclose(f_lib); 
-      return 1;
-    }
-    lib -> docs = rlc;
-    lib -> count++;
+  int *id;
+  if (gbv_finder(lib, docname, id) == 0) {
+    gbv_remove
+
   }
 
   if (gbv_data(lib, lib->count - 1, doc, docname, sb.offset)) {
@@ -193,6 +183,16 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
     fclose(f_lib);
     return 1;
   }
+
+  Document *rlc = realloc(lib -> docs, sizeof(Document) * (lib -> count + 1));
+  if (!rlc) {
+    perror("erro: falta de memoria");
+    fclose(doc);
+    fclose(f_lib); 
+    return 1;
+  }
+  lib -> docs = rlc;
+  lib -> count++;
 
   //coloca o ponteiro da lib no comeco do diretorio p/ inserir o doc
   fseek(f_lib, sb.offset, SEEK_SET);
