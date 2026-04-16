@@ -29,5 +29,9 @@ int gbv_list(const Library *lib);
 int gbv_view(const Library *lib, const char *docname);
 int gbv_order(Library *lib, const char *archive, const char *criteria);
 
+int gbv_finder
+void gbv_data
+void gbv_writer
+//void gbv_update
 #endif
 
