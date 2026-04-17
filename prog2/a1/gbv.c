@@ -404,4 +404,20 @@ int gbv_view(const Library *lib, const char *docname) {
   return 0;
 }
 
-int gbv_order(Library *lib, const char *archive, const char *criteria);
+int gbv_order(Library *lib, const char *archive, const char *criteria) {
+  if (!lib || !archive || !criteria) {
+    perror("erro: ponteiro invalido"); 
+    return -1;
+  }
+
+  // 1. Abrir o arquivo de critérios (.txt com a ordem)
+  FILE *f = fopen(criteria, "r");
+  if (!f) {
+      perror("erro: falha ao abrir arquivo de criterios");
+      return -1;
+  }
+
+  
+
+
+}
