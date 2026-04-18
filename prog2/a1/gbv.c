@@ -4,6 +4,7 @@
 #include <time.h>
 #include "gbv.h"
 #include "util.h"
+#include "aux.h"
 
 typedef struct {
   int qtd; 
@@ -308,9 +309,9 @@ int gbv_list(const Library *lib) {
 
   char data[24];
 
-  printf("Documentos presentes na biblioteca:\n");
-  printf("%-20s | %-10s | %-20s | %s\n", "Nome", "Tamanho", "Data de Insercao", "Posicao\n");
-  printf("----------------------------------------------------------\n");
+  printf("\nDocumentos presentes na biblioteca:\n\n");
+  printf("%-20s | %-10s | %-20s | %s\n", "Nome", "Tamanho", "Data de Insercao", "Posicao");
+  printf("-------------------------------------------------------------------\n");
 
   for (int i = 0; i < lib -> count; i++) {
     format_date(lib->docs[i].date, data, sizeof(data));
@@ -404,20 +405,3 @@ int gbv_view(const Library *lib, const char *docname) {
   return 0;
 }
 
-int gbv_order(Library *lib, const char *archive, const char *criteria) {
-  if (!lib || !archive || !criteria) {
-    perror("erro: ponteiro invalido"); 
-    return -1;
-  }
-
-  // 1. Abrir o arquivo de critérios (.txt com a ordem)
-  FILE *f = fopen(criteria, "r");
-  if (!f) {
-      perror("erro: falha ao abrir arquivo de criterios");
-      return -1;
-  }
-
-  
-
-
-}

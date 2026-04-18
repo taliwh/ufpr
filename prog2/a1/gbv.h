@@ -27,12 +27,6 @@ int gbv_add(Library *lib, const char *archive, const char *docname);
 int gbv_remove(Library *lib, const char *docname);
 int gbv_list(const Library *lib);
 int gbv_view(const Library *lib, const char *docname);
-int gbv_order(Library *lib, const char *archive, const char *criteria);
-
-// funcoes auxiliares
-int gbv_finder(const Library *lib, const char *docname, int *id);
-int gbv_data(Library *lib, int i, FILE *doc, const char *docname, long offset);
-int gbv_writer(FILE *f_lib, FILE *doc);
 
 #endif
 
