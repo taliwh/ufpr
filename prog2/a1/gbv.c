@@ -11,9 +11,6 @@ typedef struct {
   long offset; //diretorio(metadado?)
 } bloco; 
 
-//var global pois deu problema na gbv_view e gbv_remove ...
-char libname[MAX_NAME];
-
 //funcoes AUXILIARES
 
 int gbv_finder(const Library *lib, const char *docname, int *id) {
@@ -66,7 +63,7 @@ int gbv_writer(FILE *f_lib, FILE *doc) {
     }
   
   if (!feof(doc)) {   //caso o fread dentro do while tenha dado erro
-    perror("erro: falha ao ler o arquivo");
+    perror("erro: falha ao ler arquivo");
     return -1;
   }
 
@@ -100,9 +97,6 @@ int gbv_open(Library *lib, const char *filename) {
     return -1;
   }
 
-  //atualiza var local com a lib
-  strcpy(libname, filename);
-
   FILE *f = fopen(filename, "rb");
   if (!f) { 
     if (gbv_create(filename)) { //se n conseguiu criar, tenta criar de nv
@@ -118,7 +112,7 @@ int gbv_open(Library *lib, const char *filename) {
 
   bloco sb; 
   if (fread(&sb, sizeof(sb), 1, f) != 1) { //verifica se conseguiu ler  o sb 
-    perror("erro: falha ao ler");
+    perror("erro: falha ao ler arquivo");
     fclose(f);
     return -1;
   }
@@ -184,7 +178,7 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
   //caso haja substituto, remove ele e reaproveita o espaco p inserir outro 
   int id;
   if (gbv_finder(lib, docname, &id) == 0) 
-    gbv_remove(lib, docname); 
+    gbv_remove(lib, archive, docname); 
   else { //caso n tenha substituto tem q realocar
     Document *rlc = realloc(lib -> docs, sizeof(Document) * (lib -> count + 1));
     if (!rlc) {
@@ -239,7 +233,7 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
 }
 
 // remove substituto
-int gbv_remove(Library *lib, const char *docname) {
+int gbv_remove(Library *lib, const char *archive, const char *docname) {
   if (!lib || !docname) {
     fprintf(stderr, "erro: parametros nulos\n");
     return -1;
@@ -257,7 +251,7 @@ int gbv_remove(Library *lib, const char *docname) {
   lib -> count--;
 
   //abre var global de novo (?)
-  FILE *f_lib = fopen(libname, "rb+");
+  FILE *f_lib = fopen(archive, "rb+");
   if (!f_lib) {
     perror("erro: falha ao abrir arquivo");
     return -1;
@@ -314,14 +308,14 @@ int gbv_list(const Library *lib) {
   printf("-------------------------------------------------------------------\n");
 
   for (int i = 0; i < lib -> count; i++) {
-    format_date(lib->docs[i].date, data, sizeof(data));
+    format_date(lib -> docs[i].date, data, sizeof(data));
     printf("%-20s | %-10ld | %-20s | %ld\n", lib -> docs[i].name, lib -> docs[i].size, data, lib -> docs[i].offset);
   }
 
   return 0;
 }
 
-int gbv_view(const Library *lib, const char *docname) {
+int gbv_view(const Library *lib, const char *archive, const char *docname) {
   if (!lib || !docname)
     return -1;  
   
@@ -332,7 +326,7 @@ int gbv_view(const Library *lib, const char *docname) {
   }
 
   // abre var global pq deu problema
-  FILE *f_lib = fopen(libname, "rb");
+  FILE *f_lib = fopen(archive, "rb");
   if (!f_lib) {
     perror("erro: falha ao criar arquivo");
     return -1;
@@ -343,6 +337,7 @@ int gbv_view(const Library *lib, const char *docname) {
   int end = ptr + doc -> size; //fim do doc
   //buffer pra ler conteudo por isso  cont
   char cont[BUFFER_SIZE];
+  int mover = 1;
   char opcao;
   int restante;
   int ler;
@@ -352,28 +347,33 @@ int gbv_view(const Library *lib, const char *docname) {
   fseek(f_lib, ptr, SEEK_SET);
 
   while (1) {
-    restante = end - ptr;
+    if (mover) {
+      restante = end - ptr;
 
-    if (restante > BUFFER_SIZE)
-      ler = BUFFER_SIZE;
-    else
-      ler = restante;
+      if (restante > BUFFER_SIZE)
+        ler = BUFFER_SIZE;
+      else
+        ler = restante;
 
-    if (ler) {
-      fseek(f_lib, ptr, SEEK_SET);
-      qtd = fread(cont, 1, ler, f_lib);
-      if (qtd) {
-        if (fwrite(cont, 1, qtd, stdout) < (size_t)qtd) {
-          fclose(f_lib);
-          return -1;
+      if (ler) {
+        fseek(f_lib, ptr, SEEK_SET);
+        qtd = fread(cont, 1, ler, f_lib);
+        if (qtd) {
+          printf("\n\n");
+          if (fwrite(cont, 1, qtd, stdout) < (size_t)qtd) {
+            fclose(f_lib);
+            return -1;
+          }
+          printf("\n\n--- Bloco: %ld de %ld bytes ---", ptr - doc -> offset + qtd, doc -> size);
+          if (ptr - doc -> offset + qtd == doc -> size)
+            printf(" (ultimo bloco)");
         }
-        printf("\n--- Bloco: %ld de %ld bytes ---\n", ptr - doc -> offset + qtd, doc -> size);
       }
+      else
+        printf("fim do doc");
     }
-    else
-      printf("fim do doc");
 
-    printf("Escolha n, p, q\n");
+    printf("\n(p) <anterior>, (n) <proximo>, (q) <sair>\n");
 
     scanf(" %c", &opcao);
 
@@ -382,23 +382,25 @@ int gbv_view(const Library *lib, const char *docname) {
     }
 
     if (opcao == 'n') {
-      if (ptr + BUFFER_SIZE < end) 
+      if (ptr + BUFFER_SIZE < end) {
         ptr = ptr + BUFFER_SIZE;
-      else 
-        printf("Voce ja esta no final.\n");
-    } 
-
-    else if (opcao == 'p') 
-      if (ptr - BUFFER_SIZE >= doc -> offset) 
-        ptr = ptr - BUFFER_SIZE;
-      else {
-        ptr = doc -> offset; // volta pro comeco
-        printf("Voce ja esta no inicio.\n");
+        mover = 1;
       }
+    }
 
-    else 
-      printf("opcao invalida, digite n p ou q.\n");
+    else if (opcao == 'p') {
+      if (ptr - BUFFER_SIZE >= doc -> offset) {
+        ptr = ptr - BUFFER_SIZE;
+        mover = 1;
+      }
+      else 
+        ptr = doc -> offset; // volta pro comeco
+    }
 
+    else {
+      mover = 0;
+      printf("\nOpcao invalida, digite: ");
+    }
   }  
 
   fclose(f_lib);
