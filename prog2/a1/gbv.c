@@ -11,6 +11,7 @@ typedef struct {
   long offset; 
 } bloco; 
 
+// cria uma lib vazia e escreve o super bloco
 int gbv_create(const char *filename) {
   FILE *f = fopen(filename, "wb");
   if (!f) {
@@ -32,6 +33,7 @@ int gbv_create(const char *filename) {
   return 0;
 }
 
+// abre a lib e armazena os documentos
 int gbv_open(Library *lib, const char *filename) {
   if (!lib || !filename) {
     fprintf(stderr, "erro: parametros nulos\n");
@@ -40,11 +42,13 @@ int gbv_open(Library *lib, const char *filename) {
 
   FILE *f = fopen(filename, "rb");
   if (!f) { 
-    if (gbv_create(filename)) { //se n conseguiu criar, tenta criar de nv
+    // cria a lib caso ela ainda nao exista
+    if (gbv_create(filename)) { 
       perror("erro: falha ao criar arquivo");
       return -1;
     }
-    f = fopen(filename, "rb"); //se n conseguiu abrir nem oq criou, ai ja era
+    // verifica se a lib recem criada pode ser aberta
+    f = fopen(filename, "rb"); 
     if (!f) {
       perror("erro: falha ao abrir arquivo");
       return -1;
@@ -52,23 +56,29 @@ int gbv_open(Library *lib, const char *filename) {
   }
 
   bloco sb; 
-  if (fread(&sb, sizeof(sb), 1, f) != 1) { //verifica se conseguiu ler  o sb 
+  if (fread(&sb, sizeof(sb), 1, f) != 1) { 
     perror("erro: falha ao ler arquivo");
     fclose(f);
     return -1;
   }
+  
+  // atualiza a quantidade de documentos do diretorio
+  lib -> count = sb.qtd;
 
-  lib -> count = sb.qtd; //pega qtd de doc
-
-  if (sb.qtd) { //se nao ta vazio
-    lib -> docs = calloc(sb.qtd, sizeof(Document)); //aloca os docs
+  // se ha documentos, aloca eles dentro da lib
+  if (sb.qtd) {
+    lib -> docs = calloc(sb.qtd, sizeof(Document)); 
     if (!lib -> docs) {
       perror("erro: falta de memoria");
       fclose(f);
       return -1;
     }
-    fseek(f, sb.offset, SEEK_SET); //aponta pra onde deve ficar os documentos a serem lidos
-    if (fread(lib -> docs, sizeof(Document), sb.qtd, f) != sb.qtd) { // coloca os docs do arq dentro da lib
+
+    // aponta pra onde deve ficar os documentos a serem lidos
+    fseek(f, sb.offset, SEEK_SET); 
+
+    // armazena os documentos na lib
+    if (fread(lib -> docs, sizeof(Document), sb.qtd, f) != sb.qtd) { 
       perror("erro: falha ao ler arquivo");
       free(lib -> docs);
       fclose(f);
@@ -76,24 +86,32 @@ int gbv_open(Library *lib, const char *filename) {
     }
   }
   else
-    lib -> docs = NULL; //aponta pra null (?) n sei se precisa na real
+    lib -> docs = NULL; 
 
   fclose(f);
   return 0;
 }
 
+// adiciona um novo documento no final da lib
 int gbv_add(Library *lib, const char *archive, const char *docname) {
   if (!lib || !archive || !docname) {
     fprintf(stderr, "erro: parametros nulos\n");
     return -1;
   }
   
+  // verifica se o nome desse documento excede o maximo de caracteres
   if (strlen(docname) + 1 > MAX_NAME) {
     fprintf(stderr, "erro: o nome do documento eh muito longo\n");
     return -1;
   }
+  
+  // previne erro de escrita e leitura infinita
+  if (!strcmp(archive, docname)) {
+    fprintf(stderr, "erro: nao e possivel inserir a propria biblioteca\n");
+    return -1;
+  }
 
-  //cria ponteiros pro doc e pra lib
+  // cria ponteiros pro documento e pra lib
   FILE *doc = fopen(docname, "rb");
   if (!doc) {
     perror("erro: falha ao abrir arquivo");
@@ -107,7 +125,7 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
     return -1;
   }
 
-  //le o super bloco
+  // le o super bloco
   bloco sb;
   if (fread(&sb, sizeof(bloco), 1, f_lib) != 1) { 
     perror("erro: falha ao ler arquivo");
@@ -116,11 +134,13 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
     return -1;
   }
 
-  //caso haja substituto, remove ele e reaproveita o espaco p inserir outro 
+  // caso haja substituto, remove ele e reaproveita o espaco para inserir outro 
   int id;
   if (gbv_finder(lib, docname, &id) == 0) 
     gbv_remove(lib, archive, docname); 
-  else { //caso n tenha substituto tem q realocar
+  else { 
+
+    // caso nao tenha substituto tem q realocar para inserir o novo documento
     Document *rlc = realloc(lib -> docs, sizeof(Document) * (lib -> count + 1));
     if (!rlc) {
       perror("erro: falta de memoria");
@@ -131,27 +151,28 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
     lib -> docs = rlc;
   }
 
+  // preenche os metadados do novo documento
   if (gbv_data(lib, lib -> count, doc, docname, sb.offset)) {
     fclose(doc);
     fclose(f_lib);
     return -1;
   }
 
-  //coloca o ponteiro da lib no comeco do diretorio p/ inserir o doc
+  // coloca o ponteiro da lib no comeco do diretorio para inserir o documento
   fseek(f_lib, sb.offset, SEEK_SET);
   
-  //escreve o doc na lib
+  // escreve o doc na lib
   if (gbv_writer(f_lib, doc)) {
     fclose(doc);
     fclose(f_lib);
     return -1;
   }
 
-  //atualiza o super bloco
+  // atualiza o super bloco
   sb.qtd = lib -> count;
   sb.offset = ftell(f_lib);
 
-  //atualiza o endereco do diretorio
+  // atualiza o endereco do diretorio
   if (fwrite(lib -> docs, sizeof(Document), lib -> count, f_lib) != lib -> count) {
     perror("erro: falha ao escrever no arquivo");
     fclose(doc);
@@ -159,7 +180,7 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
     return -1;
   }
 
-  //coloca o sb atualizado de novo
+  // coloca o super bloco atualizado de novo
   rewind(f_lib);
   if (fwrite(&sb, sizeof(bloco), 1, f_lib) != 1) {
     perror("erro: falha ao escrever no arquivo");
@@ -173,32 +194,32 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
   return 0;
 }
 
-// remove substituto
+// remove o metadado da memoria
 int gbv_remove(Library *lib, const char *archive, const char *docname) {
   if (!lib || !docname) {
     fprintf(stderr, "erro: parametros nulos\n");
     return -1;
   }
 
+  // encontra o id do documento que sera retirado
   int id;
   if (gbv_finder(lib, docname, &id) != 0)
-    return 1; //nao acho o arquivo af
+    return 1;
 
-  // remove o metadado da memoria
+  // alinha os docs
   for (int i = id; i < lib -> count - 1; i++) {
       lib -> docs[i] = lib -> docs[i + 1];
   }
-  
+
+  // atualiza a quantidade de docs
   lib -> count--;
 
-  //abre var global de novo (?)
   FILE *f_lib = fopen(archive, "rb+");
   if (!f_lib) {
     perror("erro: falha ao abrir arquivo");
     return -1;
   }
 
-  //le o super bloco
   bloco sb;
   if (fread(&sb, sizeof(bloco), 1, f_lib) != 1) { 
     perror("erro: falha ao ler arquivo");
@@ -206,20 +227,20 @@ int gbv_remove(Library *lib, const char *archive, const char *docname) {
     return -1;
   }
 
-  //atualiza so o sb.qtd, sb.offset mantem ja q removemos
+  // atualiza so o sb.qtd, sb.offset mantem ja que removemos
   sb.qtd = lib -> count;
 
-  //coloca ponteiro pro diretorio p atualizar o diretorio
+  // coloca ponteiro pro diretorio p atualizar o diretorio
   fseek(f_lib, sb.offset, SEEK_SET);
 
-  //atualiza o endereco do diretorio
+  // atualiza o endereco do diretorio
   if (fwrite(lib -> docs, sizeof(Document), lib -> count, f_lib) != lib -> count) {
     perror("erro: falha ao escrever no arquivo");
     fclose(f_lib);
     return -1;
   }
 
-  //coloca o sb atualizado de novo
+  // coloca o super bloco atualizado de novo
   rewind(f_lib);
   if (fwrite(&sb, sizeof(bloco), 1, f_lib) != 1) {
     perror("erro: falha ao escrever no arquivo");
@@ -231,6 +252,7 @@ int gbv_remove(Library *lib, const char *archive, const char *docname) {
   return 0;
 }
 
+// lista os documentos presentes na lib
 int gbv_list(const Library *lib) {
   if (!lib) {
     fprintf(stderr, "erro: parametros nulos\n");
@@ -256,17 +278,18 @@ int gbv_list(const Library *lib) {
   return 0;
 }
 
+// visualiza o conteudo de um documento da lib
 int gbv_view(const Library *lib, const char *archive, const char *docname) {
   if (!lib || !docname)
     return -1;  
   
+  // verifica se o documento esta presente
   int id;
   if (gbv_finder(lib, docname, &id)) {
     printf("Este documento nao esta presente\n");
     return -1;
   }
 
-  // abre var global pq deu problema
   FILE *f_lib = fopen(archive, "rb");
   if (!f_lib) {
     perror("erro: falha ao criar arquivo");
@@ -274,34 +297,51 @@ int gbv_view(const Library *lib, const char *archive, const char *docname) {
   }
 
   Document *doc = &lib -> docs[id];
-  int ptr = doc -> offset; //ptr do doc, comeca no comeco 
-  int end = ptr + doc -> size; //fim do doc
-  //buffer pra ler conteudo por isso  cont
-  char cont[BUFFER_SIZE];
-  int mover = 1;
-  char opcao;
-  int restante;
-  int ler;
-  int qtd;
+  size_t qtd;
 
-  //ponteiro p ler o comeco do doc
+  // ponteiro do comeco do documento
+  int ptr = doc -> offset;
+  
+  // ponteiro do final do documento
+  long end = ptr + doc -> size; 
+
+  // buffer pra ler o conteudo 
+  char cont[BUFFER_SIZE];
+
+  // indicador que sinaliza se eh necessario mover o bloco
+  int mover = 1;
+
+  // indicador do que ainda falta para ler no documento
+  long restante;
+  
+  char opcao;
+
+  // indicador do que devemos ler no documento
+  long ler;
+
+  // ponteiro para ler o comeco do doc
   fseek(f_lib, ptr, SEEK_SET);
 
   while (1) {
     if (mover) {
       restante = end - ptr;
 
+      // define o que devemos ler no momento, se é o tamanho do buffer ou o resto do arquivo
       if (restante > BUFFER_SIZE)
         ler = BUFFER_SIZE;
       else
         ler = restante;
 
       if (ler) {
+
+        // aponta o ponteiro da lib (f_lib) para onde o ponteiro do documento esta
         fseek(f_lib, ptr, SEEK_SET);
         qtd = fread(cont, 1, ler, f_lib);
+
+        // mostra na tela o conteudo do documento
         if (qtd) {
           printf("\n\n");
-          if (fwrite(cont, 1, qtd, stdout) < (size_t)qtd) {
+          if (fwrite(cont, 1, qtd, stdout) < qtd) {
             fclose(f_lib);
             return -1;
           }
@@ -310,11 +350,9 @@ int gbv_view(const Library *lib, const char *archive, const char *docname) {
             printf(" (ultimo bloco)");
         }
       }
-      else
-        printf("fim do doc");
     }
 
-    printf("\n(p) <anterior>, (n) <proximo>, (q) <sair>\n");
+    printf("\ndigite: (p) <anterior>, (n) <proximo>, (q) <sair>\n");
 
     scanf(" %c", &opcao);
 
@@ -322,23 +360,31 @@ int gbv_view(const Library *lib, const char *archive, const char *docname) {
       break; 
     }
 
+    // avanca o ponteiro do documento para o proximo bloco 
     if (opcao == 'n') {
+
+      // verificacao pra nao ultrapassar o final do bloco
       if (ptr + BUFFER_SIZE < end) {
         ptr = ptr + BUFFER_SIZE;
         mover = 1;
       }
     }
 
+    // retrocede o ponteiro do documento para o bloco anterior 
     else if (opcao == 'p') {
+
+      // verificacao pro ponteiro nao ir antes do comeco do documento
       if (ptr - BUFFER_SIZE >= doc -> offset) {
         ptr = ptr - BUFFER_SIZE;
         mover = 1;
       }
       else 
-        ptr = doc -> offset; // volta pro comeco
+        ptr = doc -> offset; 
     }
 
     else {
+      
+      // nao printa de novo o que ja printou, caso a opcao digitada seja invalida
       mover = 0;
       printf("\nOpcao invalida, digite: ");
     }

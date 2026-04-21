@@ -1,0 +1,33 @@
+Autoria: Thalísia Arianna Fernandes Fleck GRR20256088
+
+Lista de arquivos:
+
+util.c util.h
+Makefile
+gbv.c gbv.h
+main.c
+aux.c aux.h ( funcoes auxiliares )
+
+Dificuldades encontradas:
+
+Foi complicado visualizar como o superbloco e o diretorio de metadados se organizam dentro da biblioteca;
+
+Funcoes como fseek, fread também me foram confusas de entender, pois tive dificuldade em me acostumar a entender 
+o que os argumentos das funcoes estavam fazendo;
+
+Utilizar strings também foi difícil, pois em prog1 nao tivemos muita oportunidade de entrar em contato com vetores 
+do tipo char;
+
+A falta da biblioteca como parametro de gbv_remove e gbv_view me deixou muito pensativa sobre o que fazer que até 
+considerei em transformar a biblioteca em uma var global;
+
+Apesar de ser convencao e boa pratica usar return 0 como sucesso, eu me acostumei com a ideia de que: 
+1 = certo e 0 = errado, entao algumas logicas condicionais me deixaram um pouco confusa;
+
+Eu verifiquei tanta possibilidade de erro (com perror e fprintf), que acho que ficou um pouco poluido meu codigo nesse quesito, 
+pensei em fazer uma funcao auxiliar somente para tratar casos de erros, mas infelizmente nao soube pensar muito bem nisso;
+
+Bugs conhecidos:
+
+Ao tentar inserir o proprio arquivo da biblioteca nela mesma, o programa entrava em um loop infinito e segfault quando eu listava a biblioteca.
+Corrigi verificando no gbv_add se o arquivo a ser adicionado na biblioteca nao vai ser ela própia.

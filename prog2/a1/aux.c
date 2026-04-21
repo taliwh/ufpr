@@ -6,6 +6,7 @@
 #include "gbv.h"
 #include "aux.h"
 
+// retorna 0 se conseguiu achar um documento na lib e sinaliza seu indice no vetor
 int gbv_finder(const Library *lib, const char *docname, int *id) {
   if (!lib || !docname) {
     fprintf(stderr,"erro: parametros nulos\n");
@@ -21,6 +22,7 @@ int gbv_finder(const Library *lib, const char *docname, int *id) {
   return 1;
 }
 
+// retorna 0 se conseguiu colocar as informacoes do documento em seu metadado
 int gbv_data(Library *lib, int i, FILE *doc, const char *docname, long offset) {
   if (!lib || !docname) {
     fprintf(stderr, "erro: parametros nulos\n");
@@ -39,15 +41,18 @@ int gbv_data(Library *lib, int i, FILE *doc, const char *docname, long offset) {
   return 0;
 }
 
-// escreve o doc na lib
+// escreve o documento na biblioteca
 int gbv_writer(FILE *f_lib, FILE *doc) {
   if (!f_lib || !doc) {
     fprintf(stderr, "erro: parametros nulos\n");
     return -1;
   }
 
-  char cont[BUFFER_SIZE]; //buffer q armazena contteudo
-  size_t qtd; //qtd de coisa lida do doc;
+  // buffer para armazenar o conteudo lido do documento
+  char cont[BUFFER_SIZE]; 
+
+  // quantidade de coisa a ser lida do documento
+  int qtd; 
 
   while ((qtd = fread(cont, 1, sizeof(cont), doc)) > 0)
     if (fwrite(cont, 1, qtd, f_lib) != qtd) {
@@ -55,7 +60,8 @@ int gbv_writer(FILE *f_lib, FILE *doc) {
       return -1;
     }
   
-  if (!feof(doc)) {   //caso o fread dentro do while tenha dado erro
+  // caso o fread do while tenha dado erro
+  if (!feof(doc)) {   
     perror("erro: falha ao ler arquivo");
     return -1;
   }
