@@ -19,6 +19,7 @@ int gbv_create(const char *filename) {
     return -1;
   }
 
+  // inicializa com {0} para evitar padding com lixo de memoria
   bloco sb = {0};
   sb.qtd = 0;
   sb.offset = sizeof(sb); 
@@ -151,6 +152,7 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
     lib -> docs = rlc;
   }
 
+  // inicializa o novo campo
   memset(&lib->docs[lib->count], 0, sizeof(Document));
 
   // preenche os metadados do novo documento
