@@ -19,7 +19,7 @@ int gbv_create(const char *filename) {
     return -1;
   }
 
-  bloco sb;
+  bloco sb = {0};
   sb.qtd = 0;
   sb.offset = sizeof(sb); 
 
@@ -150,6 +150,8 @@ int gbv_add(Library *lib, const char *archive, const char *docname) {
     }
     lib -> docs = rlc;
   }
+
+  memset(&lib->docs[lib->count], 0, sizeof(Document));
 
   // preenche os metadados do novo documento
   if (gbv_data(lib, lib -> count, doc, docname, sb.offset)) {
@@ -300,7 +302,7 @@ int gbv_view(const Library *lib, const char *archive, const char *docname) {
   size_t qtd;
 
   // ponteiro do comeco do documento
-  int ptr = doc -> offset;
+  long ptr = doc -> offset;
   
   // ponteiro do final do documento
   long end = ptr + doc -> size; 

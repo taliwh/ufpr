@@ -31,3 +31,6 @@ Bugs conhecidos:
 
 Ao tentar inserir o proprio arquivo da biblioteca nela mesma, o programa entrava em um loop infinito e segfault quando eu listava a biblioteca.
 Corrigi verificando no gbv_add se o arquivo a ser adicionado na biblioteca nao vai ser ela própia.
+
+Por algum motivo, falta algum free no valgrind quando eu rodo o programa com "valgrind /gbv -a lib.gbv arquivo.txt".
+Nao consegui identificar o problema.

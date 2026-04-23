@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "gbv.h"
 
@@ -32,6 +33,8 @@ int main(int argc, char *argv[]) {
     } else {
         printf("Opção inválida.\n");
     }
+
+    free(lib.docs);
 
     return 0;
 }
