@@ -1,4 +1,0 @@
-Autoria: Thalísia Arianna Fernandes Fleck GRR20256088
-
-Creio que consegui pegar a ideia do que era para fazer, porem acabou dando seg fault quando vou testar.
-Imagino que tenha algo a ver com o tamanho do char da struct "senha" que eu criei (talvez eu tenha colocado o \n errado, nao sei)
