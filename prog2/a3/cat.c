@@ -3,33 +3,65 @@
 
 #include "cat.h"
 
-cat box_create(unsigned char side, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y){			
+cat* create_cat(unsigned char side, enum face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y) {			
 
-	if ((x - apothem < 0) || (x + apothem > max_x) || (y - apothem < 0) || (y + apothem > max_y)) 
+	if ((x - side/2 < 0) || (x + side/2 > max_x) || (y - side/2 < 0) || (y + side/2 > max_y)) 
                 return NULL;												
 
-	cat *new_cat = (cat) malloc(sizeof(cat));																								
-	if (!new_cat) 
+	cat *player = (cat*) malloc(sizeof(cat));																								
+	if (!player) 
                 return NULL;	
-                																																										
-	new_cat->side = side;																																																													
-	new_cat->hp = 5;																																
-	new_cat->x = x;																																
-	new_cat->y = y;																																	
-	new_cat->control = joystick_create();																											
+
+	player->box.side = side;		
+        player->box.face = LOOK_RIGHT; //inicialmente olha pra direita																																
+	player->box.x = x;																																
+	player->box.y = y;																																	
+																																																				
+	player->hp = 5;	
+
+        player->control = joystick_create();		
+        player->camera = create_camera();	
+        player->sprites = put_catsprite();
+        cat->frame = NORMAL;
         																											
-	return new_cat;																																	
+	return player;																																	
 }
 
-void cat_move(struct body *box , char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y){									
+void step_cat(cat *player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y) {									
 
-	if (!trajectory) { if ((box->x - steps*CAT_STEP) - box->apothem >= 0) box->x = box->x - steps*CAT_STEP;} 						
-	else if (trajectory == 1){ if ((box->x + steps*CAT_STEP) + box->apothem <= max_x) box->x = box->x + steps*CAT_STEP;}			
-	else if (trajectory == 2){ if ((box->y - steps*CAT_STEP) - box->apothem >= 0) box->y = box->y - steps*CAT_STEP;}				
-	else if (trajectory == 3){ if ((box->y + steps*CAT_STEP) + box->apothem <= max_y) box->y = box->y + steps*CAT_STEP;}			
+	if (!trajectory) 
+                if ((player->box.x - steps*CAT_STEP) - player->box.side/2 >= 0) 
+                        player->box.x = player->box.x - steps*CAT_STEP;
+
+	else if (trajectory == 1) 
+                if ((player->box.x + steps*CAT_STEP) + player->box.side/2 <= max_x) 
+                        player->box.x = player->box.x + steps*CAT_STEP;
+
+	else if (trajectory == 2) 
+                if ((player->box.y - steps*CAT_STEP) - player->box.side/2 >= 0) 
+                        player->box.y = player->box.y - steps*CAT_STEP;
+
+	else if (trajectory == 3)
+                if ((player->box.y + steps*CAT_STEP) + player->box.side/2 <= max_y) 
+                        player->box.y = player->box.y + steps*CAT_STEP;
+
 }
 
-void cat_destroy(cat *box){																																																								
-	joystick_destroy(box->control);																												
-	free(box);																																		
+void destroy_cat(cat *player) {																																																								
+	joystick_destroy(player->control);																												
+	free(player);																																		
 }
+
+
+
+cat_kill
+unsigned char cat_kill(struct enemy *animal, cat *player) {																																					
+
+																																															
+}
+
+
+
+cat_frame
+
+if cat crouch show image etc

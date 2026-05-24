@@ -6,7 +6,8 @@ typedef struct {
 	unsigned char left;																												
 	unsigned char up;																												
 	unsigned char down;																																																					//Botão de movimentação para baixo 
-	unsigned char fire;
+	unsigned char jump;
+        unsigned char crouch;
 } joystick;																														
 
 joystick* joystick_create();																										
@@ -15,6 +16,6 @@ void joystick_right(joystick *element);
 void joystick_left(joystick *element);																								
 void joystick_up(joystick *element);																							
 void joystick_down(joystick *element);																							
-void joystick_fire(joystick *element);																								
+void joystick_jump(joystick *element);																								
 
 #endif																															

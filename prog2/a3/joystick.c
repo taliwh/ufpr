@@ -2,14 +2,16 @@
 #include "joystick.h"
 
 joystick* joystick_create(){														
-
 	joystick *element = (joystick*) malloc (sizeof(joystick));						
-	if (!element) return NULL;														
+	if (!element) 
+                return NULL;	
+
 	element->right = 0;																
 	element->left = 0;																
 	element->up = 0;																
 	element->down = 0;															
-	element->fire = 0;																
+	element->jump = 0;
+
 	return element;																	
 }
 
@@ -23,4 +25,4 @@ void joystick_up(joystick *element){ element->up = element->up ^ 1;}
 
 void joystick_down(joystick *element){ element->down = element->down ^ 1;}			
 
-void joystick_fire(joystick *element){ element->fire = element->fire ^ 1;}			
+void joystick_jump(joystick *element){ element->jump = element->fire ^ 1;}
