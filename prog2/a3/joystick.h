@@ -16,6 +16,7 @@ void joystick_right(joystick *element);
 void joystick_left(joystick *element);																								
 void joystick_up(joystick *element);																							
 void joystick_down(joystick *element);																							
-void joystick_jump(joystick *element);																								
+void joystick_jump(joystick *element);
+void joystick_crouch(joystick *element);																						
 
 #endif																															

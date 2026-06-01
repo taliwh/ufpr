@@ -366,6 +366,7 @@ imprimeOrdenado(struct nodo* no)
 
       printf("%d ", no->chaves[i]);  
     }
+    
   if (!no->eh_folha)
     {
       imprimeOrdenado(no->filhos[i]); 
