@@ -7,11 +7,11 @@ world* create_land () {
         if (!land)
                 return NULL;
         
-        land->fox = create_fox(, );
-        land->bird = create_bird(, );
+        land->fox = create_fox(1792 , 256, 1024);
+        land->bird = create_bird(2304, 32, 1408);
         
-        land->fish1 = create_fish();
-        land->fish2 = create_fish();
+        land->fish1 = create_fish(1984, 64);
+        land->fish2 = create_fish(3084, 384);
 
         land->solids = malloc(sizeof(struct solid) * NUM_SOLIDS);
         land->hazards = malloc(sizeof(struct hazard) * NUM_HAZARDS);
@@ -34,7 +34,7 @@ world* create_land () {
         land->solids[3] = (struct solid){832, 320, 1280, 192};
 
         //chao da 2 lava
-        land->solids[4] = (struct solid){2112, 384, 192, 128}
+        land->solids[4] = (struct solid){2112, 384, 192, 128};
 
         //terceiro bloco de terra depois da lava ate o buraco
         land->solids[5] = (struct solid){2304, 320, 716, 192};
@@ -43,8 +43,8 @@ world* create_land () {
         land->solids[6] = (struct solid){3020, 384, 64, 128};
 
         //littles pontes do espinho
-        land->solids[7] = (struct solid){3084, 448, 64, 64}
-        land->solids[8] = (struct solid){3212, 384, 64, 64}
+        land->solids[7] = (struct solid){3084, 448, 64, 64};
+        land->solids[8] = (struct solid){3212, 384, 64, 64};
 
         //ultimo bloco de terra (q tem a bandeira)
         land->solids[9] = (struct solid){3276, 320, 948, 192};
@@ -54,19 +54,22 @@ world* create_land () {
         land->solids[11] = (struct solid){1920, 128, 145, 47};
 
         //1 lava
-        land->hazards[0] = (struct solid){640, 488, 192, 24}
+        land->hazards[0] = (struct hazard){640, 488, 192, 24};
 
         //1 espinho
-        land->hazards[1] = (struct solid){832, 296, 64, 24}
+        land->hazards[1] = (struct hazard){832, 296, 64, 24};
 
         //2 lava
-        land->hazards[2] = (struct solid){2112, 320, }
+        land->hazards[2] = (struct hazard){2112, 320, 192, 64};
 
-     
+        //plataforma com espinho
+        land->hazards[3] = (struct hazard){2688, 192, 140, 88};
+
+        //espinho do chao
+        land->hazards[4] = (struct hazard){3084, 499, 192, 13};
+
         return land;
 }
-
-
 
 void destroy_land (world* land) {
         if (!land)
@@ -85,16 +88,16 @@ void destroy_land (world* land) {
 
 unsigned char collision (struct body a, struct body b)
 {
-    if (a.x + a.side/2 < b.x - b.side/2)
+    if (a.x + SIDE/2 < b.x - SIDE/2)
         return 0;
 
-    if (a.x - a.side/2 > b.x + b.side/2)
+    if (a.x - SIDE/2 > b.x + SIDE/2)
         return 0;
 
-    if (a.y + a.side/2 < b.y - b.side/2)
+    if (a.y + SIDE/2 < b.y - SIDE/2)
         return 0;
 
-    if (a.y - a.side/2 > b.y + b.side/2)
+    if (a.y - SIDE/2 > b.y + SIDE/2)
         return 0;
 
     return 1;

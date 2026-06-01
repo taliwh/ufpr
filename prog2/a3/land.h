@@ -1,13 +1,12 @@
 #ifndef __LAND__
 #define __LAND__
 
-#include <allegro5/allegro.h>
 #include "entidades.h"
 
-#define Y_FLOOR 192
+#define Y_FLOOR 320
 #define LAND_WIDTH 4224
 
-#define NUM_HAZARDS 
+#define NUM_HAZARDS 5
 #define NUM_SOLIDS 12
 
 struct solid {
@@ -34,6 +33,7 @@ typedef struct {
 } world;
 
 unsigned char collision(struct body a, struct body b);
-
+world* create_land();
+void destroy_land(world* land);
 
 #endif

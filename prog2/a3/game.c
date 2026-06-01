@@ -58,7 +58,7 @@ struct game *create_game () {
         catland->state = MENU;
 
         // cria o player
-        catland->player = create_cat(CAT_SIDE, LOOK_RIGHT, CAT_SIDE/2, Y_FLOOR, LAND_WIDTH, Y_SCREEN);
+        catland->player = create_cat(LOOK_RIGHT, 0, Y_FLOOR - SIDE/2, LAND_WIDTH, Y_SCREEN);
         if (!catland->player)
                 return NULL;
 
@@ -112,5 +112,5 @@ void destroy_game (struct game* catland) {
 
 
 
-create_camera
-destroy_camera
+//create_camera
+//destroy_camera

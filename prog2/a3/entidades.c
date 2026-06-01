@@ -4,9 +4,6 @@
 #include <allegro5/allegro_image.h>
 #include "entidades.h"
 
-
-
-
 fish* create_fish (unsigned short x, unsigned short y) {
         fish *pexe = malloc(sizeof(fish));
         if (!pexe)
@@ -14,29 +11,26 @@ fish* create_fish (unsigned short x, unsigned short y) {
         
         pexe->sprite = al_load_bitmap("assets/sprites/fish/Clownfish.png");
 
-        pexe->box.side = SIDE;
         pexe->box.face = LOOK_LEFT;
-        pexe->box.x = x;
-        pexe->box.y = y;
+        pexe->box.x = x + SIDE/2;
+        pexe->box.y = y + SIDE/2;
         
         pexe->collected = 0;
 
         return pexe;
 }
 
-enemy* create_fox (unsigned short x, unsigned short y, unsigned short start, unsigned short end) {
+enemy* create_fox (unsigned short x, unsigned short y, unsigned short end) {
         enemy* fox = malloc(sizeof(enemy));
         if (!fox)
                 return NULL;
 
         fox->sprites = load_foxsprite();
 
-        fox->box.side = SIDE;
         fox->box.face = LOOK_LEFT;
-        fox->box.x = x;
-        fox->box.y = y;
-
-        fox->start_x = start;
+        //CENTRO DA CRIATURA
+        fox->box.x = x + SIDE/2;
+        fox->box.y = y + SIDE/2;
         fox->end_x = end;
 
         return fox;
@@ -56,19 +50,17 @@ ALLEGRO_BITMAP** load_foxsprite () {
         return sprites;
 }
 
-enemy* create_bird (unsigned short x, unsigned short y, unsigned short start, unsigned short end) {
+enemy* create_bird (unsigned short x, unsigned short y, unsigned short end) {
         enemy* bird = malloc(sizeof(enemy));
         if (!bird)
                 return NULL;
 
         bird->sprites = load_birdsprite();
 
-        bird->box.side = SIDE;
         bird->box.face = LOOK_LEFT;
-        bird->box.x = x;
-        bird->box.y = y;
 
-        bird->start_x = start;
+        bird->box.x = x + SIDE/2;
+        bird->box.y = y + SIDE/2;
         bird->end_x = end;
 
         return bird;

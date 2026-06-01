@@ -5,17 +5,16 @@
 #include "cat.h"
 
 cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y) {			
-	if ((x - side/2 < 0) || (x + side/2 > max_x) || (y - side/2 < 0) || (y + side/2 > max_y)) 
+	if ((x < 0) || (x + SIDE > max_x) || (y < 0) || (y + SIDE > max_y)) 
                 return NULL;												
 
 	cat *player = (cat*) malloc(sizeof(cat));																								
 	if (!player) 
                 return NULL;	
-
-	player->box.side = SIDE;		
+		
         player->box.face = face;																													
-	player->box.x = x;																																
-	player->box.y = y;																																
+	player->box.x = x + SIDE/2;																																
+	player->box.y = y + SIDE/2;																																
 																																																				
 	player->hp = MAX_HP;	
 
@@ -37,26 +36,26 @@ struct sprite_cat* load_catsprite() {
         sprites->crouch = al_load_bitmap("assets/sprites/cat/crouch.png");
 
         sprites->run = malloc(sizeof(ALLEGRO_BITMAP*) * RUN_SPRITE);
-        sprites->jump = malloc(sizeof(ALLEGRO_BITMAP*) * WALK_SPRITE);
-        sprites->walk = malloc(sizeof(ALLEGRO_BITMAP*) * JUMP_SPRITE);
+        sprites->jump = malloc(sizeof(ALLEGRO_BITMAP*) * JUMP_SPRITE);
+        sprites->walk = malloc(sizeof(ALLEGRO_BITMAP*) * WALK_SPRITE);
 
         if (!sprites->walk || !sprites->run || !sprites->jump)
                 return NULL;
 
         int i;
-        for(i = 0; i < QTD_RUN; i++) {
+        for(i = 0; i < RUN_SPRITE; i++) {
                 char path[100];
                 sprintf(path, "assets/sprites/cat/run/%d.png", i+1);
                 sprites->run[i] = al_load_bitmap(path);
         }
 
-        for(i = 0; i < QTD_WALK; i++) {
+        for(i = 0; i < JUMP_SPRITE; i++) {
                 char path[100];
                 sprintf(path, "assets/sprites/cat/jump/%d.png", i+1);
                 sprites->jump[i] = al_load_bitmap(path);
         }
 
-        for(i = 0; i < QTD_JUMP; i++)
+        for(i = 0; i < WALK_SPRITE; i++)
         {
                 char path[100];
                 sprintf(path, "assets/sprites/cat/walk/%d.png", i+1);
@@ -110,12 +109,15 @@ void destroy_catsprite(struct sprite_cat* sprites) {
 
 void destroy_cat(cat *player) {	
         if (!player)
-                return NULL;
+                return;
 
         destroy_camera(player->camera);
         destroy_catsprite(player->sprites);					        																																																		
-	joystick_destroy(player->control);																												
-	free(player);																																		
+	joystick_destroy(player->control);	
+
+	free(player);
+        
+
 }
 
 																																							

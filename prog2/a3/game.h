@@ -6,6 +6,8 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
+#include "cat.h"
+#include "land.h"
 
 #define X_SCREEN 700																																									//Definição do tamanho da tela em pixels no eixo x
 #define Y_SCREEN 512

@@ -25,4 +25,4 @@ void joystick_up(joystick *element){ element->up = element->up ^ 1;}
 
 void joystick_down(joystick *element){ element->down = element->down ^ 1;}			
 
-void joystick_jump(joystick *element){ element->jump = element->fire ^ 1;}
+void joystick_jump(joystick *element){ element->jump = element->jump ^ 1;}

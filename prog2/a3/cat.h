@@ -1,11 +1,11 @@
+#ifndef __CAT__
+#define __CAT__
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
-#ifndef __CAT__ 																																	
-#define __CAT__																																																														//Quantidade de pixels que um quadrado se move por passo
-
-#include "joystick.h"																																																															//Estrutura e procedimentos relacionados ao controle da arma (pistola) no jogo
-#include "land.h"
+#include "joystick.h"
+#include "entidades.h"
 
 #define CAT_STEP 10	
 
@@ -21,6 +21,7 @@ enum frames {
     WALK,
     DOWN,
     JUMP,
+    SCARED,
 
     NUM_FRAMES
 };
