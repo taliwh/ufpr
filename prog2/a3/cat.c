@@ -1,10 +1,10 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <allegro5/allegro_primitives.h>
 
 #include "cat.h"
 
-cat* create_cat(unsigned char side, enum face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y) {			
-
+cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y) {			
 	if ((x - side/2 < 0) || (x + side/2 > max_x) || (y - side/2 < 0) || (y + side/2 > max_y)) 
                 return NULL;												
 
@@ -12,23 +12,61 @@ cat* create_cat(unsigned char side, enum face, unsigned short x, unsigned short 
 	if (!player) 
                 return NULL;	
 
-	player->box.side = side;		
-        player->box.face = LOOK_RIGHT; //inicialmente olha pra direita																																
+	player->box.side = SIDE;		
+        player->box.face = face;																													
 	player->box.x = x;																																
-	player->box.y = y;																																	
+	player->box.y = y;																																
 																																																				
-	player->hp = 5;	
+	player->hp = MAX_HP;	
 
         player->control = joystick_create();		
         player->camera = create_camera();	
-        player->sprites = put_catsprite();
-        cat->frame = NORMAL;
+        player->sprites = load_catsprite();
+        player->frame = NORMAL;
         																											
 	return player;																																	
 }
 
-void step_cat(cat *player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y) {									
+struct sprite_cat* load_catsprite() {
+        struct sprite_cat *sprites = malloc(sizeof(struct sprite_cat));
+        if (!sprites)
+                return NULL;
 
+        sprites->normal = al_load_bitmap("assets/sprites/cat/normal.png");
+        sprites->scared = al_load_bitmap("assets/sprites/cat/scared.png");
+        sprites->crouch = al_load_bitmap("assets/sprites/cat/crouch.png");
+
+        sprites->run = malloc(sizeof(ALLEGRO_BITMAP*) * RUN_SPRITE);
+        sprites->jump = malloc(sizeof(ALLEGRO_BITMAP*) * WALK_SPRITE);
+        sprites->walk = malloc(sizeof(ALLEGRO_BITMAP*) * JUMP_SPRITE);
+
+        if (!sprites->walk || !sprites->run || !sprites->jump)
+                return NULL;
+
+        int i;
+        for(i = 0; i < QTD_RUN; i++) {
+                char path[100];
+                sprintf(path, "assets/sprites/cat/run/%d.png", i+1);
+                sprites->run[i] = al_load_bitmap(path);
+        }
+
+        for(i = 0; i < QTD_WALK; i++) {
+                char path[100];
+                sprintf(path, "assets/sprites/cat/jump/%d.png", i+1);
+                sprites->jump[i] = al_load_bitmap(path);
+        }
+
+        for(i = 0; i < QTD_JUMP; i++)
+        {
+                char path[100];
+                sprintf(path, "assets/sprites/cat/walk/%d.png", i+1);
+                sprites->walk[i] = al_load_bitmap(path);
+        }
+
+        return sprites;
+}
+
+void step_cat(cat* player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y) {									
 	if (!trajectory) 
                 if ((player->box.x - steps*CAT_STEP) - player->box.side/2 >= 0) 
                         player->box.x = player->box.x - steps*CAT_STEP;
@@ -44,24 +82,40 @@ void step_cat(cat *player, char steps, unsigned char trajectory, unsigned short 
 	else if (trajectory == 3)
                 if ((player->box.y + steps*CAT_STEP) + player->box.side/2 <= max_y) 
                         player->box.y = player->box.y + steps*CAT_STEP;
-
 }
 
-void destroy_cat(cat *player) {																																																								
+void destroy_catsprite(struct sprite_cat* sprites) {
+        if (!sprites)
+                return;
+
+        al_destroy_bitmap(sprites->normal);
+        al_destroy_bitmap(sprites->scared);
+        al_destroy_bitmap(sprites->crouch);
+
+        for (int i = 0; i < RUN_SPRITE; i++)
+                al_destroy_bitmap(sprites->run[i]);
+
+        for (int i = 0; i < JUMP_SPRITE; i++)
+                al_destroy_bitmap(sprites->jump[i]);
+
+        for (int i = 0; i < WALK_SPRITE; i++)
+                al_destroy_bitmap(sprites->walk[i]);
+
+        free(sprites->run);
+        free(sprites->jump);
+        free(sprites->walk);
+
+        free(sprites);
+}
+
+void destroy_cat(cat *player) {	
+        if (!player)
+                return NULL;
+
+        destroy_camera(player->camera);
+        destroy_catsprite(player->sprites);					        																																																		
 	joystick_destroy(player->control);																												
 	free(player);																																		
 }
 
-
-
-cat_kill
-unsigned char cat_kill(struct enemy *animal, cat *player) {																																					
-
-																																															
-}
-
-
-
-cat_frame
-
-if cat crouch show image etc
+																																							

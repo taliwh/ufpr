@@ -5,6 +5,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_image.h>
 
 #define X_SCREEN 700																																									//Definição do tamanho da tela em pixels no eixo x
 #define Y_SCREEN 512
@@ -50,21 +51,18 @@ struct game {
         ALLEGRO_TIMER *timer;   // clock dos eventos   
         ALLEGRO_EVENT_QUEUE *queue;  
         ALLEGRO_DISPLAY *disp;   
+        world* land;
         enum state state;  
         cat *player;       
 };
 
 
-struct catland *creat_land
-
-void destroy_land
-
-funcao  MENU
-funcao vitoria
-funcao GAMEOVER
-funcao gameplay 
-? vetor imagem?
-funcao inimigo e player
+struct game* create_game();
+void destroy_game(struct game* catland);
+void destroy_image(struct game* catland);
+void destroy_font(struct game* catland);
+void destroy_audio(struct game* catland);
+void destroy_game(struct game* catland);
 
 #endif
 

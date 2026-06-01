@@ -5,9 +5,16 @@
 #define __CAT__																																																														//Quantidade de pixels que um quadrado se move por passo
 
 #include "joystick.h"																																																															//Estrutura e procedimentos relacionados ao controle da arma (pistola) no jogo
+#include "land.h"
 
 #define CAT_STEP 10	
-#define CAT_SIDE 64
+
+//quantidade de cada sprite
+#define RUN_SPRITE 5
+#define WALK_SPRITE 5
+#define JUMP_SPRITE 6
+
+#define MAX_HP 5
 
 enum frames {
     NORMAL,
@@ -18,28 +25,13 @@ enum frames {
     NUM_FRAMES
 };
 
-enum face {
-        LOOK_RIGHT,
-        LOOK_LEFT
-}
-
-struct body {
-        unsigned char side; 
-        unsigned char face;
-        unsigned short x;																																
-	unsigned short y;	
-};
-
 struct sprite_cat {
         ALLEGRO_BITMAP *normal;
-
-        ALLEGRO_BITMAP **run;
-        ALLEGRO_BITMAP **walk;
-        ALLEGRO_BITMAP **crouch;
-        ALLEGRO_BITMAP **jump;
-
-        ALLEGRO_BITMAP **attack;
         ALLEGRO_BITMAP *scared;
+        ALLEGRO_BITMAP *crouch;
+        ALLEGRO_BITMAP **run;
+        ALLEGRO_BITMAP **jump;
+        ALLEGRO_BITMAP **walk;
 };
 
 typedef struct {			
@@ -51,9 +43,10 @@ typedef struct {
         enum frames frame;																																																												
 } cat;																																			
 
-cat* create_cat(unsigned char side, enum face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y);	
-void step_cat(cat *player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y);						
-void move_cat(cat *element, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y);																																	
+cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y);	
+struct sprite_cat* load_catsprite();
+void step_cat(cat* player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y);		
+void destroy_catsprite(struct sprite_cat* sprites);																																				
 void destroy_cat(cat *element);																											
 
 #endif		

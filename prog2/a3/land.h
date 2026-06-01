@@ -1,36 +1,39 @@
+#ifndef __LAND__
+#define __LAND__
+
+#include <allegro5/allegro.h>
+#include "entidades.h"
+
 #define Y_FLOOR 192
 #define LAND_WIDTH 4224
 
+#define NUM_HAZARDS 
+#define NUM_SOLIDS 12
 
-struct sprite_enemy {
-
-        ALLEGRO_BITMAP **move;
-        ALLEGRO_BITMAP **attack;
+struct solid {
+    unsigned short x;
+    unsigned short y;
+    unsigned short width;
+    unsigned short height;
 };
 
-struct enemies {
-
-}
-
-struct solid
-    ALLEGRO_BITMAP **images;
-
-    int current;
-
-    float x;
-
-    float speed;
+struct hazard {
+    unsigned short x;
+    unsigned short y;
+    unsigned short width; //largura
+    unsigned short height;
 };
 
-struct problem?
-struct platform_map
-{
-    ALLEGRO_BITMAP *image;
+typedef struct {
+    enemy *fox;
+    enemy *bird;
+    fish *fish1;
+    fish *fish2;
+    struct solid *solids;
+    struct hazard *hazards;
+} world;
 
-    float x;
+unsigned char collision(struct body a, struct body b);
 
-    float speed;
-};
 
-unsigned char collision_2D(struct body player, struct body cause_death);
-create_camera
+#endif
