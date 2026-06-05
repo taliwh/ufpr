@@ -5,7 +5,7 @@
 #include <allegro5/allegro_image.h>
 
 #include "joystick.h"
-#include "entidades.h"
+#include "creatures.h"
 
 #define CAT_STEP 10	
 

@@ -1,7 +1,7 @@
 #ifndef __LAND__
 #define __LAND__
 
-#include "entidades.h"
+#include "creatures.h"
 
 #define Y_FLOOR 320
 #define LAND_WIDTH 4224

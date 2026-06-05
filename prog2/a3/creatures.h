@@ -1,5 +1,7 @@
-#ifndef __ENTIDADES__
-#define __ENTIDADES__
+#ifndef __CREATURES__
+#define __CREATURES__
+
+#include <allegro5/allegro5.h>	
 
 //side de cada entidade
 #define SIDE 64
@@ -34,7 +36,7 @@ typedef struct {
     unsigned char collected;
 } fish;
 
-fish* create_fish(unsigned char x, unsigned char y);
+fish* create_fish(unsigned short x, unsigned short y);
 enemy* create_fox(unsigned short x, unsigned short y, unsigned short end);
 enemy* create_bird(unsigned short x, unsigned short y, unsigned short end);
 ALLEGRO_BITMAP** load_foxsprite ();

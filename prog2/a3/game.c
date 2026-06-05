@@ -26,20 +26,21 @@ struct game *create_game () {
                 free(catland->music);
                 free(catland->font);
                 free(catland->images);
+                free(catland->land);
                 free(catland);
                 return NULL;
         }
 
         // carrega as musicas necessarias
-        catland->music->default = al_load_audio_stream("assets/musica/default.mp3", 4, 2048);
-        catland->music->death = al_load_audio_stream("assets/musica/death.mp3", 4, 2048);
-        catland->music->click = al_load_audio_stream("assets/musica/click.mp3", 4, 2048);
-        catland->music->fish = al_load_audio_stream("assets/musica/fish.mp3", 4, 2048);
-        catland->music->damage = al_load_audio_stream("assets/musica/dano.mp3", 4, 2048);
+        catland->music->default_music = al_load_audio_stream("assets/musica/default.ogg", 4, 2048);
+        catland->music->death = al_load_audio_stream("assets/musica/death.ogg", 4, 2048);
+        catland->music->click = al_load_audio_stream("assets/musica/click.ogg", 4, 2048);
+        catland->music->fish = al_load_audio_stream("assets/musica/fish.ogg", 4, 2048);
+        catland->music->damage = al_load_audio_stream("assets/musica/dano.ogg", 4, 2048);
 
         // carrega as fontes necessarias
         catland->font->menu = al_load_ttf_font("assets/fontes/menu.otf", 128, 0);
-        catland->font->game = al_load_ttf_font("assets/fontes/default.ttf", 60, 0);
+        catland->font->game = al_load_ttf_font("assets/fontes/menu.otf", 60, 0);
 
         // carrega as imagens necessarias
         catland->images->icon = al_load_bitmap("assets/sprites/game/icon.png");
@@ -84,7 +85,7 @@ void destroy_font (struct game* catland) {
 }
 
 void destroy_audio (struct game* catland) {
-        al_destroy_audio_stream(catland->music->default);
+        al_destroy_audio_stream(catland->music->default_music);
         al_destroy_audio_stream(catland->music->death);
         al_destroy_audio_stream(catland->music->click);
         al_destroy_audio_stream(catland->music->fish);
@@ -110,7 +111,3 @@ void destroy_game (struct game* catland) {
         free(catland);
 }
 
-
-
-//create_camera
-//destroy_camera

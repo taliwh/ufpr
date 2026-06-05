@@ -14,8 +14,10 @@
 
 enum state {
         MENU,
+        PLAY,
+        WIN,
         GAMEOVER,
-        QUIT,
+        EXIT,
 };
 
 struct fonts {
@@ -24,7 +26,7 @@ struct fonts {
 };
 
 struct sounds {
-        ALLEGRO_AUDIO_STREAM *default;
+        ALLEGRO_AUDIO_STREAM *default_music;
         ALLEGRO_AUDIO_STREAM *death;
         ALLEGRO_AUDIO_STREAM *click;
         ALLEGRO_AUDIO_STREAM *fish;
@@ -53,11 +55,10 @@ struct game {
         ALLEGRO_TIMER *timer;   // clock dos eventos   
         ALLEGRO_EVENT_QUEUE *queue;  
         ALLEGRO_DISPLAY *disp;   
-        world* land;
+        world *land;
         enum state state;  
         cat *player;       
 };
-
 
 struct game* create_game();
 void destroy_game(struct game* catland);

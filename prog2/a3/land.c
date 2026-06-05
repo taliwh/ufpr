@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "land.h"
 
+
 world* create_land () {
         world *land = malloc(sizeof(world));
         if (!land)
@@ -28,7 +29,7 @@ world* create_land () {
         land->solids[1] = (struct solid){640, 320, 64, 64};
 
         //chao da 1 lava
-        land->solids[2] = (struct solid){640, 512, 192, 64}
+        land->solids[2] = (struct solid){640, 512, 192, 64};
 
         //segundo bloco de terra q vai ate a lava (onde vai aparecer a raposa)
         land->solids[3] = (struct solid){832, 320, 1280, 192};

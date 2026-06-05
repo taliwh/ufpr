@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
-#include "entidades.h"
+#include "creatures.h"
 
 fish* create_fish (unsigned short x, unsigned short y) {
         fish *pexe = malloc(sizeof(fish));
@@ -56,7 +56,6 @@ enemy* create_bird (unsigned short x, unsigned short y, unsigned short end) {
                 return NULL;
 
         bird->sprites = load_birdsprite();
-
         bird->box.face = LOOK_LEFT;
 
         bird->box.x = x + SIDE/2;

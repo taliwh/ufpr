@@ -3,9 +3,10 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "cat.h"
+#include "camera.h"
 
 cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y) {			
-	if ((x < 0) || (x + SIDE > max_x) || (y < 0) || (y + SIDE > max_y)) 
+	if (x + SIDE > max_x || y + SIDE > max_y) 
                 return NULL;												
 
 	cat *player = (cat*) malloc(sizeof(cat));																								
@@ -15,14 +16,30 @@ cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned sho
         player->box.face = face;																													
 	player->box.x = x + SIDE/2;																																
 	player->box.y = y + SIDE/2;																																
-																																																				
+	player->frame = NORMAL;																																																	
 	player->hp = MAX_HP;	
 
-        player->control = joystick_create();		
-        player->camera = create_camera();	
+        player->control = joystick_create();
+        if (!player->control) {
+                free(player);
+                return NULL;
+        }
+
+        player->camera = create_camera();
+        if (!player->camera) {
+                joystick_destroy(player->control);
+                free(player);
+                return NULL;
+        }
+
         player->sprites = load_catsprite();
-        player->frame = NORMAL;
-        																											
+        if (!player->sprites) {
+                destroy_camera(player->camera);
+                joystick_destroy(player->control);
+                free(player);
+                return NULL;
+        }
+																									
 	return player;																																	
 }
 
@@ -39,8 +56,18 @@ struct sprite_cat* load_catsprite() {
         sprites->jump = malloc(sizeof(ALLEGRO_BITMAP*) * JUMP_SPRITE);
         sprites->walk = malloc(sizeof(ALLEGRO_BITMAP*) * WALK_SPRITE);
 
-        if (!sprites->walk || !sprites->run || !sprites->jump)
+        if (!sprites->walk || !sprites->run || !sprites->jump) {
+                free(sprites->run);
+                free(sprites->jump);
+                free(sprites->walk);
+
+                al_destroy_bitmap(sprites->normal);
+                al_destroy_bitmap(sprites->scared);
+                al_destroy_bitmap(sprites->crouch);
+
+                free(sprites);
                 return NULL;
+        }
 
         int i;
         for(i = 0; i < RUN_SPRITE; i++) {
@@ -66,21 +93,19 @@ struct sprite_cat* load_catsprite() {
 }
 
 void step_cat(cat* player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y) {									
-	if (!trajectory) 
-                if ((player->box.x - steps*CAT_STEP) - player->box.side/2 >= 0) 
+	if (!trajectory) {
+                if ((player->box.x - steps*CAT_STEP) - SIDE/2 >= 0) 
                         player->box.x = player->box.x - steps*CAT_STEP;
-
-	else if (trajectory == 1) 
-                if ((player->box.x + steps*CAT_STEP) + player->box.side/2 <= max_x) 
+        } else if (trajectory == 1) { 
+                if ((player->box.x + steps*CAT_STEP) + SIDE/2 <= max_x) 
                         player->box.x = player->box.x + steps*CAT_STEP;
-
-	else if (trajectory == 2) 
-                if ((player->box.y - steps*CAT_STEP) - player->box.side/2 >= 0) 
+        } else if (trajectory == 2) { 
+                if ((player->box.y - steps*CAT_STEP) - SIDE/2 >= 0) 
                         player->box.y = player->box.y - steps*CAT_STEP;
-
-	else if (trajectory == 3)
-                if ((player->box.y + steps*CAT_STEP) + player->box.side/2 <= max_y) 
+        } else if (trajectory == 3) {
+                if ((player->box.y + steps*CAT_STEP) + SIDE/2 <= max_y) 
                         player->box.y = player->box.y + steps*CAT_STEP;
+        }
 }
 
 void destroy_catsprite(struct sprite_cat* sprites) {
