@@ -37,26 +37,61 @@ int main() {
                 if (catland->event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                         catland->state = EXIT;
 
+                // isso aq e pra input
                 if (catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && catland->state == MENU)
                         input_menu(catland);
+                
+                if (catland->event.type == ALLEGRO_EVENT_KEY_DOWN && catland->state == PLAY)
+                        switch (catland->event.keyboard.keycode) {
+                                case ALLEGRO_KEY_A: 
+                                        joystick_left(catland->player->control);
+                                        catland->player->box.face = LOOK_LEFT;
+                                        catland->player->frame = WALK;
+                                        break;
+                                case ALLEGRO_KEY_S: 
+                                        joystick_crouch(catland->player->control);
+                                        catland->player->frame = DOWN;
+                                        break;
+                                case ALLEGRO_KEY_D:
+                                        joystick_right(catland->player->control);
+                                        catland->player->box.face = LOOK_RIGHT;
+                                        catland->player->frame = WALK;
+                                        break;
+                                case ALLEGRO_KEY_SPACE:
+                                        joystick_jump(catland->player->control);
+                                        catland->player->frame = JUMP;
+                                        break;
+                                default:
+                                        break; 
+                        }
+                
+                if (catland->event.type == ALLEGRO_EVENT_KEY_U && catland->state = PLAY)
+                        switch (catland->event.keyboard.keycode) {
+                                case ALLEGRO_KEY_A:
+                                        break;
+                                default:
+                                        break;
+                        }
 
-                // isso aq eh pra renderizar
+
+
+                // isso aq eh pra renderizar (desenho)
                 if (catland->event.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(catland->queue)) {
                         al_clear_to_color(al_map_rgb(0,0,0));
                         switch (catland->state)
                         {
-                                case (MENU):
+                                case MENU:
                                         render_menu(catland);
                                         break;
+                                case PLAY:
+                                        render_play(catland);
+                                        break;
                                 /*
-                                case (PLAY):
-                                        state_play(catland);
+                                case WIN:
+                                        render_win(catland);
                                         break;
-                                case (WIN):
-                                        state_win(catland);
-                                        break;
-                                case (GAMEOVER):
-                                        state_gameover(catland);
+                                case GAMEOVER:
+                                        render_gameover(catland);
                                         break;
                                 */
                                 default:

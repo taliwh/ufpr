@@ -16,6 +16,7 @@
 
 #define MAX_HP 5
 
+// eunaosei se esse enum eh necessario sinceramente falando....
 enum frames {
     NORMAL,
     WALK,
@@ -23,7 +24,7 @@ enum frames {
     JUMP,
     SCARED,
 
-    NUM_FRAMES
+    NUM_FRAMES //>???p q serve isso
 };
 
 struct sprite_cat {

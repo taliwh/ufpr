@@ -26,13 +26,18 @@ void input_menu(struct game *catland) {
         int cursor_y = catland->event.mouse.y;
 
         // verifica se clicou na area do botao jogar
-        //if (cursor_x >= 212 && cursor_x <= 500 && cursor_y >= 247 && cursor_y <= 385)
-                //catland->state = PLAY;
+        if (cursor_x >= 215 && cursor_x <= 500 && cursor_y >= 247 && cursor_y <= 318)
+                catland->state = PLAY;
         
         // verifica se clicou na area do botao sair
-        if (cursor_x >= 215 && cursor_x <= 490 && cursor_y >= 320 && cursor_y <= 390)
+        if (cursor_x >= 215 && cursor_x <= 490 && cursor_y >= 323 && cursor_y <= 390)
                 catland->state = EXIT;
 }
+
+void render_play() {
+        
+}
+
 
 /*
 void state_play(struct game *catland);
