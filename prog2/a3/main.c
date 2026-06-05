@@ -36,12 +36,17 @@ int main() {
                 al_wait_for_event(catland->queue, &catland->event);
                 if (catland->event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                         catland->state = EXIT;
+
+                if (catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && catland->state == MENU)
+                        input_menu(catland);
+
+                // isso aq eh pra renderizar
                 if (catland->event.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(catland->queue)) {
                         al_clear_to_color(al_map_rgb(0,0,0));
                         switch (catland->state)
                         {
                                 case (MENU):
-                                        state_menu(catland);
+                                        render_menu(catland);
                                         break;
                                 /*
                                 case (PLAY):

@@ -2,12 +2,9 @@
 #include <allegro5/allegro5.h>	
 #include "game.h"
 
-void state_menu(struct game *catland) {
+void render_menu(struct game *catland) {
         if (!catland)
                 return;
-
-        int cursor_x;
-        int cursor_y;
 
         // carrega o fundo do menu e o titulo
         al_draw_bitmap(catland->images->menu_bg, 0, 0, 0);
@@ -21,20 +18,20 @@ void state_menu(struct game *catland) {
         al_draw_scaled_bitmap(catland->images->button, 0, 0, al_get_bitmap_width(catland->images->button), al_get_bitmap_height(catland->images->button), 212, 320, 288, 138, 0);
         al_draw_text(catland->font->game, al_map_rgb(220, 211, 230), 350, 323, ALLEGRO_ALIGN_CENTER, "SAIR");
 
-        if (catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-                cursor_x = catland->event.mouse.x;
-                cursor_y = catland->event.mouse.y;
-        
-                // verifica se clicou na area do botao jogar
-                //if (cursor_x >= 212 && cursor_x <= 500 && cursor_y >= 247 && cursor_y <= 385)
-                        //catland->state = PLAY;
-                
-                // verifica se clicou na area do botao sair
-                if (cursor_x >= 212 && cursor_x <= 500 && cursor_y >= 320 && cursor_y <= 458)
-                        catland->state = EXIT;
-        }
-
         return;
+}
+
+void input_menu(struct game *catland) {
+        int cursor_x = catland->event.mouse.x;
+        int cursor_y = catland->event.mouse.y;
+
+        // verifica se clicou na area do botao jogar
+        //if (cursor_x >= 212 && cursor_x <= 500 && cursor_y >= 247 && cursor_y <= 385)
+                //catland->state = PLAY;
+        
+        // verifica se clicou na area do botao sair
+        if (cursor_x >= 215 && cursor_x <= 490 && cursor_y >= 320 && cursor_y <= 390)
+                catland->state = EXIT;
 }
 
 /*
