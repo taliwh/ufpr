@@ -4,19 +4,28 @@
 #include <allegro5/allegro_image.h>
 #include "creatures.h"
 
-fish* create_fish (unsigned short x, unsigned short y) {
+fish* create_fish (unsigned short x, unsigned short y, char fish_type, char collected) {
         fish *pexe = malloc(sizeof(fish));
         if (!pexe)
                 return NULL;
-        
-        pexe->sprite = al_load_bitmap("assets/sprites/fish/Clownfish.png");
 
+        if (fish_type == 1) {
+                if (collected)
+                        pexe->sprite = al_load_bitmap("assets/sprites/fish/ClownfishOutline.png");
+                else
+                        pexe->sprite = al_load_bitmap("assets/sprites/fish/Clownfish.png");
+        }
+
+        if (fish_type == 2) {
+                if (collected)
+                        pexe->sprite = al_load_bitmap("assets/sprites/fish/SurgeonfishOutline.png");
+                else 
+                        pexe->sprite = al_load_bitmap("assets/sprites/fish/Surgeonfish.png");
+        }
         pexe->box.face = LOOK_LEFT;
         pexe->box.side = SIDE_FISH;
         pexe->box.x = x + SIDE_FISH/2;
         pexe->box.y = y + SIDE_FISH/2;
-        
-        pexe->collected = 0;
 
         return pexe;
 }

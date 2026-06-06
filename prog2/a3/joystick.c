@@ -1,31 +1,71 @@
 #include <stdlib.h>
 #include "joystick.h"
 
-joystick* joystick_create(){														
-	joystick *element = (joystick*) malloc (sizeof(joystick));						
-	if (!element) 
-                return NULL;	
+joystick* joystick_create() {
+    joystick *element = malloc(sizeof(joystick));
 
-	element->right = 0;																
-	element->left = 0;																															
-	element->down = 0;															
-	element->jump = 0;
-        element->crouch = 0;
-        element->run = 0;
+    if (!element)
+        return NULL;
 
-	return element;																	
+    element->right = 0;
+    element->left = 0;
+    element->up = 0;
+    element->down = 0;
+    element->jump = 0;
+    element->crouch = 0;
+    element->run = 0;
+
+    return element;
 }
 
-void joystick_destroy(joystick *element){ free(element);}							
+void joystick_destroy(joystick *element) {
+    free(element);
+}
 
-void joystick_left(joystick *element){ element->left = element->left ^ 1;}			
+void joystick_left_down(joystick *element) {
+    element->left = 1;
+}
 
-void joystick_right(joystick *element){ element->right = element->right ^ 1;}				
+void joystick_left_up(joystick *element) {
+    element->left = 0;
+}
 
-void joystick_down(joystick *element){ element->down = element->down ^ 1;}			
+void joystick_right_down(joystick *element) {
+    element->right = 1;
+}
 
-void joystick_jump(joystick *element){ element->jump = element->jump ^ 1;}
+void joystick_right_up(joystick *element) {
+    element->right = 0;
+}
 
-void joystick_crouch(joystick *element){ element->crouch = element->crouch ^ 1;}
+void joystick_down_down(joystick *element) {
+    element->down = 1;
+}
 
-void joystick_run(joystick *element){ element->run = element->run ^ 1;}
+void joystick_down_up(joystick *element) {
+    element->down = 0;
+}
+
+void joystick_jump_down(joystick *element) {
+    element->jump = 1;
+}
+
+void joystick_jump_up(joystick *element) {
+    element->jump = 0;
+}
+
+void joystick_crouch_down(joystick *element) {
+    element->crouch = 1;
+}
+
+void joystick_crouch_up(joystick *element) {
+    element->crouch = 0;
+}
+
+void joystick_run_down(joystick *element) {
+    element->run = 1;
+}
+
+void joystick_run_up(joystick *element) {
+    element->run = 0;
+}

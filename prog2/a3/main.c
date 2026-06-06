@@ -44,24 +44,19 @@ int main() {
                 if (catland->state == PLAY && catland->event.type == ALLEGRO_EVENT_KEY_DOWN)
                         switch (catland->event.keyboard.keycode) {
                                 case ALLEGRO_KEY_A: 
-                                        joystick_left(catland->player->control);
-                                        catland->player->frame = WALK;
+                                        joystick_left_down(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_LCTRL: 
-                                        joystick_crouch(catland->player->control);
-                                        catland->player->frame = DOWN;
+                                        joystick_crouch_down(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_D:
-                                        joystick_right(catland->player->control);
-                                        catland->player->frame = WALK;
+                                        joystick_right_down(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_SPACE:
-                                        joystick_jump(catland->player->control);
-                                        catland->player->frame = JUMP;
+                                        joystick_jump_down(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_LSHIFT:
-                                        joystick_run(catland->player->control);
-                                        catland->player->frame = RUN;
+                                        joystick_run_down(catland->player->control);
                                         break;
                                 default:
                                         break; 
@@ -70,30 +65,23 @@ int main() {
                 if (catland->event.type == ALLEGRO_EVENT_KEY_UP && catland->state == PLAY)
                         switch (catland->event.keyboard.keycode) {
                                 case ALLEGRO_KEY_A: 
-                                        joystick_left(catland->player->control);
-                                        catland->player->frame = NORMAL;
+                                        joystick_left_up(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_LCTRL: 
-                                        joystick_crouch(catland->player->control);
-                                        catland->player->frame = NORMAL;
+                                        joystick_crouch_up(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_D:
-                                        joystick_right(catland->player->control);
-                                        catland->player->frame = NORMAL;
+                                        joystick_right_up(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_SPACE:
-                                        joystick_jump(catland->player->control);
-                                        catland->player->frame = NORMAL;
+                                        joystick_jump_up(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_LSHIFT:
-                                        joystick_run(catland->player->control);
-                                        catland->player->frame = NORMAL;
+                                        joystick_run_up(catland->player->control);
                                         break;
                                 default:
                                         break; 
                         }
-
-
 
                 // isso aq eh pra renderizar (desenho)
                 if (catland->event.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(catland->queue)) {

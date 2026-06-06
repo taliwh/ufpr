@@ -48,13 +48,27 @@ void render_play(struct game *catland) {
         update_camera(p->camera, p->box.x);
         float cam = p->camera->x;
 
+        update_position(p);
+
+        // define qual animação deve estar ativa
+        if (p->control->crouch)
+                p->frame = DOWN;
+        else if (p->control->jump)
+                p->frame = JUMP;
+        else if (p->control->run && (p->control->left || p->control->right))
+                p->frame = RUN;
+        else if (p->control->left || p->control->right)
+                p->frame = WALK;
+        else
+                p->frame = NORMAL;
+
         // desenha fundo e mundo (o background vai mais devagar dando um efeito top)
         al_draw_bitmap(catland->images->game_bg, -cam * 0.3, 0, 0);
         al_draw_bitmap(catland->images->land, -cam, 0, 0);
-
-        update_position(catland->player);
-
-
+        
+        // desenha o pexe
+        al_draw_scaled_bitmap(catland->land->fish1->sprite, 0, 0, SIDE_FISH, SIDE_FISH, (catland->land->fish1->box.x - SIDE_FISH/2) - cam, catland->land->fish1->box.y - SIDE_FISH/2, 45, 45, 0);
+        al_draw_scaled_bitmap(catland->land->fish2->sprite, 0, 0, SIDE_FISH, SIDE_FISH, (catland->land->fish2->box.x - SIDE_FISH/2) - cam, catland->land->fish2->box.y - SIDE_FISH/2, 45, 45, 0);        
         // escolhe o sprite
         ALLEGRO_BITMAP *sprite;
         switch (p->frame) {
@@ -93,9 +107,3 @@ void render_play(struct game *catland) {
 
         al_draw_scaled_bitmap(sprite, 0, 0, 50, 50, (p->box.x - SIDE_CAT/2) - cam, p->box.y - SIDE_CAT/2, 64, 64, flip);
 }
-
-/*
-void state_play(struct game *catland);
-void state_win(struct game *catland);
-void state_gameover(struct game *catland);
-*/

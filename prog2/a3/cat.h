@@ -16,16 +16,14 @@
 
 #define MAX_HP 5
 
-// eunaosei se esse enum eh necessario sinceramente falando....
 enum frames {
     NORMAL,
     WALK,
     RUN,
     DOWN,
     JUMP,
-    SCARED,
+    SCARED
 
-    NUM_FRAMES //>???p q serve isso
 };
 
 struct sprite_cat {
@@ -49,7 +47,7 @@ typedef struct {
 
 cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y);	
 struct sprite_cat* load_catsprite();
-void step_cat(cat* player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y);		
+void step_cat(cat* player, int speed, unsigned char trajectory, unsigned short max_x, unsigned short max_y);		
 void update_position(cat *player);
 void destroy_catsprite(struct sprite_cat* sprites);																																				
 void destroy_cat(cat *element);																											

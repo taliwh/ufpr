@@ -96,19 +96,22 @@ struct sprite_cat* load_catsprite() {
         return sprites;
 }
 
-void step_cat(cat* player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y) {									
+void step_cat(cat* player, int speed, unsigned char trajectory, unsigned short max_x, unsigned short max_y) {									
 	if (!trajectory) {
-                if ((player->box.x - steps*CAT_STEP) - player->box.side/2 >= 0) 
-                        player->box.x = player->box.x - steps*CAT_STEP;
+                if ((player->box.x - speed) - player->box.side/2 >= 0) 
+                        player->box.x -= speed;
+
         } else if (trajectory == 1) { 
-                if ((player->box.x + steps*CAT_STEP) + player->box.side/2 <= max_x) 
-                        player->box.x = player->box.x + steps*CAT_STEP;
+                if ((player->box.x + speed) + player->box.side/2 <= max_x) 
+                        player->box.x += speed;
+
         } else if (trajectory == 2) { 
-                if ((player->box.y - steps*CAT_STEP) - player->box.side/2 >= 0) 
-                        player->box.y = player->box.y - steps*CAT_STEP;
+                if ((player->box.y - speed) - player->box.side/2 >= 0) 
+                        player->box.y -= speed;
+
         } else if (trajectory == 3) {
-                if ((player->box.y + steps*CAT_STEP) + player->box.side/2 <= max_y) 
-                        player->box.y = player->box.y + steps*CAT_STEP;
+                if ((player->box.y + speed) + player->box.side/2 <= max_y) 
+                        player->box.y += speed;
         }
 }
 
@@ -116,14 +119,22 @@ void update_position (cat* player) {
         if (!player)
                 return;
 
-        if (player->control->left) {
+        int speed = CAT_STEP;
+
+        if (player->control->run)
+                speed = 20;
+
+        if (player->control->crouch)
+                speed = 5;
+
+        if (player->control->left && !player->control->right) {
                 player->box.face = LOOK_LEFT;
-                step_cat(player, 1, 0, LAND_WIDTH, Y_SCREEN);
+                step_cat(player, speed, 0, LAND_WIDTH, Y_SCREEN);
         }
         
-        if (player->control->right) {
+        if (player->control->right && !player->control->left) {
                 player->box.face = LOOK_RIGHT;
-                step_cat(player, 1, 1, LAND_WIDTH, Y_SCREEN);
+                step_cat(player, speed, 1, LAND_WIDTH, Y_SCREEN);
         }
 
 

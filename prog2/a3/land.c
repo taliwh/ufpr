@@ -11,8 +11,8 @@ world* create_land () {
         land->fox = create_fox(1792 , 256, 1024);
         land->bird = create_bird(2304, 32, 1408);
         
-        land->fish1 = create_fish(1984, 64);
-        land->fish2 = create_fish(3084, 384);
+        land->fish1 = create_fish(1984, 120, 1, 0);
+        land->fish2 = create_fish(3080, 400, 2, 0);
 
         land->solids = malloc(sizeof(struct solid) * NUM_SOLIDS);
         land->hazards = malloc(sizeof(struct hazard) * NUM_HAZARDS);
