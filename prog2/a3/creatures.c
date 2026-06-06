@@ -12,8 +12,9 @@ fish* create_fish (unsigned short x, unsigned short y) {
         pexe->sprite = al_load_bitmap("assets/sprites/fish/Clownfish.png");
 
         pexe->box.face = LOOK_LEFT;
-        pexe->box.x = x + SIDE/2;
-        pexe->box.y = y + SIDE/2;
+        pexe->box.side = SIDE_FISH;
+        pexe->box.x = x + SIDE_FISH/2;
+        pexe->box.y = y + SIDE_FISH/2;
         
         pexe->collected = 0;
 
@@ -28,9 +29,10 @@ enemy* create_fox (unsigned short x, unsigned short y, unsigned short end) {
         fox->sprites = load_foxsprite();
 
         fox->box.face = LOOK_LEFT;
-        //CENTRO DA CRIATURA
-        fox->box.x = x + SIDE/2;
-        fox->box.y = y + SIDE/2;
+        fox->box.side = SIDE_FOX;
+        fox->box.x = x + SIDE_FOX/2;
+        fox->box.y = y + SIDE_FOX/2;
+        
         fox->end_x = end;
 
         return fox;
@@ -57,9 +59,9 @@ enemy* create_bird (unsigned short x, unsigned short y, unsigned short end) {
 
         bird->sprites = load_birdsprite();
         bird->box.face = LOOK_LEFT;
-
-        bird->box.x = x + SIDE/2;
-        bird->box.y = y + SIDE/2;
+        bird->box.side = SIDE_BIRD;
+        bird->box.x = x + SIDE_BIRD/2;
+        bird->box.y = y + SIDE_BIRD/2;
         bird->end_x = end;
 
         return bird;
@@ -82,6 +84,7 @@ ALLEGRO_BITMAP** load_birdsprite () {
 void destroy_fish (fish *pexe) {
         if (!pexe)
                 return;
+
         al_destroy_bitmap(pexe->sprite);
         free(pexe);
 }
@@ -92,7 +95,6 @@ void destroy_foxsprite (ALLEGRO_BITMAP **sprites) {
 
     for (int i = 0; i < 4; i++)
         al_destroy_bitmap(sprites[i]);
-
     free(sprites);
 }
 
@@ -102,7 +104,6 @@ void destroy_birdsprite (ALLEGRO_BITMAP **sprites) {
 
     for (int i = 0; i < 6; i++)
         al_destroy_bitmap(sprites[i]);
-
     free(sprites);
 }
 

@@ -32,8 +32,11 @@ typedef struct {
     struct hazard *hazards;
 } world;
 
-unsigned char collision(struct body a, struct body b);
 world* create_land();
 void destroy_land(world* land);
+unsigned char collision(struct body a, struct body b);
+//unsigned char floor_collision(struct body a, struct solid);
+//unsigned char hazard_collision(struct body a, struct hazard);
+        
 
 #endif

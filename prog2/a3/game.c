@@ -33,10 +33,10 @@ struct game *create_game () {
 
         // carrega as musicas necessarias
         catland->music->default_music = al_load_audio_stream("assets/musica/default.ogg", 4, 2048);
-        catland->music->death = al_load_audio_stream("assets/musica/death.ogg", 4, 2048);
-        catland->music->click = al_load_audio_stream("assets/musica/click.ogg", 4, 2048);
-        catland->music->fish = al_load_audio_stream("assets/musica/fish.ogg", 4, 2048);
-        catland->music->damage = al_load_audio_stream("assets/musica/dano.ogg", 4, 2048);
+        catland->music->death = al_load_sample("assets/musica/death.ogg");
+        catland->music->click = al_load_sample("assets/musica/click.ogg");
+        catland->music->fish = al_load_sample("assets/musica/fish.ogg");
+        catland->music->damage = al_load_sample("assets/musica/dano.ogg");
 
         // carrega as fontes necessarias
         catland->font->menu = al_load_ttf_font("assets/fontes/menu.otf", 128, 0);
@@ -44,7 +44,7 @@ struct game *create_game () {
 
         // carrega as imagens necessarias
         catland->images->icon = al_load_bitmap("assets/sprites/game/icon.png");
-        catland->images->land = al_load_bitmap("assets/sprites/land.png");
+        catland->images->land = al_load_bitmap("assets/sprites/landteste.png");
         catland->images->menu_bg = al_load_bitmap("assets/sprites/menu.png");
         catland->images->game_bg = al_load_bitmap("assets/sprites/galaxy.png");
         catland->images->button = al_load_bitmap("assets/sprites/botao.png");
@@ -59,7 +59,7 @@ struct game *create_game () {
         catland->state = MENU;
 
         // cria o player
-        catland->player = create_cat(LOOK_RIGHT, 0, Y_FLOOR - SIDE/2, LAND_WIDTH, Y_SCREEN);
+        catland->player = create_cat(LOOK_RIGHT, 0, Y_FLOOR - SIDE_CAT, LAND_WIDTH, Y_SCREEN);
         if (!catland->player)
                 return NULL;
 
@@ -86,10 +86,10 @@ void destroy_font (struct game* catland) {
 
 void destroy_audio (struct game* catland) {
         al_destroy_audio_stream(catland->music->default_music);
-        al_destroy_audio_stream(catland->music->death);
-        al_destroy_audio_stream(catland->music->click);
-        al_destroy_audio_stream(catland->music->fish);
-        al_destroy_audio_stream(catland->music->damage);
+        al_destroy_sample(catland->music->death);
+        al_destroy_sample(catland->music->click);
+        al_destroy_sample(catland->music->fish);
+        al_destroy_sample(catland->music->damage);
 
         free(catland->music);
 }

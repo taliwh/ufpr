@@ -27,10 +27,10 @@ struct fonts {
 
 struct sounds {
         ALLEGRO_AUDIO_STREAM *default_music;
-        ALLEGRO_AUDIO_STREAM *death;
-        ALLEGRO_AUDIO_STREAM *click;
-        ALLEGRO_AUDIO_STREAM *fish;
-        ALLEGRO_AUDIO_STREAM *damage;
+        ALLEGRO_SAMPLE *death;
+        ALLEGRO_SAMPLE *click;
+        ALLEGRO_SAMPLE *fish;
+        ALLEGRO_SAMPLE *damage;
 };
 
 struct pngs {

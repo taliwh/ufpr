@@ -4,20 +4,24 @@
 
 #include "cat.h"
 #include "camera.h"
+#include "land.h"
+#include "game.h"
 
 cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y) {			
-	if (x + SIDE > max_x || y + SIDE > max_y) 
+	if (x + SIDE_CAT > max_x || y + SIDE_CAT > max_y) 
                 return NULL;												
 
 	cat *player = (cat*) malloc(sizeof(cat));																								
 	if (!player) 
                 return NULL;	
-		
-        player->box.face = face;																													
-	player->box.x = x + SIDE/2;																																
-	player->box.y = y + SIDE/2;																																
+	
+        player->box.face = face;
+        player->box.side = SIDE_CAT;																													
+	player->box.x = x + SIDE_CAT/2;																																
+	player->box.y = y + SIDE_CAT/2;																																
 	player->frame = NORMAL;																																																	
 	player->hp = MAX_HP;	
+        player->sprite_counter = 0;
 
         player->control = joystick_create();
         if (!player->control) {
@@ -94,18 +98,35 @@ struct sprite_cat* load_catsprite() {
 
 void step_cat(cat* player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y) {									
 	if (!trajectory) {
-                if ((player->box.x - steps*CAT_STEP) - SIDE/2 >= 0) 
+                if ((player->box.x - steps*CAT_STEP) - player->box.side/2 >= 0) 
                         player->box.x = player->box.x - steps*CAT_STEP;
         } else if (trajectory == 1) { 
-                if ((player->box.x + steps*CAT_STEP) + SIDE/2 <= max_x) 
+                if ((player->box.x + steps*CAT_STEP) + player->box.side/2 <= max_x) 
                         player->box.x = player->box.x + steps*CAT_STEP;
         } else if (trajectory == 2) { 
-                if ((player->box.y - steps*CAT_STEP) - SIDE/2 >= 0) 
+                if ((player->box.y - steps*CAT_STEP) - player->box.side/2 >= 0) 
                         player->box.y = player->box.y - steps*CAT_STEP;
         } else if (trajectory == 3) {
-                if ((player->box.y + steps*CAT_STEP) + SIDE/2 <= max_y) 
+                if ((player->box.y + steps*CAT_STEP) + player->box.side/2 <= max_y) 
                         player->box.y = player->box.y + steps*CAT_STEP;
         }
+}
+
+void update_position (cat* player) {
+        if (!player)
+                return;
+
+        if (player->control->left) {
+                player->box.face = LOOK_LEFT;
+                step_cat(player, 1, 0, LAND_WIDTH, Y_SCREEN);
+        }
+        
+        if (player->control->right) {
+                player->box.face = LOOK_RIGHT;
+                step_cat(player, 1, 1, LAND_WIDTH, Y_SCREEN);
+        }
+
+
 }
 
 void destroy_catsprite(struct sprite_cat* sprites) {

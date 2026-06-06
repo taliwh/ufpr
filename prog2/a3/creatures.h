@@ -4,7 +4,10 @@
 #include <allegro5/allegro5.h>	
 
 //side de cada entidade
-#define SIDE 64
+#define SIDE_CAT 64 //50
+#define SIDE_BIRD 35
+#define SIDE_FOX 25
+#define SIDE_FISH 18
 
 //quantidade de sprites 
 #define FOX_SPRITE 4
@@ -18,7 +21,7 @@ enum face {
 struct body {
         //direcao q o personagem ta olhando
         unsigned char face;
-
+        unsigned short side;
         //centro da box
         unsigned short x;																																
 	unsigned short y;	

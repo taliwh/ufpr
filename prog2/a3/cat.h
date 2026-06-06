@@ -11,8 +11,8 @@
 
 //quantidade de cada sprite
 #define RUN_SPRITE 5
-#define WALK_SPRITE 5
-#define JUMP_SPRITE 6
+#define WALK_SPRITE 6
+#define JUMP_SPRITE 5
 
 #define MAX_HP 5
 
@@ -20,6 +20,7 @@
 enum frames {
     NORMAL,
     WALK,
+    RUN,
     DOWN,
     JUMP,
     SCARED,
@@ -42,12 +43,14 @@ typedef struct {
 	joystick *control;		
         struct camera *camera; //camera q segue o jogador
         struct sprite_cat *sprites; 
-        enum frames frame;																																																												
+        enum frames frame;
+        unsigned char sprite_counter;																																																												
 } cat;																																			
 
 cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y);	
 struct sprite_cat* load_catsprite();
 void step_cat(cat* player, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y);		
+void update_position(cat *player);
 void destroy_catsprite(struct sprite_cat* sprites);																																				
 void destroy_cat(cat *element);																											
 

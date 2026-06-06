@@ -87,19 +87,28 @@ void destroy_land (world* land) {
         free(land);
 }
 
-unsigned char collision (struct body a, struct body b)
-{
-    if (a.x + SIDE/2 < b.x - SIDE/2)
+unsigned char entity_collision (struct body a, struct body b) {
+    if (a.x + a.side/2 < b.x - b.side/2)
         return 0;
 
-    if (a.x - SIDE/2 > b.x + SIDE/2)
+    if (a.x - a.side/2 > b.x + b.side/2)
         return 0;
 
-    if (a.y + SIDE/2 < b.y - SIDE/2)
+    if (a.y + a.side/2 < b.y - b.side/2)
         return 0;
 
-    if (a.y - SIDE/2 > b.y + SIDE/2)
+    if (a.y - a.side/2 > b.y + b.side/2)
         return 0;
 
     return 1;
 }
+
+/*
+unsigned char floor_collision(struct body a, struct solid) {
+
+}
+
+unsigned char hazard_collision(struct body a, struct hazard) {
+
+}
+*/

@@ -1,7 +1,7 @@
 #include <allegro5/allegro5.h>																					
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
- 
+
 #include "cat.h"
 #include "game.h"
 #include "states.h"
@@ -28,7 +28,7 @@ int main() {
 
         al_set_audio_stream_playmode(catland->music->default_music, ALLEGRO_PLAYMODE_LOOP);
         al_attach_audio_stream_to_mixer(catland->music->default_music, al_get_default_mixer());
-        al_set_audio_stream_gain(catland->music->default_music, 0.05);
+        al_set_audio_stream_gain(catland->music->default_music, 0.10);
         al_set_audio_stream_playing(catland->music->default_music, true);
 
         al_start_timer(catland->timer);
@@ -38,39 +38,59 @@ int main() {
                         catland->state = EXIT;
 
                 // isso aq e pra input
-                if (catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && catland->state == MENU)
+                if (catland->state == MENU && catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                         input_menu(catland);
-                
-                if (catland->event.type == ALLEGRO_EVENT_KEY_DOWN && catland->state == PLAY)
+
+                if (catland->state == PLAY && catland->event.type == ALLEGRO_EVENT_KEY_DOWN)
                         switch (catland->event.keyboard.keycode) {
                                 case ALLEGRO_KEY_A: 
                                         joystick_left(catland->player->control);
-                                        catland->player->box.face = LOOK_LEFT;
                                         catland->player->frame = WALK;
                                         break;
-                                case ALLEGRO_KEY_S: 
+                                case ALLEGRO_KEY_LCTRL: 
                                         joystick_crouch(catland->player->control);
                                         catland->player->frame = DOWN;
                                         break;
                                 case ALLEGRO_KEY_D:
                                         joystick_right(catland->player->control);
-                                        catland->player->box.face = LOOK_RIGHT;
                                         catland->player->frame = WALK;
                                         break;
                                 case ALLEGRO_KEY_SPACE:
                                         joystick_jump(catland->player->control);
                                         catland->player->frame = JUMP;
                                         break;
+                                case ALLEGRO_KEY_LSHIFT:
+                                        joystick_run(catland->player->control);
+                                        catland->player->frame = RUN;
+                                        break;
                                 default:
                                         break; 
                         }
                 
-                if (catland->event.type == ALLEGRO_EVENT_KEY_U && catland->state = PLAY)
+                if (catland->event.type == ALLEGRO_EVENT_KEY_UP && catland->state == PLAY)
                         switch (catland->event.keyboard.keycode) {
-                                case ALLEGRO_KEY_A:
+                                case ALLEGRO_KEY_A: 
+                                        joystick_left(catland->player->control);
+                                        catland->player->frame = NORMAL;
+                                        break;
+                                case ALLEGRO_KEY_LCTRL: 
+                                        joystick_crouch(catland->player->control);
+                                        catland->player->frame = NORMAL;
+                                        break;
+                                case ALLEGRO_KEY_D:
+                                        joystick_right(catland->player->control);
+                                        catland->player->frame = NORMAL;
+                                        break;
+                                case ALLEGRO_KEY_SPACE:
+                                        joystick_jump(catland->player->control);
+                                        catland->player->frame = NORMAL;
+                                        break;
+                                case ALLEGRO_KEY_LSHIFT:
+                                        joystick_run(catland->player->control);
+                                        catland->player->frame = NORMAL;
                                         break;
                                 default:
-                                        break;
+                                        break; 
                         }
 
 

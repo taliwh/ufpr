@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <allegro5/allegro5.h>	
 #include "game.h"
+#include "camera.h"
 
 void render_menu(struct game *catland) {
         if (!catland)
@@ -26,18 +27,72 @@ void input_menu(struct game *catland) {
         int cursor_y = catland->event.mouse.y;
 
         // verifica se clicou na area do botao jogar
-        if (cursor_x >= 215 && cursor_x <= 500 && cursor_y >= 247 && cursor_y <= 318)
+        if (cursor_x >= 215 && cursor_x <= 500 && cursor_y >= 247 && cursor_y <= 318) {
+                al_play_sample(catland->music->click, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                 catland->state = PLAY;
-        
+        }
+
         // verifica se clicou na area do botao sair
-        if (cursor_x >= 215 && cursor_x <= 490 && cursor_y >= 323 && cursor_y <= 390)
+        if (cursor_x >= 215 && cursor_x <= 490 && cursor_y >= 323 && cursor_y <= 390) {
+                al_play_sample(catland->music->click, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                //espera o som toca por completo antes de sair
+                al_rest(0.5);
                 catland->state = EXIT;
+        }
 }
+ 
+void render_play(struct game *catland) {
+        int flip = 0;
+        cat *p = catland->player;
+        printf("player x=%d y=%d\n", catland->player->box.x, catland->player->box.y);
+        update_camera(p->camera, p->box.x);
+        float cam = p->camera->x;
 
-void render_play() {
-        
+        // desenha fundo e mundo (o background vai mais devagar dando um efeito top)
+        al_draw_bitmap(catland->images->game_bg, -cam * 0.3, 0, 0);
+        al_draw_bitmap(catland->images->land, -cam, 0, 0);
+
+        update_position(catland->player);
+
+
+        // escolhe o sprite
+        ALLEGRO_BITMAP *sprite;
+        switch (p->frame) {
+                case WALK:
+                        p->sprite_counter++;
+                        if (p->sprite_counter >= WALK_SPRITE * 5)
+                                p->sprite_counter = 0;
+                        sprite = p->sprites->walk[p->sprite_counter / 5];
+                        break;
+                case RUN:
+                        p->sprite_counter++;
+                        if (p->sprite_counter >= RUN_SPRITE * 5)
+                                p->sprite_counter = 0;
+                        sprite = p->sprites->run[p->sprite_counter / 5];
+                        break; 
+                case JUMP:
+                        p->sprite_counter++;
+                        if (p->sprite_counter >= JUMP_SPRITE * 5)
+                                p->sprite_counter = 0;
+                        sprite = p->sprites->jump[p->sprite_counter / 5];
+                        break;
+                case SCARED:
+                        sprite = p->sprites->scared;
+                        break;
+                case DOWN:
+                        sprite = p->sprites->crouch;
+                        break;               
+                default:
+                        sprite = p->sprites->normal;
+                        break;
+        }
+
+        //se tive olhando p esquerda deixa sprite p esquerda (flag = 1);
+        if (p->box.face == LOOK_LEFT) 
+                flip = 1;
+
+        al_draw_scaled_bitmap(sprite, 0, 0, 50, 50, (p->box.x - SIDE_CAT/2) - cam, p->box.y - SIDE_CAT/2, 64, 64, flip);
 }
-
 
 /*
 void state_play(struct game *catland);

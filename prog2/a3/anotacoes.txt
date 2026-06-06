@@ -51,3 +51,5 @@ como funciona  a  insercao na fila
 como eusei se e bom usar enum ou define normal / unsigned
 
 perguntar quando e bom usar struct e quandoe  bom usar vetor?
+
+ver dps como q arruma logica de poder apertar a e d ao msm tempo
