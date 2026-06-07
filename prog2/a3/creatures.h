@@ -21,16 +21,16 @@ enum face {
 struct body {
         //direcao q o personagem ta olhando
         unsigned char face;
-        unsigned short side;
+        int side;
         //centro da box
-        unsigned short x;																																
-	unsigned short y;	
+        int x;																																
+	int y;	
 };
 
 typedef struct {
     struct body box;
     ALLEGRO_BITMAP **sprites;
-    unsigned short end_x;
+    int end_x;
 } enemy;
 
 typedef struct {
@@ -38,9 +38,9 @@ typedef struct {
     ALLEGRO_BITMAP *sprite;
 } fish;
 
-fish* create_fish(unsigned short x, unsigned short y, char fish_type, char collected);
-enemy* create_fox(unsigned short x, unsigned short y, unsigned short end);
-enemy* create_bird(unsigned short x, unsigned short y, unsigned short end);
+fish* create_fish(int x, int y, char fish_type, char collected);
+enemy* create_fox(int x, int y, int end);
+enemy* create_bird(int x, int y, int end);
 ALLEGRO_BITMAP** load_foxsprite ();
 ALLEGRO_BITMAP** load_birdsprite();
 void destroy_fox(enemy* fox);

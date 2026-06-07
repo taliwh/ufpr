@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "land.h"
-
+#include "cat.h"
 
 world* create_land () {
         world *land = malloc(sizeof(world));
@@ -51,8 +51,8 @@ world* create_land () {
         land->solids[9] = (struct solid){3276, 320, 948, 192};
 
         //plataformas saudaveis so com grama sem perigo eba
-        land->solids[10] = (struct solid){1664, 177, 145, 51};
-        land->solids[11] = (struct solid){1920, 128, 145, 47};
+        land->solids[10] = (struct solid){1664, 215, 145, 51};
+        land->solids[11] = (struct solid){1920, 173, 145, 47};
 
         //1 lava
         land->hazards[0] = (struct hazard){640, 488, 192, 24};
@@ -104,9 +104,24 @@ unsigned char entity_collision (struct body a, struct body b) {
 }
 
 /*
-unsigned char floor_collision(struct body a, struct solid) {
+int floor_collision(cat *player, world *land)
+{
+    int foot = player->box.y + player->box.side/2;
 
+    for (int i = 0; i < NUM_SOLIDS; i++) {
+        struct solid s = land->solids[i];
+
+        if (player->box.x >= s.x &&
+            player->box.x <= s.x + s.width &&
+            (foot == s.y || (player->box.y - SIDE_CAT/2) >= s.y))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
 }
+
 
 unsigned char hazard_collision(struct body a, struct hazard) {
 

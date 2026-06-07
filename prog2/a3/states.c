@@ -44,11 +44,14 @@ void input_menu(struct game *catland) {
 void render_play(struct game *catland) {
         int flip = 0;
         cat *p = catland->player;
-        printf("player x=%d y=%d\n", catland->player->box.x, catland->player->box.y);
+        printf(" x = %d y = %d\n", p->box.x, p->box.y); //debug
         update_camera(p->camera, p->box.x);
         float cam = p->camera->x;
 
         update_position(p);
+
+        if (!cat_chao(p, catland->land))
+                apply_gravity(p);
 
         // define qual animação deve estar ativa
         if (p->control->crouch)
@@ -60,7 +63,7 @@ void render_play(struct game *catland) {
         else if (p->control->left || p->control->right)
                 p->frame = WALK;
         else
-                p->frame = NORMAL;
+                p->frame = NORMAL; 
 
         // desenha fundo e mundo (o background vai mais devagar dando um efeito top)
         al_draw_bitmap(catland->images->game_bg, -cam * 0.3, 0, 0);

@@ -6,6 +6,7 @@
 
 #include "joystick.h"
 #include "creatures.h"
+#include "land.h"
 
 #define CAT_STEP 10	
 
@@ -15,6 +16,7 @@
 #define JUMP_SPRITE 5
 
 #define MAX_HP 5
+#define GRAVITY 10
 
 enum frames {
     NORMAL,
@@ -23,7 +25,6 @@ enum frames {
     DOWN,
     JUMP,
     SCARED
-
 };
 
 struct sprite_cat {
@@ -42,14 +43,16 @@ typedef struct {
         struct camera *camera; //camera q segue o jogador
         struct sprite_cat *sprites; 
         enum frames frame;
-        unsigned char sprite_counter;																																																												
+        unsigned char sprite_counter;																																																						
 } cat;																																			
 
-cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y);	
+cat* create_cat(enum face face, int x, int y, int max_x, int max_y);	
 struct sprite_cat* load_catsprite();
-void step_cat(cat* player, int speed, unsigned char trajectory, unsigned short max_x, unsigned short max_y);		
+void step_cat(cat* player, int speed, unsigned char trajectory, int max_x, int max_y);		
 void update_position(cat *player);
 void destroy_catsprite(struct sprite_cat* sprites);																																				
 void destroy_cat(cat *element);																											
+void apply_gravity(cat *player);
+int cat_chao (cat *player, world *land);
 
 #endif		

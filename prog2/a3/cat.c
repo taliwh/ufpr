@@ -6,8 +6,9 @@
 #include "camera.h"
 #include "land.h"
 #include "game.h"
+#include "creatures.h"
 
-cat* create_cat(enum face face, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y) {			
+cat* create_cat(enum face face, int x, int y, int max_x, int max_y) {			
 	if (x + SIDE_CAT > max_x || y + SIDE_CAT > max_y) 
                 return NULL;												
 
@@ -96,7 +97,7 @@ struct sprite_cat* load_catsprite() {
         return sprites;
 }
 
-void step_cat(cat* player, int speed, unsigned char trajectory, unsigned short max_x, unsigned short max_y) {									
+void step_cat(cat* player, int speed, unsigned char trajectory, int max_x, int max_y) {									
 	if (!trajectory) {
                 if ((player->box.x - speed) - player->box.side/2 >= 0) 
                         player->box.x -= speed;
@@ -137,8 +138,40 @@ void update_position (cat* player) {
                 step_cat(player, speed, 1, LAND_WIDTH, Y_SCREEN);
         }
 
-
 }
+
+void apply_gravity(cat *player) {
+        if (!player)
+                return;
+
+        if (player->control->jump && player->box.y > 130) {
+                player->box.y -= 15;  // sobe
+        } else {
+                player->control->jump = 0;
+                player->box.y += GRAVITY;
+        }
+        
+}
+
+int cat_chao (cat *player, world *land) {
+        if (!player || !land)
+                return -1;
+
+        int no_chao = 0;
+        int foot = player->box.y + player->box.side/2;
+
+        for (int i = 0; i < NUM_SOLIDS; i++) {
+                struct solid s = land->solids[i];
+                if (!player->control->jump && 
+                player->box.x >= s.x &&
+                player->box.x <= s.x + s.width &&
+                abs(foot - s.y) <= 10) {
+                        no_chao = 1;
+                }
+        }
+
+        return no_chao;
+}       
 
 void destroy_catsprite(struct sprite_cat* sprites) {
         if (!sprites)

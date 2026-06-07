@@ -53,7 +53,8 @@ int main() {
                                         joystick_right_down(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_SPACE:
-                                        joystick_jump_down(catland->player->control);
+                                        if (cat_chao(catland->player, catland->land))
+                                                joystick_jump_down(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_LSHIFT:
                                         joystick_run_down(catland->player->control);
@@ -86,8 +87,7 @@ int main() {
                 // isso aq eh pra renderizar (desenho)
                 if (catland->event.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(catland->queue)) {
                         al_clear_to_color(al_map_rgb(0,0,0));
-                        switch (catland->state)
-                        {
+                        switch (catland->state) {
                                 case MENU:
                                         render_menu(catland);
                                         break;

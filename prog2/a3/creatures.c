@@ -4,7 +4,7 @@
 #include <allegro5/allegro_image.h>
 #include "creatures.h"
 
-fish* create_fish (unsigned short x, unsigned short y, char fish_type, char collected) {
+fish* create_fish (int x, int y, char fish_type, char collected) {
         fish *pexe = malloc(sizeof(fish));
         if (!pexe)
                 return NULL;
@@ -30,7 +30,7 @@ fish* create_fish (unsigned short x, unsigned short y, char fish_type, char coll
         return pexe;
 }
 
-enemy* create_fox (unsigned short x, unsigned short y, unsigned short end) {
+enemy* create_fox (int x, int y, int end) {
         enemy* fox = malloc(sizeof(enemy));
         if (!fox)
                 return NULL;
@@ -61,7 +61,7 @@ ALLEGRO_BITMAP** load_foxsprite () {
         return sprites;
 }
 
-enemy* create_bird (unsigned short x, unsigned short y, unsigned short end) {
+enemy* create_bird (int x, int y, int end) {
         enemy* bird = malloc(sizeof(enemy));
         if (!bird)
                 return NULL;

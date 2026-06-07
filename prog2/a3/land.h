@@ -35,7 +35,7 @@ typedef struct {
 world* create_land();
 void destroy_land(world* land);
 unsigned char collision(struct body a, struct body b);
-//unsigned char floor_collision(struct body a, struct solid);
+//int floor_collision(cat *player, world *land);
 //unsigned char hazard_collision(struct body a, struct hazard);
         
 
