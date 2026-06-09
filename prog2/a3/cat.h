@@ -16,7 +16,8 @@
 #define JUMP_SPRITE 5
 
 #define MAX_HP 5
-#define GRAVITY 10
+#define GRAVITY 5
+#define VELOCITY 35
 
 enum frames {
     NORMAL,
@@ -36,23 +37,28 @@ struct sprite_cat {
         ALLEGRO_BITMAP **walk;
 };
 
-typedef struct {			
+typedef struct cat {			
         struct body box;// caixinha em volta do personagem (o corpo dele);																																																																																								
 	unsigned char hp; 																																														
 	joystick *control;		
         struct camera *camera; //camera q segue o jogador
         struct sprite_cat *sprites; 
         enum frames frame;
-        unsigned char sprite_counter;																																																						
+        unsigned char sprite_counter;	
+        int vel_y;		
+        int old_y;																																																		
 } cat;																																			
 
 cat* create_cat(enum face face, int x, int y, int max_x, int max_y);	
 struct sprite_cat* load_catsprite();
-void step_cat(cat* player, int speed, unsigned char trajectory, int max_x, int max_y);		
-void update_position(cat *player);
+void step_cat(cat* player, int speed, unsigned char trajectory, int max_x);		
+void update_position(cat *player, world *land);
 void destroy_catsprite(struct sprite_cat* sprites);																																				
 void destroy_cat(cat *element);																											
-void apply_gravity(cat *player);
-int cat_chao (cat *player, world *land);
+void cat_gravity(cat *player, world *land);
+// verifica se o gato esta no chao, se tiver, retorna coordenada do chao, se nao tiver, retorna -1
+int floor_collision(cat *player, world *land);
+int wall_collision(cat *player, world *land);
+
 
 #endif		

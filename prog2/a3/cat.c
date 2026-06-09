@@ -12,7 +12,7 @@ cat* create_cat(enum face face, int x, int y, int max_x, int max_y) {
 	if (x + SIDE_CAT > max_x || y + SIDE_CAT > max_y) 
                 return NULL;												
 
-	cat *player = (cat*) malloc(sizeof(cat));																								
+	cat *player = calloc(1, sizeof(cat));																								
 	if (!player) 
                 return NULL;	
 	
@@ -22,7 +22,6 @@ cat* create_cat(enum face face, int x, int y, int max_x, int max_y) {
 	player->box.y = y + SIDE_CAT/2;																																
 	player->frame = NORMAL;																																																	
 	player->hp = MAX_HP;	
-        player->sprite_counter = 0;
 
         player->control = joystick_create();
         if (!player->control) {
@@ -46,6 +45,18 @@ cat* create_cat(enum face face, int x, int y, int max_x, int max_y) {
         }
 																									
 	return player;																																	
+}
+void cat_gravity(cat *player, world *land) { 
+        if (!player || !land)       
+                return; 
+        player->old_y = player->box.y; 
+        player->vel_y += GRAVITY; 
+        player->box.y += player->vel_y;
+
+
+        floor_collision(player, land);
+        
+
 }
 
 struct sprite_cat* load_catsprite() {
@@ -97,26 +108,7 @@ struct sprite_cat* load_catsprite() {
         return sprites;
 }
 
-void step_cat(cat* player, int speed, unsigned char trajectory, int max_x, int max_y) {									
-	if (!trajectory) {
-                if ((player->box.x - speed) - player->box.side/2 >= 0) 
-                        player->box.x -= speed;
-
-        } else if (trajectory == 1) { 
-                if ((player->box.x + speed) + player->box.side/2 <= max_x) 
-                        player->box.x += speed;
-
-        } else if (trajectory == 2) { 
-                if ((player->box.y - speed) - player->box.side/2 >= 0) 
-                        player->box.y -= speed;
-
-        } else if (trajectory == 3) {
-                if ((player->box.y + speed) + player->box.side/2 <= max_y) 
-                        player->box.y += speed;
-        }
-}
-
-void update_position (cat* player) {
+void update_position (cat* player, world *land) {
         if (!player)
                 return;
 
@@ -130,48 +122,77 @@ void update_position (cat* player) {
 
         if (player->control->left && !player->control->right) {
                 player->box.face = LOOK_LEFT;
-                step_cat(player, speed, 0, LAND_WIDTH, Y_SCREEN);
+                step_cat(player, speed, 0, LAND_WIDTH);
         }
         
         if (player->control->right && !player->control->left) {
                 player->box.face = LOOK_RIGHT;
-                step_cat(player, speed, 1, LAND_WIDTH, Y_SCREEN);
+                step_cat(player, speed, 1, LAND_WIDTH);
         }
 
+        wall_collision(player, land);
 }
 
-void apply_gravity(cat *player) {
-        if (!player)
-                return;
-
-        if (player->control->jump && player->box.y > 130) {
-                player->box.y -= 15;  // sobe
-        } else {
-                player->control->jump = 0;
-                player->box.y += GRAVITY;
+void step_cat(cat* player, int speed, unsigned char trajectory, int max_x) {									
+	if (!trajectory) {
+                if ((player->box.x - speed) - player->box.side/2 >= 0) 
+                        player->box.x -= speed;
+        }
+        else if (trajectory == 1) {
+                if ((player->box.x + speed) + player->box.side/2 <= max_x) 
+                        player->box.x += speed;
         }
         
+
 }
 
-int cat_chao (cat *player, world *land) {
+int floor_collision(cat *player, world *land) {
         if (!player || !land)
-                return -1;
+                return 0;
 
-        int no_chao = 0;
-        int foot = player->box.y + player->box.side/2;
+        int old_foot = player->old_y + player->box.side / 2;
+        int new_foot = player->box.y + player->box.side / 2;
 
         for (int i = 0; i < NUM_SOLIDS; i++) {
                 struct solid s = land->solids[i];
-                if (!player->control->jump && 
-                player->box.x >= s.x &&
-                player->box.x <= s.x + s.width &&
-                abs(foot - s.y) <= 10) {
-                        no_chao = 1;
-                }
+
+                if (player->box.x >= s.x && 
+                    player->box.x <= s.x + s.width && 
+                    old_foot <= s.y && new_foot >= s.y) {
+                        player->box.y = s.y - player->box.side / 2;
+                        player->vel_y = 0;
+                        return 1;
+                    }
         }
 
-        return no_chao;
-}       
+    return -1;
+}
+
+int wall_collision(cat *player, world *land) {
+        int left  = player->box.x - player->box.side/2;
+        int right = player->box.x + player->box.side/2;
+        int head  = player->box.y - player->box.side/2;
+
+        for (int i = 0; i < NUM_SOLIDS; i++) {
+                struct solid s = land->solids[i];
+
+                //parede da direita
+                if (head >= s.y && head < s.y + s.height) {
+                        if (s.x >= player->box.x && right >= s.x)
+                                player->box.x = s.x - player->box.side/2;
+                        else if (player->box.x > s.x + s.width && left <= s.x + s.width)
+                                player->box.x = s.x + s.width + player->box.side/2;
+                }
+        }
+        return 0;
+}
+
+//int hazard_collision(cat *player, world *land) {
+
+//}
+
+//void cat_damage
+//if vida menor q 5 vai pro estado kil;
 
 void destroy_catsprite(struct sprite_cat* sprites) {
         if (!sprites)
@@ -206,8 +227,6 @@ void destroy_cat(cat *player) {
 	joystick_destroy(player->control);	
 
 	free(player);
-        
-
 }
 
 																																							

@@ -36,9 +36,10 @@ typedef struct {
 typedef struct {
     struct body box;
     ALLEGRO_BITMAP *sprite;
+    int collected;
 } fish;
 
-fish* create_fish(int x, int y, char fish_type, char collected);
+fish* create_fish(int x, int y, char fish_type);
 enemy* create_fox(int x, int y, int end);
 enemy* create_bird(int x, int y, int end);
 ALLEGRO_BITMAP** load_foxsprite ();

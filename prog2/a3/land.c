@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "land.h"
-#include "cat.h"
+
 
 world* create_land () {
         world *land = malloc(sizeof(world));
@@ -11,8 +11,8 @@ world* create_land () {
         land->fox = create_fox(1792 , 256, 1024);
         land->bird = create_bird(2304, 32, 1408);
         
-        land->fish1 = create_fish(1984, 120, 1, 0);
-        land->fish2 = create_fish(3080, 400, 2, 0);
+        land->fish1 = create_fish(1984, 120, 1);
+        land->fish2 = create_fish(3080, 400, 2);
 
         land->solids = malloc(sizeof(struct solid) * NUM_SOLIDS);
         land->hazards = malloc(sizeof(struct hazard) * NUM_HAZARDS);
@@ -38,7 +38,7 @@ world* create_land () {
         land->solids[4] = (struct solid){2112, 384, 192, 128};
 
         //terceiro bloco de terra depois da lava ate o buraco
-        land->solids[5] = (struct solid){2304, 320, 716, 192};
+        land->solids[5] = (struct solid){2304, 320, 712, 192};
 
         //quarto bloco de terra antes do buraco de espinho q tem o peixe
         land->solids[6] = (struct solid){3020, 384, 64, 128};
@@ -47,12 +47,15 @@ world* create_land () {
         land->solids[7] = (struct solid){3084, 448, 64, 64};
         land->solids[8] = (struct solid){3212, 384, 64, 64};
 
+        //chao do espinho
+        land->solids[9] = (struct solid){3084, 512, 192, 64};
+
         //ultimo bloco de terra (q tem a bandeira)
-        land->solids[9] = (struct solid){3276, 320, 948, 192};
+        land->solids[10] = (struct solid){3276, 320, 948, 192};
 
         //plataformas saudaveis so com grama sem perigo eba
-        land->solids[10] = (struct solid){1664, 215, 145, 51};
-        land->solids[11] = (struct solid){1920, 173, 145, 47};
+        land->solids[11] = (struct solid){1664, 220, 145, 35};
+        land->solids[12] = (struct solid){1920, 173, 145, 47};
 
         //1 lava
         land->hazards[0] = (struct hazard){640, 488, 192, 24};
@@ -72,21 +75,6 @@ world* create_land () {
         return land;
 }
 
-void destroy_land (world* land) {
-        if (!land)
-                return;
-
-        destroy_fox(land->fox);
-        destroy_bird(land->bird);
-        destroy_fish(land->fish1);
-        destroy_fish(land->fish2);
-
-        free(land->solids);
-        free(land->hazards);
-
-        free(land);
-}
-
 unsigned char entity_collision (struct body a, struct body b) {
     if (a.x + a.side/2 < b.x - b.side/2)
         return 0;
@@ -103,27 +91,18 @@ unsigned char entity_collision (struct body a, struct body b) {
     return 1;
 }
 
-/*
-int floor_collision(cat *player, world *land)
-{
-    int foot = player->box.y + player->box.side/2;
 
-    for (int i = 0; i < NUM_SOLIDS; i++) {
-        struct solid s = land->solids[i];
+void destroy_land (world* land) {
+        if (!land)
+                return;
 
-        if (player->box.x >= s.x &&
-            player->box.x <= s.x + s.width &&
-            (foot == s.y || (player->box.y - SIDE_CAT/2) >= s.y))
-        {
-            return 1;
-        }
-    }
+        destroy_fox(land->fox);
+        destroy_bird(land->bird);
+        destroy_fish(land->fish1);
+        destroy_fish(land->fish2);
 
-    return 0;
+        free(land->solids);
+        free(land->hazards);
+
+        free(land);
 }
-
-
-unsigned char hazard_collision(struct body a, struct hazard) {
-
-}
-*/

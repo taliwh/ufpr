@@ -2,12 +2,11 @@
 #define __LAND__
 
 #include "creatures.h"
-
 #define Y_FLOOR 320
 #define LAND_WIDTH 4224
 
 #define NUM_HAZARDS 5
-#define NUM_SOLIDS 12
+#define NUM_SOLIDS 13
 
 struct solid {
     unsigned short x;

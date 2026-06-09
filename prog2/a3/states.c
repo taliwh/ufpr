@@ -2,6 +2,7 @@
 #include <allegro5/allegro5.h>	
 #include "game.h"
 #include "camera.h"
+#include "cat.h"
 
 void render_menu(struct game *catland) {
         if (!catland)
@@ -47,11 +48,12 @@ void render_play(struct game *catland) {
         printf(" x = %d y = %d\n", p->box.x, p->box.y); //debug
         update_camera(p->camera, p->box.x);
         float cam = p->camera->x;
+        cat_gravity(p, catland->land);
+        update_position(p, catland->land);
 
-        update_position(p);
 
-        if (!cat_chao(p, catland->land))
-                apply_gravity(p);
+
+
 
         // define qual animação deve estar ativa
         if (p->control->crouch)

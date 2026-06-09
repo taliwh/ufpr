@@ -5,6 +5,7 @@
 #include "cat.h"
 #include "game.h"
 #include "states.h"
+#include "land.h"
 
 int main() {
         al_init();
@@ -53,8 +54,11 @@ int main() {
                                         joystick_right_down(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_SPACE:
-                                        if (cat_chao(catland->player, catland->land))
+                                        // se ele coletou o fish 2 tem direito a pular qts vezes quiser XD
+                                        if (catland->land->fish2->collected || floor_collision(catland->player, catland->land) != -1) {
+                                                catland->player->vel_y = -VELOCITY;
                                                 joystick_jump_down(catland->player->control);
+                                        }
                                         break;
                                 case ALLEGRO_KEY_LSHIFT:
                                         joystick_run_down(catland->player->control);
