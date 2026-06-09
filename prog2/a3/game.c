@@ -17,6 +17,7 @@ struct game *create_game () {
         if (!catland)
                 return NULL;
         
+ 
         catland->land = create_land();
 
         catland->music = malloc(sizeof(struct sounds));
@@ -54,7 +55,9 @@ struct game *create_game () {
         catland->timer = al_create_timer(1.0 / 30.0);
         catland->queue = al_create_event_queue();
         catland->disp = al_create_display(X_SCREEN, Y_SCREEN);
-
+        ALLEGRO_BITMAP *icon = al_load_bitmap("assets/sprites/game/icon.png");
+        if (icon)
+                al_set_display_icon(catland->disp, icon);
         // estado inicial do jogo
         catland->state = MENU;
 
