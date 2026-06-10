@@ -7,6 +7,7 @@
 #include "land.h"
 #include "game.h"
 #include "creatures.h"
+#include "collision.h"
 
 cat* create_cat(enum face face, int x, int y, int max_x, int max_y) {			
 	if (x + SIDE_CAT > max_x || y + SIDE_CAT > max_y) 
@@ -22,7 +23,6 @@ cat* create_cat(enum face face, int x, int y, int max_x, int max_y) {
 	player->box.y = y + SIDE_CAT/2;																																
 	player->frame = NORMAL;																																																	
 	player->hp = MAX_HP;	
-        player->chao = 1;
 
         player->control = joystick_create();
         if (!player->control) {
@@ -46,18 +46,6 @@ cat* create_cat(enum face face, int x, int y, int max_x, int max_y) {
         }
 																									
 	return player;																																	
-}
-void cat_gravity(cat *player, world *land) { 
-        if (!player || !land)       
-                return; 
-        player->old_y = player->box.y; 
-        player->vel_y += GRAVITY; 
-        player->box.y += player->vel_y;
-
-
-        floor_collision(player, land);
-        
-
 }
 
 struct sprite_cat* load_catsprite() {
@@ -109,6 +97,21 @@ struct sprite_cat* load_catsprite() {
         return sprites;
 }
 
+void step_cat(cat* player, int speed, unsigned char trajectory, int max_x) {
+        if (!player)
+                return;					
+
+	if (!trajectory) {
+                if ((player->box.x - speed) - player->box.side/2 >= 0) 
+                        player->box.x -= speed;
+        }
+
+        else if (trajectory) {
+                if ((player->box.x + speed) + player->box.side/2 <= max_x) 
+                        player->box.x += speed;
+        }       
+}
+
 void update_position (cat* player, world *land) {
         if (!player)
                 return;
@@ -116,122 +119,84 @@ void update_position (cat* player, world *land) {
         int speed = CAT_STEP;
 
         if (player->control->run)
-                speed = 20;
+                speed = 25;
 
         if (player->control->crouch)
                 speed = 5;
 
         if (player->control->left && !player->control->right) {
                 player->box.face = LOOK_LEFT;
-                step_cat(player, speed, 0, LAND_WIDTH, land);
+                step_cat(player, speed, 0, LAND_WIDTH);
         }
-        
         if (player->control->right && !player->control->left) {
                 player->box.face = LOOK_RIGHT;
-                step_cat(player, speed, 1, LAND_WIDTH, land);
+                step_cat(player, speed, 1, LAND_WIDTH);
         }
+        int vale;
+        //aplica colisao com parede se o gato caiu
+        if (!floor_collision(player, land)) {
 
-        wall_collision(player, land);
-}
-/*
-void step_cat(cat* player, int speed, unsigned char trajectory, int max_x) {									
-	if (!trajectory) {
-                if ((player->box.x - speed) - player->box.side/2 >= 0) 
-                        player->box.x -= speed;
-        }
-
-        else if (trajectory == 1) {
-                if ((player->box.x + speed) + player->box.side/2 <= max_x) 
-                        player->box.x += speed;
+                if (player->box.x < land->solids[3].x)
+                        vale = 1;
+                else if (player->box.x < land->solids[5].x)
+                        vale = 2;
+                else 
+                        vale = 3;
+                wall_collision(player, land, vale);
         }
 }
-*/
 
-void step_cat(cat *player, int speed, unsigned char trajectory, int max_x, world *land)
-{
-    if (!trajectory) { // esquerda
+void update_frame(cat *player) {
+        if (!player)
+                return;
+        
+        // define qual animação deve estar ativa
+        if (player->control->crouch)
+                player->frame = DOWN;
 
-        for (int i = 0; i < speed; i++) {
+        else if (player->control->jump)
+                player->frame = JUMP;
 
-            if ((player->box.x - 1) - player->box.side/2 < 0)
-                break;
+        else if (player->control->run && (player->control->left || player->control->right))
+                player->frame = RUN;
 
-            player->box.x--;
+        else if (player->control->left || player->control->right)
+                player->frame = WALK;
 
-            wall_collision(player, land);
-        }
-    }
-
-    else { // direita
-
-        for (int i = 0; i < speed; i++) {
-
-            if ((player->box.x + 1) + player->box.side/2 > max_x)
-                break;
-
-            player->box.x++;
-
-            wall_collision(player, land);
-        }
-    }
+        else
+                player->frame = NORMAL; 
 }
 
-int cat_onground(cat *player) {
+void apply_gravity(cat *player, world *land) { 
+        if (!player || !land)       
+                return; 
+        player->old_y = player->box.y; 
+        player->vel_y += GRAVITY; 
+        player->box.y += player->vel_y;
+
+        floor_collision(player, land);
+}
+//funcao pra ver se ele coletou o fish
+//funcao pra ver se ele ta morto
+//botar na main dai, pq ele so pode pular se tiver vivo
+
+//void cat_hp
+int cat_alive(cat *player) {
         if (!player)
                 return -1;
-        if (player->chao)
-                return 1;
+        if (player->hp == 0)
+                return 0;
 
+        return 1;
+}
+
+int cat_infinitejump(world *land) {
+        if (!land)
+                return -1;
+        if (land->fish2->collected)
+                return 1;
         return 0;
 }
-
-void floor_collision(cat *player, world *land) {
-        if (!player || !land)
-                return;
-
-        int old_foot = player->old_y + player->box.side / 2;
-        int new_foot = player->box.y + player->box.side / 2;
-
-        for (int i = 0; i < NUM_SOLIDS; i++) {
-                struct solid s = land->solids[i];
-
-                if (player->box.x >= s.x && 
-                    player->box.x <= s.x + s.width && 
-                    old_foot <= s.y && new_foot >= s.y) {
-                        player->box.y = s.y - player->box.side / 2;
-                        player->vel_y = 0;
-                        player->chao = 1;
-                    }
-        }
-}
-
-void wall_collision(cat *player, world *land) {
-        if (!player || !land)
-                return;
-
-        int left  = player->box.x - player->box.side/2;
-        int right = player->box.x + player->box.side/2;
-        int head  = player->box.y - player->box.side/2;
-
-        for (int i = 0; i < NUM_SOLIDS; i++) {
-                struct solid s = land->solids[i];
-
-                //parede da direita
-                if (head >= s.y && head < s.y + s.height) {
-                        if (s.x >= player->box.x && right >= s.x)
-                                player->box.x = s.x - player->box.side/2;
-                        else if (player->box.x > s.x + s.width && left <= s.x + s.width)
-                                player->box.x = s.x + s.width + player->box.side/2;
-                }
-        }
-}
-
-//int hazard_collision(cat *player, world *land) {
-
-//}
-
-//void cat_damage
-//if vida menor q 5 vai pro estado kil;
 
 void destroy_catsprite(struct sprite_cat* sprites) {
         if (!sprites)

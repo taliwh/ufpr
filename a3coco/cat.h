@@ -16,7 +16,7 @@
 #define JUMP_SPRITE 5
 
 #define MAX_HP 5
-#define GRAVITY 5
+#define GRAVITY 3.5
 #define VELOCITY 35
 
 enum frames {
@@ -46,20 +46,20 @@ typedef struct cat {
         enum frames frame;
         unsigned char sprite_counter;	
         int vel_y;		
-        int old_y;	
-        int chao;																																																	
+        int old_y;				
+																																													
 } cat;																																			
 
 cat* create_cat(enum face face, int x, int y, int max_x, int max_y);	
 struct sprite_cat* load_catsprite();
-void step_cat(cat* player, int speed, unsigned char trajectory, int max_x, world *land);		
+void step_cat(cat *player, int speed, unsigned char trajectory, int max_x);	
 void update_position(cat *player, world *land);
+void update_frame(cat *player);
+void apply_gravity(cat *player, world *land);
+int cat_alive(cat *player);
+int cat_infinitejump(world *land);
 void destroy_catsprite(struct sprite_cat* sprites);																																				
 void destroy_cat(cat *element);																											
-void cat_gravity(cat *player, world *land);
-// verifica se o gato esta no chao, se tiver, retorna coordenada do chao, se nao tiver, retorna -1
-void floor_collision(cat *player, world *land);
-void wall_collision(cat *player, world *land);
-int cat_onground(cat *player);
+
 
 #endif		
