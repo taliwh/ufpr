@@ -23,7 +23,8 @@ struct hazard {
 };
 
 typedef struct {
-    enemy *fox;
+    enemy *fox1;
+    enemy *fox2;
     enemy *bird;
     fish *fish1;
     fish *fish2;
@@ -33,9 +34,6 @@ typedef struct {
 
 world* create_land();
 void destroy_land(world* land);
-unsigned char collision(struct body a, struct body b);
-//int floor_collision(cat *player, world *land);
-//unsigned char hazard_collision(struct body a, struct hazard);
-        
+
 
 #endif

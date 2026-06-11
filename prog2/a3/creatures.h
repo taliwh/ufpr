@@ -3,15 +3,21 @@
 
 #include <allegro5/allegro5.h>	
 
+#define NUM_FISH 2
+#define NUM_FOX 2
+
 //side de cada entidade
 #define SIDE_CAT 64 //50
-#define SIDE_BIRD 35
-#define SIDE_FOX 25
-#define SIDE_FISH 18
+#define SIDE_BIRD 64
+#define SIDE_FOX 64
+#define SIDE_FISH 64
 
 //quantidade de sprites 
 #define FOX_SPRITE 4
 #define BIRD_SPRITE 6
+
+#define FOX_SPEED 18
+#define BIRD_SPEED 25
 
 enum face {
         LOOK_RIGHT,
@@ -31,6 +37,9 @@ typedef struct {
     struct body box;
     ALLEGRO_BITMAP **sprites;
     int end_x;
+    int start_x; 
+    int vel_x;
+    int sprite_counter;
 } enemy;
 
 typedef struct {
@@ -44,6 +53,9 @@ enemy* create_fox(int x, int y, int end);
 enemy* create_bird(int x, int y, int end);
 ALLEGRO_BITMAP** load_foxsprite ();
 ALLEGRO_BITMAP** load_birdsprite();
+void update_fox(enemy *fox);
+void update_bird(enemy *bird);
+void draw_fox (enemy *fox, int cam);
 void destroy_fox(enemy* fox);
 void destroy_foxsprite(ALLEGRO_BITMAP **sprites);
 void destroy_bird(enemy* bird);

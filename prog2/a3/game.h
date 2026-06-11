@@ -61,6 +61,12 @@ struct game {
 };
 
 struct game* create_game();
+void init_allegro();
+void apply_sounds (struct game *catland);
+void set_allegro(struct game *catland);
+void update_all(struct game *catland);
+void draw_all (struct game *catland);
+void reset_game(struct game *catland);
 void destroy_game(struct game* catland);
 void destroy_image(struct game* catland);
 void destroy_font(struct game* catland);

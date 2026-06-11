@@ -7,32 +7,18 @@
 #include "states.h"
 #include "land.h"
 
-int main() {
-        al_init();
-        al_install_keyboard();
-        al_install_mouse();
-        al_init_image_addon();
-        al_install_audio();
-        al_init_acodec_addon();
-        al_init_font_addon();
-        al_init_ttf_addon();
-        al_reserve_samples(16);
+#include "physics.h"
 
+int main() {
+        //ai faz uma var  tipo init = init allegro e dps verifica if !init
+        init_allegro();
+        //fazer pro init retornar -1 se erro e verificar aq dai retornar 1 de erro ja q e main n esquecer
         struct game *catland = create_game();
         if (!catland)
                 return 1;
 
-	al_register_event_source(catland->queue, al_get_keyboard_event_source());				
-	al_register_event_source(catland->queue, al_get_display_event_source(catland->disp));				
-	al_register_event_source(catland->queue, al_get_timer_event_source(catland->timer)); 
-	al_register_event_source(catland->queue, al_get_mouse_event_source());	
+        set_allegro(catland);
 
-        al_set_audio_stream_playmode(catland->music->default_music, ALLEGRO_PLAYMODE_LOOP);
-        al_attach_audio_stream_to_mixer(catland->music->default_music, al_get_default_mixer());
-        al_set_audio_stream_gain(catland->music->default_music, 0.10);
-        al_set_audio_stream_playing(catland->music->default_music, true);
-
-        al_start_timer(catland->timer);
         while (catland->state != EXIT) {
                 al_wait_for_event(catland->queue, &catland->event);
                 if (catland->event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -41,6 +27,8 @@ int main() {
                 // isso aq e pra input
                 if (catland->state == MENU && catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                         input_menu(catland);
+                if (catland->state == GAMEOVER && catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                        input_gameover(catland);
 
                 if (catland->state == PLAY && catland->event.type == ALLEGRO_EVENT_KEY_DOWN)
                         switch (catland->event.keyboard.keycode) {
@@ -54,12 +42,7 @@ int main() {
                                         joystick_right_down(catland->player->control);
                                         break;
                                 case ALLEGRO_KEY_SPACE:
-                                        // se ele coletou o fish 2 tem direito a pular qts vezes quiser XD
-                                        if (catland->land->fish2->collected || cat_onground(catland->player)) {
-                                                catland->player->vel_y = -VELOCITY;
-                                                catland->player->chao = 0;
-                                                joystick_jump_down(catland->player->control);
-                                        }
+                                        apply_jump(catland);
                                         break;
                                 case ALLEGRO_KEY_LSHIFT:
                                         joystick_run_down(catland->player->control);
@@ -103,10 +86,10 @@ int main() {
                                 case WIN:
                                         render_win(catland);
                                         break;
+                                */
                                 case GAMEOVER:
                                         render_gameover(catland);
                                         break;
-                                */
                                 default:
                                         break;
                         }                        							

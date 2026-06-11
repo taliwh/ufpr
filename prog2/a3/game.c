@@ -9,6 +9,8 @@
 #include "game.h"
 #include "cat.h"
 #include "land.h"
+#include "physics.h"
+#include "camera.h"
 
 // cria o mundo do jogo 
 struct game *create_game () {
@@ -68,7 +70,129 @@ struct game *create_game () {
 
         return catland;
 }
-                 
+
+void init_allegro() {
+        al_init();
+
+        al_install_keyboard();
+        al_install_mouse();
+        al_install_audio();
+
+        al_init_image_addon();
+        al_init_acodec_addon();
+        al_init_font_addon();
+        al_init_ttf_addon();
+
+        al_reserve_samples(16);
+}
+
+void apply_sounds (struct game *catland) {
+        if (!catland)
+                return;
+        cat *p = catland->player;
+        
+        if (p->cooldown.took_fish) {
+                al_play_sample(catland->music->fish, 0.05, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                p->cooldown.took_fish = 0;
+        }
+        if (p->cooldown.took_damage) {
+                al_play_sample(catland->music->damage, 0.05, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                p->cooldown.took_damage = 0;
+        }
+
+        if (p->cooldown.just_died) {
+                al_play_sample(catland->music->death, 0.05, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                p->cooldown.just_died = 0;
+        }
+
+}
+
+void set_allegro(struct game *catland) {
+        if (!catland)
+                return;
+
+	al_register_event_source(catland->queue, al_get_keyboard_event_source());				
+	al_register_event_source(catland->queue, al_get_display_event_source(catland->disp));				
+	al_register_event_source(catland->queue, al_get_timer_event_source(catland->timer)); 
+	al_register_event_source(catland->queue, al_get_mouse_event_source());	
+
+        al_set_audio_stream_playmode(catland->music->default_music, ALLEGRO_PLAYMODE_LOOP);
+        al_set_audio_stream_gain(catland->music->default_music, 0.05);
+        al_set_audio_stream_playing(catland->music->default_music, true);
+
+        al_attach_audio_stream_to_mixer(catland->music->default_music, al_get_default_mixer());
+        
+        al_start_timer(catland->timer);
+}
+
+void update_all(struct game *catland) {
+        if (!catland)
+                return;
+
+        update_camera(catland->player->camera, catland->player->box.x);
+        update_frame(catland->player);
+        update_position(catland->player, catland->land);
+        update_hp(catland->player, catland->land);
+        update_fox(catland->land->fox1);
+        update_fox(catland->land->fox2);
+}
+
+void draw_all (struct game *catland) {
+        if (!catland)
+                return;
+
+        float cam = catland->player->camera->x;
+
+        // desenha fundo e mundo (o background vai mais devagar dando um efeito top)
+        al_draw_bitmap(catland->images->game_bg, -cam * 0.3, 0, 0);
+        al_draw_bitmap(catland->images->land, -cam, 0, 0);
+        
+        // desenha o pexe
+        if (!catland->land->fish1->collected)
+                al_draw_scaled_bitmap(catland->land->fish1->sprite, 0, 0, 16, 16, (catland->land->fish1->box.x - SIDE_FISH/2) - cam, catland->land->fish1->box.y - SIDE_FISH/2, 45, 45, 0);
+        if (!catland->land->fish2->collected)
+                al_draw_scaled_bitmap(catland->land->fish2->sprite, 0, 0, 16, 16, (catland->land->fish2->box.x - SIDE_FISH/2) - cam, catland->land->fish2->box.y - SIDE_FISH/2, 45, 45, 0);        
+
+        
+        draw_fox(catland->land->fox1, cam);
+        draw_fox(catland->land->fox2, cam);
+
+        //desenha os coracoes conforme hp do gato
+        for (int i = 0; i < catland->player->hp; i++) {
+                al_draw_scaled_bitmap(catland->images->heart,
+                        0, 0,
+                        al_get_bitmap_width(catland->images->heart),
+                        al_get_bitmap_height(catland->images->heart),
+                        10 + i * 40, 10,   
+                        32, 32,            
+                        0);
+        }
+        
+
+
+}
+
+void reset_game(struct game *catland) {
+        if (!catland)
+                return;
+
+        destroy_cat(catland->player);
+        destroy_land(catland->land);
+
+        catland->player = create_cat(
+                LOOK_RIGHT,
+                0,
+                Y_FLOOR - SIDE_CAT,
+                LAND_WIDTH,
+                Y_SCREEN
+        );
+
+        catland->land = create_land();
+
+        if (!catland->player || !catland->land)
+                catland->state = EXIT;
+}
+
 void destroy_image (struct game* catland) {
         al_destroy_bitmap(catland->images->icon);
         al_destroy_bitmap(catland->images->land);

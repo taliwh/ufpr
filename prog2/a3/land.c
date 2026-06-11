@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include "land.h"
 
-
 world* create_land () {
         world *land = malloc(sizeof(world));
         if (!land)
                 return NULL;
         
-        land->fox = create_fox(1792 , 256, 1024);
+        land->fox1 = create_fox(1024 , 256, 2050);
+        land->fox2 = create_fox(2304 , 256, 2500);
         land->bird = create_bird(2304, 32, 1408);
         
         land->fish1 = create_fish(1984, 120, 1);
-        land->fish2 = create_fish(3080, 400, 2);
+        land->fish2 = create_fish(3130, 150, 2);
 
         land->solids = malloc(sizeof(struct solid) * NUM_SOLIDS);
         land->hazards = malloc(sizeof(struct hazard) * NUM_HAZARDS);
@@ -38,7 +38,7 @@ world* create_land () {
         land->solids[4] = (struct solid){2112, 384, 192, 128};
 
         //terceiro bloco de terra depois da lava ate o buraco
-        land->solids[5] = (struct solid){2304, 320, 712, 192};
+        land->solids[5] = (struct solid){2304, 320, 700, 192};
 
         //quarto bloco de terra antes do buraco de espinho q tem o peixe
         land->solids[6] = (struct solid){3020, 384, 64, 128};
@@ -75,28 +75,15 @@ world* create_land () {
         return land;
 }
 
-unsigned char entity_collision (struct body a, struct body b) {
-    if (a.x + a.side/2 < b.x - b.side/2)
-        return 0;
 
-    if (a.x - a.side/2 > b.x + b.side/2)
-        return 0;
-
-    if (a.y + a.side/2 < b.y - b.side/2)
-        return 0;
-
-    if (a.y - a.side/2 > b.y + b.side/2)
-        return 0;
-
-    return 1;
-}
 
 
 void destroy_land (world* land) {
         if (!land)
                 return;
 
-        destroy_fox(land->fox);
+        destroy_fox(land->fox1);
+        destroy_fox(land->fox2);
         destroy_bird(land->bird);
         destroy_fish(land->fish1);
         destroy_fish(land->fish2);
