@@ -5,22 +5,20 @@
 #include "cat.h"
 #include "camera.h"
 #include "land.h"
-#include "game.h"
 #include "creatures.h"
 #include "physics.h"
 
 cat* create_cat(enum face face, int x, int y, int max_x, int max_y) {			
-	if (x + SIDE_CAT > max_x || y + SIDE_CAT > max_y) 
+	if (x + SIDE > max_x || y + SIDE > max_y) 
                 return NULL;												
 
 	cat *player = calloc(1, sizeof(cat));																								
 	if (!player) 
                 return NULL;	
 	
-        player->box.face = face;
-        player->box.side = SIDE_CAT;																													
-	player->box.x = x + SIDE_CAT/2;																																
-	player->box.y = y + SIDE_CAT/2;																																
+        player->box.face = face;																												
+	player->box.x = x + SIDE/2;																																
+	player->box.y = y + SIDE/2;																																
 	player->frame = NORMAL;																																																	
 	player->hp = MAX_HP;	
         player->chao = 1;
@@ -99,6 +97,13 @@ struct sprite_cat* load_catsprite() {
         return sprites;
 }
 
+int cat_win(cat *player) {
+        if (!player)
+                return -1;
+        if (player->box.x >= 3663)
+                return 1;
+        return 0;
+}
 
 
 void update_position (cat* player, world *land) {
@@ -161,7 +166,7 @@ void update_hp(cat *player, world *land) {
                 }
         }
 
-        if (entity_collision(player->box, land->fox1->box) || entity_collision(player->box, land->fox2->box)) {
+        if (entity_collision(player->box, land->fox1->box) || entity_collision(player->box, land->fox2->box) || (entity_collision(player->box, land->bird->box) && !player->control->crouch)) {
                 player->hp--;
                 player->cooldown.damage_timer = 20;
                 if (cat_alive(player))
@@ -171,7 +176,7 @@ void update_hp(cat *player, world *land) {
                 
         }
         
-        if ((fish1_taken(player,land) || fish2_taken(player, land)) && player->hp != MAX_HP) {
+        if (fish1_taken(player,land) || fish2_taken(player, land)) {
                 player->hp += 1; 
                 player->cooldown.took_fish = 1;
         }
@@ -201,12 +206,12 @@ void update_frame(cat *player) {
 
 void step_cat (cat* player, int speed, unsigned char trajectory, int max_x) {									
 	if (!trajectory) {
-                if ((player->box.x - speed) - player->box.side/2 >= 0) 
+                if ((player->box.x - speed) - SIDE/2 >= 0) 
                         player->box.x -= speed;
         }
 
         else if (trajectory == 1) {
-                if ((player->box.x + speed) + player->box.side/2 <= max_x) 
+                if ((player->box.x + speed) + SIDE/2 <= max_x) 
                         player->box.x += speed;
         }
 }

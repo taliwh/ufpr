@@ -7,17 +7,14 @@
 #define NUM_FOX 2
 
 //side de cada entidade
-#define SIDE_CAT 64 //50
-#define SIDE_BIRD 64
-#define SIDE_FOX 64
-#define SIDE_FISH 64
+#define SIDE 64 
 
 //quantidade de sprites 
 #define FOX_SPRITE 4
 #define BIRD_SPRITE 6
 
 #define FOX_SPEED 18
-#define BIRD_SPEED 25
+#define BIRD_SPEED 18
 
 enum face {
         LOOK_RIGHT,
@@ -27,7 +24,7 @@ enum face {
 struct body {
         //direcao q o personagem ta olhando
         unsigned char face;
-        int side;
+
         //centro da box
         int x;																																
 	int y;	
@@ -56,6 +53,7 @@ ALLEGRO_BITMAP** load_birdsprite();
 void update_fox(enemy *fox);
 void update_bird(enemy *bird);
 void draw_fox (enemy *fox, int cam);
+void draw_bird(enemy *bird, int cam);
 void destroy_fox(enemy* fox);
 void destroy_foxsprite(ALLEGRO_BITMAP **sprites);
 void destroy_bird(enemy* bird);

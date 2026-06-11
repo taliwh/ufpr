@@ -3,8 +3,6 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include "creatures.h"
-#include "cat.h"
-#include "land.h"
 
 fish* create_fish (int x, int y, char fish_type) {
         fish *pexe = malloc(sizeof(fish));
@@ -20,9 +18,8 @@ fish* create_fish (int x, int y, char fish_type) {
                 pexe->sprite = al_load_bitmap("assets/sprites/fish/Surgeonfish.png");
         
         pexe->box.face = LOOK_LEFT;
-        pexe->box.side = SIDE_FISH;
-        pexe->box.x = x + SIDE_FISH/2;
-        pexe->box.y = y + SIDE_FISH/2;
+        pexe->box.x = x + SIDE/2;
+        pexe->box.y = y + SIDE/2;
 
         return pexe;
 }
@@ -35,12 +32,11 @@ enemy* create_fox (int x, int y, int end) {
         fox->sprites = load_foxsprite();
 
         fox->box.face = LOOK_LEFT;
-        fox->box.side = SIDE_FOX;
-        fox->box.x = x + SIDE_FOX/2;
-        fox->box.y = y + SIDE_FOX/2;
+        fox->box.x = x + SIDE/2;
+        fox->box.y = y + SIDE/2;
         fox->sprite_counter = 0;
-        fox->start_x = x + SIDE_FOX/2;
-        fox->vel_x = 0;
+        fox->start_x = x + SIDE/2;
+        fox->vel_x = FOX_SPEED;
 
         fox->end_x = end;
 
@@ -68,10 +64,12 @@ enemy* create_bird (int x, int y, int end) {
 
         bird->sprites = load_birdsprite();
         bird->box.face = LOOK_LEFT;
-        bird->box.side = SIDE_BIRD;
-        bird->box.x = x + SIDE_BIRD/2;
-        bird->box.y = y + SIDE_BIRD/2;
+        bird->box.x = x + SIDE/2;
+        bird->box.y = y + SIDE/2;
         bird->end_x = end;
+        bird->start_x = x + SIDE/2;  // adicionar
+        bird->vel_x = BIRD_SPEED;          // adicionar
+        bird->sprite_counter = 0;          // adicionar
 
         return bird;
 }
@@ -102,10 +100,10 @@ void update_fox(enemy *fox) {
                 fox->box.face = LOOK_LEFT;
 
         if (fox->box.x >= fox->end_x)
-                fox->vel_x = -FOX_SPEED;
-
+                fox->vel_x = -abs(fox->vel_x);
+ 
         if (fox->box.x <= fox->start_x)
-                fox->vel_x = FOX_SPEED;
+                fox->vel_x = abs(fox->vel_x);
 
 
 }
@@ -122,10 +120,41 @@ void update_bird(enemy *bird) {
                 bird->box.face = LOOK_LEFT;
 
         if (bird->box.x >= bird->end_x)
-                bird->vel_x = -FOX_SPEED;
-
+                bird->vel_x = -abs(bird->vel_x);
+ 
         if (bird->box.x <= bird->start_x)
-                bird->vel_x = FOX_SPEED;
+                bird->vel_x = abs(bird->vel_x);
+}
+
+void draw_bird (enemy *bird, int cam) {
+        if (!bird)
+                return;
+
+        bird->sprite_counter++;
+
+        if (bird->sprite_counter >= FOX_SPRITE * 5)
+                bird->sprite_counter = 0;
+
+        ALLEGRO_BITMAP *bird_sprite =
+                bird->sprites[bird->sprite_counter / 5];
+
+        int bird_flip = 0;
+
+        if (bird->box.face == LOOK_LEFT)
+                bird_flip = ALLEGRO_FLIP_HORIZONTAL;
+
+        al_draw_scaled_bitmap(
+                bird_sprite,
+                0, 0,
+                al_get_bitmap_width(bird_sprite),
+                al_get_bitmap_height(bird_sprite),
+                (bird->box.x - SIDE/2) - cam,
+                bird->box.y - SIDE/2,
+                100, 100,
+                bird_flip
+        );
+
+
 }
 
 void draw_fox (enemy *fox, int cam) {
@@ -150,13 +179,12 @@ void draw_fox (enemy *fox, int cam) {
                 0, 0,
                 al_get_bitmap_width(fox_sprite),
                 al_get_bitmap_height(fox_sprite),
-                (fox->box.x - SIDE_FOX/2) - cam,
-                fox->box.y - SIDE_FOX/2,
+                (fox->box.x - SIDE/2) - cam,
+                fox->box.y - SIDE/2,
                 64, 64,
                 fox_flip
         );
 
-        fox->sprite_counter++;
 }
 
 void destroy_fish (fish *pexe) {

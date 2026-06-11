@@ -7,9 +7,9 @@ ENTREGA = $(MAIN)
 
 ALLEGRO_FLAGS = $(shell pkg-config allegro-5 allegro_main-5 allegro_font-5 allegro_ttf-5 allegro_image-5 allegro_audio-5 allegro_acodec-5 allegro_primitives-5 --libs --cflags)
 
-HDR = game.h cat.h land.h creatures.h joystick.h states.h camera.h physics.h
+HDR = game.h cat.h land.h creatures.h joystick.h states.h camera.h physics.h save.h
 
-OBJ = game.o cat.o land.o creatures.o joystick.o states.o camera.o physics.o
+OBJ = game.o cat.o land.o creatures.o joystick.o states.o camera.o physics.o save.o
 
 $(MAIN): main.o $(OBJ)
 	$(CC) main.o $(OBJ) -o $(MAIN) $(ALLEGRO_FLAGS)
@@ -24,6 +24,7 @@ joystick.o: joystick.c joystick.h
 states.o: states.c states.h
 camera.o: camera.c camera.h
 physics.o: physics.c physics.h
+save.o: save.c save.h
 
 run: $(MAIN)
 	./$(MAIN)
@@ -40,4 +41,4 @@ tgz: clean
 	@echo "Arquivo $(ENTREGA).tgz criado para entrega"
 
 clean:
-	rm -f *~ *.o $(MAIN) $(ENTREGA).tgz
+	rm -f *~ *.o $(MAIN) $(ENTREGA).tgz save.cat

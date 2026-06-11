@@ -6,10 +6,10 @@ int hazard_collision(cat *player, world *land, int *instakill) {
         if (!player || !land)
                 return -1;
 
-        int left  = player->box.x - player->box.side/2;
-        int right = player->box.x + player->box.side/2;
-        int head  = player->box.y - player->box.side/2;
-        int foot = player->box.y + player->box.side / 2;
+        int left  = player->box.x - SIDE/2;
+        int right = player->box.x + SIDE/2;
+        int head  = player->box.y - SIDE/2;
+        int foot = player->box.y + SIDE / 2;
 
         for (int i = 0; i < NUM_HAZARDS; i++) {
                 struct hazard s = land->hazards[i];
@@ -50,16 +50,18 @@ void apply_jump(struct game *catland) {
 
 
 int entity_collision (struct body a, struct body b) {
-        if (a.x + a.side/2 < b.x - b.side/2)
+
+        
+        if (a.x + SIDE/2 < b.x - SIDE/2)
                 return 0;
 
-        if (a.x - a.side/2 > b.x + b.side/2)
+        if (a.x - SIDE/2 > b.x + SIDE/2)
                 return 0;
 
-        if (a.y + a.side/2 < b.y - b.side/2)
+        if (a.y + SIDE/2 < b.y - SIDE/2)
                 return 0;
 
-        if (a.y - a.side/2 > b.y + b.side/2)
+        if (a.y - SIDE/2 > b.y + SIDE/2)
                 return 0;
 
         return 1;
@@ -69,8 +71,8 @@ void floor_collision(cat *player, world *land) {
         if (!player || !land)
                 return;
 
-        int old_foot = player->old_y + player->box.side / 2;
-        int new_foot = player->box.y + player->box.side / 2;
+        int old_foot = player->old_y + SIDE / 2;
+        int new_foot = player->box.y + SIDE / 2;
 
         for (int i = 0; i < NUM_SOLIDS; i++) {
                 struct solid s = land->solids[i];
@@ -78,21 +80,34 @@ void floor_collision(cat *player, world *land) {
                 if (player->box.x >= s.x && 
                     player->box.x <= s.x + s.width && 
                     old_foot <= s.y && new_foot >= s.y) {
-                        player->box.y = s.y - player->box.side / 2;
+                        player->box.y = s.y - SIDE/ 2;
                         player->vel_y = 0;
                         player->chao = 1;
                     }
         }
-
+        
+        for (int i = 0; i < NUM_SOLIDS_MOVE; i++) {
+                struct solid_move *s = &land->move[i];
+ 
+                if (player->box.x >= s->x &&
+                    player->box.x <= s->x + s->width &&
+                    old_foot <= s->y && new_foot >= s->y) {
+                        player->box.y = s->y - SIDE / 2;
+                        player->vel_y = 0;
+                        player->chao = 1;
+                        // arrasta o player junto com a plataforma
+                        player->box.x += s->vel_x;
+                }
+        }
 }
 
 void wall_collision(cat *player, world *land) {
         if (!player || !land)
                 return;
 
-        int left  = player->box.x - player->box.side/2;
-        int right = player->box.x + player->box.side/2;
-        int head  = player->box.y - player->box.side/2;
+        int left  = player->box.x - SIDE/2;
+        int right = player->box.x + SIDE/2;
+        int head  = player->box.y - SIDE/2;
 
         for (int i = 0; i < NUM_SOLIDS; i++) {
                 struct solid s = land->solids[i];
@@ -100,9 +115,9 @@ void wall_collision(cat *player, world *land) {
                 //parede da direita
                 if (head >= s.y && head < s.y + s.height) {
                         if (s.x >= player->box.x && right >= s.x)
-                                player->box.x = s.x - player->box.side/2;
+                                player->box.x = s.x - SIDE/2;
                         else if (player->box.x > s.x + s.width && left <= s.x + s.width)
-                                player->box.x = s.x + s.width + player->box.side/2;
+                                player->box.x = s.x + s.width + SIDE/2;
                 }
         }
 }
@@ -114,14 +129,13 @@ int fish1_taken(cat *player, world *land) {
 
         if (!land->fish1->collected) {
 
-                int right =player->box.x + player->box.side/1;
-                int foot = player->box.y + player->box.side/1;
-                int head = player->box.y - player->box.side/1;
-                int pexe_left = land->fish1->box.x - land->fish1->box.side/1;
-                int pexe_foot = land->fish1->box.y + land->fish1->box.side/1;
+                int right =player->box.x + SIDE/2;
+                int foot = player->box.y + SIDE/2;
+                int head = player->box.y - SIDE/2;
+                int pexe_left = land->fish1->box.x - SIDE/2;
+                int pexe_foot = land->fish1->box.y + SIDE/2;
 
                 if (right >= pexe_left && foot <= pexe_foot && head <= pexe_foot) {
-                        printf("peixe coletado\n");
                         land->fish1->collected = 1;
                         return 1;
                 }
@@ -136,11 +150,11 @@ int fish2_taken(cat *player, world *land) {
 
         if (!land->fish2->collected) {
 
-                int right =player->box.x + player->box.side/2;
-                int foot = player->box.y + player->box.side/2;
-                int head = player->box.y - player->box.side/2;
-                int pexe_left = land->fish2->box.x - land->fish2->box.side/2;
-                int pexe_foot = land->fish2->box.y + land->fish2->box.side/2;
+                int right =player->box.x + SIDE/2;
+                int foot = player->box.y + SIDE/2;
+                int head = player->box.y - SIDE/2;
+                int pexe_left = land->fish2->box.x - SIDE/2;
+                int pexe_foot = land->fish2->box.y + SIDE/2;
         
                 if (right >= pexe_left && foot <= pexe_foot && head <= pexe_foot) {
                         land->fish2->collected = 1;

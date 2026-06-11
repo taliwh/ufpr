@@ -17,16 +17,20 @@ enum state {
         PLAY,
         WIN,
         GAMEOVER,
+        PAUSE,
         EXIT,
 };
 
 struct fonts {
         ALLEGRO_FONT *menu;
         ALLEGRO_FONT *game;
+        ALLEGRO_FONT *contador;
 };
 
 struct sounds {
         ALLEGRO_AUDIO_STREAM *default_music;
+        ALLEGRO_AUDIO_STREAM *win;
+        ALLEGRO_AUDIO_STREAM *gameover;
         ALLEGRO_SAMPLE *death;
         ALLEGRO_SAMPLE *click;
         ALLEGRO_SAMPLE *fish;
@@ -40,6 +44,7 @@ struct pngs {
         ALLEGRO_BITMAP *game_bg;
         ALLEGRO_BITMAP *button;
         ALLEGRO_BITMAP *heart;
+        ALLEGRO_BITMAP *platform;
 };
 
 /*      definicoes gerais do jogo:
@@ -57,6 +62,7 @@ struct game {
         ALLEGRO_DISPLAY *disp;   
         world *land;
         enum state state;  
+        enum state last_state;
         cat *player;       
 };
 

@@ -1,6 +1,7 @@
 #include <allegro5/allegro5.h>																					
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
+#include <stdio.h>
 
 #include "cat.h"
 #include "game.h"
@@ -21,14 +22,28 @@ int main() {
 
         while (catland->state != EXIT) {
                 al_wait_for_event(catland->queue, &catland->event);
+                apply_sounds(catland);
+                if (catland->event.type == ALLEGRO_EVENT_MOUSE_AXES)
+                        printf("x: %d y: %d\n", catland->event.mouse.x, catland->event.mouse.y);
                 if (catland->event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                         catland->state = EXIT;
+
+                if (catland->event.type == ALLEGRO_EVENT_KEY_DOWN && catland->event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+                        if (catland->state == PLAY) {
+                                catland->state = PAUSE;
+                                joystick_reset(catland->player->control);
+                        }
+                        else if (catland->state == PAUSE)
+                                catland->state = PLAY;
+                }
 
                 // isso aq e pra input
                 if (catland->state == MENU && catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                         input_menu(catland);
-                if (catland->state == GAMEOVER && catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-                        input_gameover(catland);
+                if ((catland->state == GAMEOVER || catland->state == WIN) && catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                        input_gameover_win(catland);
+                if (catland->state == PAUSE && catland->event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                        input_pause(catland);
 
                 if (catland->state == PLAY && catland->event.type == ALLEGRO_EVENT_KEY_DOWN)
                         switch (catland->event.keyboard.keycode) {
@@ -82,13 +97,14 @@ int main() {
                                 case PLAY:
                                         render_play(catland);
                                         break;
-                                /*
                                 case WIN:
                                         render_win(catland);
                                         break;
-                                */
                                 case GAMEOVER:
                                         render_gameover(catland);
+                                        break;
+                                case PAUSE:
+                                        render_pause(catland);
                                         break;
                                 default:
                                         break;

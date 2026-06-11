@@ -32,5 +32,6 @@ void joystick_crouch_up(joystick *element);
 void joystick_run_down(joystick *element);
 void joystick_run_up(joystick *element);
 
+void joystick_reset(joystick *element);
 #endif
 

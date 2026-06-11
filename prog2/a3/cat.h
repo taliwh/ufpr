@@ -7,7 +7,7 @@
 #include "joystick.h"
 #include "creatures.h"
 #include "land.h"
-
+#include "camera.h"
 
 #define CAT_STEP 10	
 
@@ -63,7 +63,7 @@ typedef struct cat {
 cat* create_cat(enum face face, int x, int y, int max_x, int max_y);	
 struct sprite_cat* load_catsprite();
 void step_cat(cat* player, int speed, unsigned char trajectory, int max_x);		
-
+int cat_win(cat *player);
 void update_position(cat *player, world *land);
 void update_frame(cat *player);
 void update_hp(cat *player, world *land);
