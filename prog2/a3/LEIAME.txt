@@ -1,0 +1,23 @@
+JOGO CATLAND 
+
+Autoria: Thalísia Arianna Fernandes Fleck
+GRR20256088
+
+Funcionalidades extras implementadas:
+
+[2],15 pts, Implementar, pelo menos, um segundo tipo de obstáculo dinâmico
+inédito, diferente dos requisitos mínimos (ex: plataformas que caem ou
+desmoronam). (nao tenho certeza se a plataforma movel se aplica)
+
+[3],5 pts,Implementar um botão de pausa para a fase.
+
+[4],10 pts, Implementar a função de ""rastejar"" (movimentar-se abaixado)
+para passar por áreas baixas.
+
+[6],20 pts, Implementar um mecanismo de salvar e carregar o progresso do
+jogo.
+
+[11],5 pts, Item coletável que aumenta a barra de vida.
+
+[12],5 pts, Item coletável que desbloqueia a habilidade do jogador fazer pulo
+duplo. (pulo infinito, tb n tenho certeza se aplica)

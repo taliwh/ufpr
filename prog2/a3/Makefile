@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g -std=c99
 
 MAIN = catland
-ENTREGA = $(MAIN)
+ENTREGA = A3_GRR20256088_THALISIA
 
 ALLEGRO_FLAGS = $(shell pkg-config allegro-5 allegro_main-5 allegro_font-5 allegro_ttf-5 allegro_image-5 allegro_audio-5 allegro_acodec-5 allegro_primitives-5 --libs --cflags)
 
