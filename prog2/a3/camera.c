@@ -5,29 +5,31 @@
 #include "land.h"
 
 struct camera* create_camera() {
-    struct camera *cam = malloc(sizeof(struct camera));
+        struct camera *cam = malloc(sizeof(struct camera));
+        if (!cam)
+                return NULL;
 
-    if (!cam)
-        return NULL;
+        // posicao inicial da camera
+        cam->x = 0;
 
-    cam->x = 0;
-
-    return cam;
+        return cam;
 }
 
 void update_camera(struct camera *cam, float player_x) {
+        if (!cam)
+                return;
 
-   //fgaz com q o player fique no centro da tela mas eu posso muda tb
-    cam->x = player_x - X_SCREEN / 3;
+        // centraliza a camera levemente a esquerda do player (1/3 da tela)
+        cam->x = player_x - X_SCREEN / 3;
 
-    //ifs pra camera nao ir alem do tamanho do mundo ou p tras
-    if (cam->x < 0)
-        cam->x = 0;
+        //condicoes para a camera nao ir alem do tamanho do mundo 
+        if (cam->x < 0)
+                cam->x = 0;
 
-    if (cam->x > LAND_WIDTH - X_SCREEN)
-        cam->x = LAND_WIDTH - X_SCREEN;
+        if (cam->x > LAND_WIDTH - X_SCREEN)
+                cam->x = LAND_WIDTH - X_SCREEN;
 }
 
 void destroy_camera(struct camera *cam) {
-    free(cam);
+        free(cam);
 }

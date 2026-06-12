@@ -18,6 +18,7 @@ void render_menu(struct game *catland) {
         al_draw_scaled_bitmap(catland->images->button, 0, 0, al_get_bitmap_width(catland->images->button), al_get_bitmap_height(catland->images->button), 212, 247, 288, 138, 0);
         al_draw_text(catland->font->game, al_map_rgb(220, 211, 230), 350, 250, ALLEGRO_ALIGN_CENTER, "NOVO");
 
+        // botao de continuar so aparece na tela caso tenha save
         if (save_exists()) {
                 al_draw_scaled_bitmap(catland->images->button, 0, 0, al_get_bitmap_width(catland->images->button), al_get_bitmap_height(catland->images->button), 212, 392, 288, 138, 0);
                 al_draw_text(catland->font->game, al_map_rgb(220, 211, 230), 350, 395, ALLEGRO_ALIGN_CENTER, "SAVE");
@@ -47,6 +48,7 @@ void input_menu(struct game *catland) {
                 catland->state = EXIT;
         }
 
+        // carrega o save e inicia o jogo a partir do ponto salvo
         if (save_exists()) 
                 // verifica se clicou na area do botao save
                 if (cursor_x >= 218 && cursor_x <= 490 && cursor_y >= 348 && cursor_y <= 463) {
@@ -66,6 +68,7 @@ void render_play(struct game *catland) {
         draw_all(catland);
         
         cat *p = catland->player;
+        
         // escolhe o sprite
         ALLEGRO_BITMAP *sprite;
         switch (p->frame) {
@@ -86,9 +89,6 @@ void render_play(struct game *catland) {
                         if (p->sprite_counter >= JUMP_SPRITE * 4)
                                 p->sprite_counter = 0;
                         sprite = p->sprites->jump[p->sprite_counter / 4];
-                        break;
-                case SCARED:
-                        sprite = p->sprites->scared;
                         break;
                 case DOWN:
                         sprite = p->sprites->crouch;

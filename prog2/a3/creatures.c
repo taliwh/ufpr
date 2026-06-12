@@ -9,17 +9,18 @@ fish* create_fish (int x, int y, char fish_type) {
         if (!pexe)
                 return NULL;
 
-        pexe->collected = 0;
+        pexe->collected = 0; // inicialmente nao ha coleta de peixes
 
+        pexe->box.x = x + SIDE/2;
+        pexe->box.y = y + SIDE/2;
+        pexe->box.face = LOOK_LEFT;
+
+        // verifica qual tipo de peixe deve ser renderizado
         if (fish_type == 1) 
                 pexe->sprite = al_load_bitmap("assets/sprites/fish/Clownfish.png");
 
         if (fish_type == 2) 
                 pexe->sprite = al_load_bitmap("assets/sprites/fish/Surgeonfish.png");
-        
-        pexe->box.face = LOOK_LEFT;
-        pexe->box.x = x + SIDE/2;
-        pexe->box.y = y + SIDE/2;
 
         return pexe;
 }
@@ -29,16 +30,16 @@ enemy* create_fox (int x, int y, int end) {
         if (!fox)
                 return NULL;
 
-        fox->sprites = load_foxsprite();
-
-        fox->box.face = LOOK_LEFT;
         fox->box.x = x + SIDE/2;
         fox->box.y = y + SIDE/2;
-        fox->sprite_counter = 0;
+        fox->box.face = LOOK_LEFT;
+
         fox->start_x = x + SIDE/2;
+        fox->end_x = end;
         fox->vel_x = FOX_SPEED;
 
-        fox->end_x = end;
+        fox->sprite_counter = 0;
+        fox->sprites = load_foxsprite();
 
         return fox;
 }
@@ -62,14 +63,16 @@ enemy* create_bird (int x, int y, int end) {
         if (!bird)
                 return NULL;
 
-        bird->sprites = load_birdsprite();
-        bird->box.face = LOOK_LEFT;
         bird->box.x = x + SIDE/2;
         bird->box.y = y + SIDE/2;
+        bird->box.face = LOOK_LEFT;
+
+        bird->start_x = x + SIDE/2;  
         bird->end_x = end;
-        bird->start_x = x + SIDE/2;  // adicionar
-        bird->vel_x = BIRD_SPEED;          // adicionar
-        bird->sprite_counter = 0;          // adicionar
+        bird->vel_x = BIRD_SPEED;    
+
+        bird->sprite_counter = 0;         
+        bird->sprites = load_birdsprite();
 
         return bird;
 }
@@ -94,18 +97,18 @@ void update_fox(enemy *fox) {
 
         fox->box.x += fox->vel_x;
 
+        // atualiza sua direcao
         if (fox->vel_x > 0)
                 fox->box.face = LOOK_RIGHT;
         else
                 fox->box.face = LOOK_LEFT;
 
+        // abs garante a direcao correta mesmo se a raposa ultrapassar o limite
         if (fox->box.x >= fox->end_x)
                 fox->vel_x = -abs(fox->vel_x);
  
         if (fox->box.x <= fox->start_x)
                 fox->vel_x = abs(fox->vel_x);
-
-
 }
 
 void update_bird(enemy *bird) {
@@ -114,11 +117,13 @@ void update_bird(enemy *bird) {
 
         bird->box.x += bird->vel_x;
 
+        // atualiza sua direcao
         if (bird->vel_x > 0)
                 bird->box.face = LOOK_RIGHT;
         else
                 bird->box.face = LOOK_LEFT;
 
+        // abs garante a direcao correta mesmo se a ave ultrapassar o limite
         if (bird->box.x >= bird->end_x)
                 bird->vel_x = -abs(bird->vel_x);
  
@@ -126,35 +131,34 @@ void update_bird(enemy *bird) {
                 bird->vel_x = abs(bird->vel_x);
 }
 
+
 void draw_bird (enemy *bird, int cam) {
         if (!bird)
                 return;
 
         bird->sprite_counter++;
 
-        if (bird->sprite_counter >= FOX_SPRITE * 5)
+        // reinicia o ciclo de animacao ao chegar no ultimo frame
+        if (bird->sprite_counter >= BIRD_SPRITE * 5)
                 bird->sprite_counter = 0;
 
+        // cada sprite dura 5 frames (contador / 5 = indice do sprite)
         ALLEGRO_BITMAP *bird_sprite =
                 bird->sprites[bird->sprite_counter / 5];
 
         int bird_flip = 0;
 
+        // arruma a direcao da sprite
         if (bird->box.face == LOOK_LEFT)
                 bird_flip = ALLEGRO_FLIP_HORIZONTAL;
 
-        al_draw_scaled_bitmap(
-                bird_sprite,
-                0, 0,
-                al_get_bitmap_width(bird_sprite),
+        al_draw_scaled_bitmap(bird_sprite, 0, 0, al_get_bitmap_width(bird_sprite),
                 al_get_bitmap_height(bird_sprite),
                 (bird->box.x - SIDE/2) - cam,
                 bird->box.y - SIDE/2,
                 100, 100,
                 bird_flip
         );
-
-
 }
 
 void draw_fox (enemy *fox, int cam) {
@@ -163,14 +167,17 @@ void draw_fox (enemy *fox, int cam) {
 
         fox->sprite_counter++;
 
+        // reinicia o ciclo de animacao ao chegar no ultimo frame
         if (fox->sprite_counter >= FOX_SPRITE * 5)
                 fox->sprite_counter = 0;
-
+                
+        // cada sprite dura 5 frames (contador / 5 = indice do sprite)
         ALLEGRO_BITMAP *fox_sprite =
                 fox->sprites[fox->sprite_counter / 5];
 
         int fox_flip = 0;
 
+        // arruma a direcao da sprite
         if (fox->box.face == LOOK_LEFT)
                 fox_flip = ALLEGRO_FLIP_HORIZONTAL;
 

@@ -1,3 +1,5 @@
+// joystick.c/joystick.h : arquivos adaptados do jogo agressive squares do prof vinicius fulber, mecanicas sem o uso de XOR 
+
 #ifndef __JOYSTICK__
 #define __JOYSTICK__
 
