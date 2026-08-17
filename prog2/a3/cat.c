@@ -161,7 +161,7 @@ void update_frame(cat *player) {
 
         else
                 player->frame = NORMAL; 
-}
+}       
 
 void update_hp(cat *player, world *land) {
         if (!player || !land)

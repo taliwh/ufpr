@@ -21,7 +21,7 @@ void render_menu(struct game *catland) {
         // botao de continuar so aparece na tela caso tenha save
         if (save_exists()) {
                 al_draw_scaled_bitmap(catland->images->button, 0, 0, al_get_bitmap_width(catland->images->button), al_get_bitmap_height(catland->images->button), 212, 392, 288, 138, 0);
-                al_draw_text(catland->font->game, al_map_rgb(220, 211, 230), 350, 395, ALLEGRO_ALIGN_CENTER, "SAVE");
+                al_draw_text(catland->font->game, al_map_rgb(220, 211, 230), 350, 395, ALLEGRO_ALIGN_CENTER, "LOAD");
         }
 
         // carrega o segundo botao pra sair
@@ -201,8 +201,6 @@ void render_win(struct game *catland) {
 void render_gameover(struct game *catland) {
         if (!catland)
                 return;
-
-
 
         // carrega o fundo do menu e o titulo
         al_draw_bitmap(catland->images->menu_bg, 0, 0, 0);
