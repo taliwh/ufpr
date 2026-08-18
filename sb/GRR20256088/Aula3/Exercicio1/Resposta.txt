@@ -1,0 +1,11 @@
+Baseado nos dois arquivos, associe suas respostas com a diferença entre assembly e linguagem de máquina e responda:
+
+O x86-64 é little ou big-endian?
+        little endian, pois o valor 0xAABBCCDD no arquivo .hex está comecando com os bytes menos significativos: DDCCBBAA 
+
+O endianess do assembly é necessariamente o mesmo endianess do hexadecimal?
+        nao, pois no assembly a linha eh mais legivel para nos programadores, por isso o numero representado textualmente fica com os bytes ordenados
+        movl   $0xaabbccdd,-0x8(%rbp)
+
+Qual dos arquivos representa o endianess real da máquina?
+        o arquivo .hex, pois ele apresenta os bytes do codigo binario da maquina
