@@ -13,18 +13,20 @@
 #include "physics.h"
 #include "camera.h"
 
-struct game *create_game () {
+struct game *create_game()
+{
         // aloca o que precisa ser alocado
         struct game *catland = malloc(sizeof(struct game));
         if (!catland)
                 return NULL;
-        
+
         catland->land = create_land();
 
         catland->music = malloc(sizeof(struct sounds));
         catland->font = malloc(sizeof(struct fonts));
         catland->images = malloc(sizeof(struct pngs));
-        if (!catland->music || !catland->font || !catland->images) {
+        if (!catland->music || !catland->font || !catland->images)
+        {
                 free(catland->music);
                 free(catland->font);
                 free(catland->images);
@@ -41,7 +43,6 @@ struct game *create_game () {
         catland->music->click = al_load_sample("assets/musica/click.ogg");
         catland->music->fish = al_load_sample("assets/musica/fish.ogg");
         catland->music->damage = al_load_sample("assets/musica/dano.ogg");
-
 
         // carrega as fontes necessarias
         catland->font->menu = al_load_ttf_font("assets/fontes/default.otf", 128, 0);
@@ -78,7 +79,8 @@ struct game *create_game () {
         return catland;
 }
 
-void init_allegro() {
+void init_allegro()
+{
         al_init();
 
         al_install_keyboard();
@@ -93,70 +95,78 @@ void init_allegro() {
         al_reserve_samples(16);
 }
 
-void set_allegro(struct game *catland) {
+void set_allegro(struct game *catland)
+{
         if (!catland)
                 return;
 
-	al_register_event_source(catland->queue, al_get_keyboard_event_source());				
-	al_register_event_source(catland->queue, al_get_display_event_source(catland->disp));				
-	al_register_event_source(catland->queue, al_get_timer_event_source(catland->timer)); 
-	al_register_event_source(catland->queue, al_get_mouse_event_source());	
-        
+        al_register_event_source(catland->queue, al_get_keyboard_event_source());
+        al_register_event_source(catland->queue, al_get_display_event_source(catland->disp));
+        al_register_event_source(catland->queue, al_get_timer_event_source(catland->timer));
+        al_register_event_source(catland->queue, al_get_mouse_event_source());
+
         al_start_timer(catland->timer);
 }
 
-void apply_sounds (struct game *catland) {
+void apply_sounds(struct game *catland)
+{
         if (!catland)
                 return;
 
         cat *p = catland->player;
-        
+
         // efeitos sonoros de evento unico
-        if (p->cooldown.took_fish) {
-                al_play_sample(catland->music->fish, 0.05, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+        if (p->cooldown.took_fish)
+        {
+                al_play_sample(catland->music->fish, 0.40, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                 p->cooldown.took_fish = 0;
         }
 
-        if (p->cooldown.took_damage) {
-                al_play_sample(catland->music->damage, 0.05, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+        if (p->cooldown.took_damage)
+        {
+                al_play_sample(catland->music->damage, 0.40, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                 p->cooldown.took_damage = 0;
         }
 
-        if (p->cooldown.just_died) {
-                al_play_sample(catland->music->death, 0.05, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+        if (p->cooldown.just_died)
+        {
+                al_play_sample(catland->music->death, 0.40, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                 p->cooldown.just_died = 0;
         }
 
         // musica de fundo durante o jogo
-        if (catland->state == PLAY) {
+        if (catland->state == PLAY)
+        {
                 al_set_audio_stream_playing(catland->music->win, false);
                 al_set_audio_stream_playing(catland->music->gameover, false);
                 if (catland->last_state == GAMEOVER || catland->last_state == WIN)
-                        al_seek_audio_stream_secs(catland->music->default_music, 0.0); 
+                        al_seek_audio_stream_secs(catland->music->default_music, 0.0);
                 al_set_audio_stream_playmode(catland->music->default_music, ALLEGRO_PLAYMODE_LOOP);
-                al_set_audio_stream_gain(catland->music->default_music, 0.10);
+                al_set_audio_stream_gain(catland->music->default_music, 0.70);
                 al_set_audio_stream_playing(catland->music->default_music, true);
                 al_attach_audio_stream_to_mixer(catland->music->default_music, al_get_default_mixer());
         }
 
         // musica de gameover
-        if (catland->state == GAMEOVER) {
+        if (catland->state == GAMEOVER)
+        {
                 al_set_audio_stream_playing(catland->music->default_music, false);
                 if (catland->last_state == PLAY)
                         al_seek_audio_stream_secs(catland->music->gameover, 0.0);
                 al_set_audio_stream_playmode(catland->music->gameover, ALLEGRO_PLAYMODE_LOOP);
-                al_set_audio_stream_gain(catland->music->gameover, 0.10);
+                al_set_audio_stream_gain(catland->music->gameover, 0.70);
                 al_set_audio_stream_playing(catland->music->gameover, true);
                 al_attach_audio_stream_to_mixer(catland->music->gameover, al_get_default_mixer());
         }
 
         // musica de vitoria (toca 1 vez)
-        if (catland->state == WIN) {
+        if (catland->state == WIN)
+        {
                 al_set_audio_stream_playing(catland->music->default_music, false);
                 if (catland->last_state == PLAY)
-                        al_seek_audio_stream_secs(catland->music->win, 0.0); 
+                        al_seek_audio_stream_secs(catland->music->win, 0.0);
                 al_set_audio_stream_playmode(catland->music->win, ALLEGRO_PLAYMODE_ONCE);
-                al_set_audio_stream_gain(catland->music->win, 0.10);
+                al_set_audio_stream_gain(catland->music->win, 0.70);
                 al_set_audio_stream_playing(catland->music->win, true);
                 al_attach_audio_stream_to_mixer(catland->music->win, al_get_default_mixer());
         }
@@ -165,7 +175,8 @@ void apply_sounds (struct game *catland) {
         catland->last_state = catland->state;
 }
 
-void update_all(struct game *catland) {
+void update_all(struct game *catland)
+{
         if (!catland)
                 return;
 
@@ -179,7 +190,8 @@ void update_all(struct game *catland) {
         update_bird(catland->land->bird);
 }
 
-void draw_all (struct game *catland) {
+void draw_all(struct game *catland)
+{
         if (!catland)
                 return;
 
@@ -190,16 +202,17 @@ void draw_all (struct game *catland) {
         al_draw_bitmap(catland->images->land, -cam, 0, 0);
 
         // renderiza plataformas moveis
-        for (int i = 0; i < NUM_SOLIDS_MOVE; i++) {
+        for (int i = 0; i < NUM_SOLIDS_MOVE; i++)
+        {
                 struct solid_move *s = &catland->land->move[i];
                 al_draw_bitmap(catland->images->platform, s->x - cam, s->y, 0);
         }
 
         // renderiza os peixes que nao foram coletados
         if (!catland->land->fish1->collected)
-                al_draw_scaled_bitmap(catland->land->fish1->sprite, 0, 0, 16, 16, (catland->land->fish1->box.x - SIDE/2) - cam, catland->land->fish1->box.y - SIDE/2, 45, 45, 0);
+                al_draw_scaled_bitmap(catland->land->fish1->sprite, 0, 0, 16, 16, (catland->land->fish1->box.x - SIDE / 2) - cam, catland->land->fish1->box.y - SIDE / 2, 45, 45, 0);
         if (!catland->land->fish2->collected)
-                al_draw_scaled_bitmap(catland->land->fish2->sprite, 0, 0, 16, 16, (catland->land->fish2->box.x - SIDE/2) - cam, catland->land->fish2->box.y - SIDE/2, 45, 45, 0);        
+                al_draw_scaled_bitmap(catland->land->fish2->sprite, 0, 0, 16, 16, (catland->land->fish2->box.x - SIDE / 2) - cam, catland->land->fish2->box.y - SIDE / 2, 45, 45, 0);
 
         // renderiza os inimigos
         draw_fox(catland->land->fox1, cam);
@@ -209,29 +222,30 @@ void draw_all (struct game *catland) {
         // desenha os coracoes nao deixando com que o player tenha mais que 5 vidas
         if (catland->player->hp > 5)
                 catland->player->hp = 5;
-        for (int i = 0; i < catland->player->hp; i++) {
+        for (int i = 0; i < catland->player->hp; i++)
+        {
                 al_draw_scaled_bitmap(catland->images->heart,
-                        0, 0,
-                        al_get_bitmap_width(catland->images->heart),
-                        al_get_bitmap_height(catland->images->heart),
-                        10 + i * 40, 10,   
-                        32, 32,            
-                        0);
+                                      0, 0,
+                                      al_get_bitmap_width(catland->images->heart),
+                                      al_get_bitmap_height(catland->images->heart),
+                                      10 + i * 40, 10,
+                                      32, 32,
+                                      0);
         }
-        
+
         int fish_count = catland->land->fish1->collected + catland->land->fish2->collected;
- 
+
         // desenha sprite do peixe 1 (clownfish) no canto superior direito
-        al_draw_scaled_bitmap(catland->land->fish1->sprite, 0, 0, 16, 16, X_SCREEN - 90, 10, 36, 36,0);
- 
+        al_draw_scaled_bitmap(catland->land->fish1->sprite, 0, 0, 16, 16, X_SCREEN - 90, 10, 36, 36, 0);
+
         // desenha o contador de quantos peixes ja foram coletados
-        char fish_text[8]; 
+        char fish_text[8];
         sprintf(fish_text, "x%d", fish_count); // sprintf converte fish_count para string pois al_draw_text nao aceita numero
         al_draw_text(catland->font->contador, al_map_rgb(255, 255, 255), X_SCREEN - 48, 12, 0, fish_text);
-
 }
 
-void reset_game(struct game *catland) {
+void reset_game(struct game *catland)
+{
         if (!catland)
                 return;
 
@@ -245,7 +259,8 @@ void reset_game(struct game *catland) {
                 catland->state = EXIT;
 }
 
-void destroy_game (struct game* catland) {
+void destroy_game(struct game *catland)
+{
         if (!catland)
                 return;
 
@@ -262,7 +277,8 @@ void destroy_game (struct game* catland) {
         free(catland);
 }
 
-void destroy_image (struct game* catland) {
+void destroy_image(struct game *catland)
+{
         if (!catland)
                 return;
 
@@ -277,7 +293,8 @@ void destroy_image (struct game* catland) {
         free(catland->images);
 }
 
-void destroy_font (struct game* catland) {
+void destroy_font(struct game *catland)
+{
         if (!catland)
                 return;
 
@@ -285,10 +302,11 @@ void destroy_font (struct game* catland) {
         al_destroy_font(catland->font->game);
         al_destroy_font(catland->font->contador);
 
-        free(catland->font);        
+        free(catland->font);
 }
 
-void destroy_audio (struct game* catland) {
+void destroy_audio(struct game *catland)
+{
         if (!catland)
                 return;
 
@@ -303,6 +321,3 @@ void destroy_audio (struct game* catland) {
 
         free(catland->music);
 }
-
-
-

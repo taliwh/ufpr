@@ -1,42 +1,102 @@
-arquivo insideloop.s gerado pelo gcc -s insideloop.c:
+insideloop.s
 
-    main:
-    .LFB0:
-        .cfi_startproc
-        endbr64
-        pushq	%rbp
-        .cfi_def_cfa_offset 16
-        .cfi_offset 6, -16
-        movq	%rsp, %rbp
-        .cfi_def_cfa_register 6
-        subq	$64, %rsp  <<<<<<<<<<<<<
-        movq	%fs:40, %rax
-        movq	%rax, -8(%rbp)
-        xorl	%eax, %eax
-        movl	$0, -52(%rbp)
-        movq	$0, -48(%rbp)
-        jmp	.L2
+main:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$64, %rsp
+	movq	%fs:40, %rax
+	movq	%rax, -8(%rbp)
+	xorl	%eax, %eax
+	movl	$0, -52(%rbp)
+	movq	$0, -48(%rbp)
+	jmp	.L2
 
-arquivo insideloop.s gerado pelo objdump -d inside | grep -A 15 "<main>:"
+objdump
 
-    0000000000001169 <main>:
-        1169:	f3 0f 1e fa          	endbr64
-        116d:	55                   	push   %rbp
-        116e:	48 89 e5             	mov    %rsp,%rbp
-        1171:	48 83 ec 40          	sub    $0x40,%rsp
-        1175:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
-        117c:	00 00 
-        117e:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
-        1182:	31 c0                	xor    %eax,%eax
-        1184:	c7 45 cc 00 00 00 00 	movl   $0x0,-0x34(%rbp)
-        118b:	48 c7 45 d0 00 00 00 	movq   $0x0,-0x30(%rbp)
-        1192:	00 
-        1193:	eb 13                	jmp    11a8 <main+0x3f>
-        1195:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
-        1199:	89 c2                	mov    %eax,%edx
-        119b:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+0000000000001169 <main>:
+    1169:	f3 0f 1e fa          	endbr64
+    116d:	55                   	push   %rbp
+    116e:	48 89 e5             	mov    %rsp,%rbp
+    1171:	48 83 ec 40          	sub    $0x40,%rsp  # 0x40 eh 64 em hexadecimal
+    1175:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    117c:	00 00 
+    117e:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+    1182:	31 c0                	xor    %eax,%eax
+    1184:	c7 45 cc 00 00 00 00 	movl   $0x0,-0x34(%rbp)
+    118b:	48 c7 45 d0 00 00 00 	movq   $0x0,-0x30(%rbp)
+    1192:	00 
+    1193:	eb 13                	jmp    11a8 <main+0x3f>
+    1195:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+    1199:	89 c2                	mov    %eax,%edx
+    119b:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+    119f:	89 54 85 e0          	mov    %edx,-0x20(%rbp,%rax,4)
+    11a3:	48 83 45 d0 01       	addq   $0x1,-0x30(%rbp)
+    11a8:	48 83 7d d0 03       	cmpq   $0x3,-0x30(%rbp)
+    11ad:	76 e6                	jbe    1195 <main+0x2c>
+    11af:	48 c7 45 d8 00 00 00 	movq   $0x0,-0x28(%rbp)
+    11b6:	00 
+    11b7:	eb 2e                	jmp    11e7 <main+0x7e>
+    11b9:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+    11bd:	8b 44 85 e0          	mov    -0x20(%rbp,%rax,4),%eax
+    11c1:	89 c6                	mov    %eax,%esi
+    11c3:	48 8d 05 3a 0e 00 00 	lea    0xe3a(%rip),%rax        # 2004 <_
 
-arquivo insideloop.s gerado pelo gcc -O1 -s insideloop.c:
+outsideloop.s
+
+main:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$48, %rsp
+	movq	%fs:40, %rax
+	movq	%rax, -8(%rbp)
+	xorl	%eax, %eax
+	movl	$0, -44(%rbp)
+	movq	$0, -40(%rbp)
+	jmp	.L2
+
+objdump
+
+0000000000001169 <main>:
+    1169:	f3 0f 1e fa          	endbr64
+    116d:	55                   	push   %rbp
+    116e:	48 89 e5             	mov    %rsp,%rbp
+    1171:	48 83 ec 30          	sub    $0x30,%rsp  # 48 em hexa
+    1175:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    117c:	00 00 
+    117e:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+    1182:	31 c0                	xor    %eax,%eax
+    1184:	c7 45 d4 00 00 00 00 	movl   $0x0,-0x2c(%rbp)
+    118b:	48 c7 45 d8 00 00 00 	movq   $0x0,-0x28(%rbp)
+    1192:	00 
+    1193:	eb 13                	jmp    11a8 <main+0x3f>
+    1195:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+    1199:	89 c2                	mov    %eax,%edx
+    119b:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+    119f:	89 54 85 e0          	mov    %edx,-0x20(%rbp,%rax,4)
+    11a3:	48 83 45 d8 01       	addq   $0x1,-0x28(%rbp)
+    11a8:	48 83 7d d8 03       	cmpq   $0x3,-0x28(%rbp)
+    11ad:	76 e6                	jbe    1195 <main+0x2c>
+    11af:	48 c7 45 d8 00 00 00 	movq   $0x0,-0x28(%rbp)
+    11b6:	00 
+    11b7:	eb 2e                	jmp    11e7 <main+0x7e>
+    11b9:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+    11bd:	8b 44 85 e0          	mov    -0x20(%rbp,%rax,4),%eax
+    11c1:	89 c6                	mov    %eax,%esi
+    11c3:	48 8d 05 3a 0e 00 00 	lea    0xe3a(%rip),%rax        # 2004 <_
+
+insideloop.s com flag -O1
 
 main:
 .LFB23:
@@ -71,6 +131,63 @@ main:
 	movl	$0, %r12d
 	leaq	.LC0(%rip), %r13
 
+objdump inside loop com gcc flag -O1
+0000000000001169 <main>:
+    1169:	f3 0f 1e fa          	endbr64
+    116d:	41 56                	push   %r14
+    116f:	41 55                	push   %r13
+    1171:	41 54                	push   %r12
+    1173:	55                   	push   %rbp
+    1174:	53                   	push   %rbx
+    1175:	48 83 ec 20          	sub    $0x20,%rsp   # 32 em hexa
+    1179:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    1180:	00 00 
+    1182:	48 89 44 24 18       	mov    %rax,0x18(%rsp)
+    1187:	31 c0                	xor    %eax,%eax
+    1189:	c7 04 24 00 00 00 00 	movl   $0x0,(%rsp)
+    1190:	c7 44 24 04 01 00 00 	movl   $0x1,0x4(%rsp)
+    1197:	00 
+    1198:	c7 44 24 08 02 00 00 	movl   $0x2,0x8(%rsp)
+    119f:	00 
+    11a0:	c7 44 24 0c 03 00 00 	movl   $0x3,0xc(%rsp)
+    11a7:	00 
+    11a8:	48 89 e3             	mov    %rsp,%rbx
+    11ab:	4c 8d 74 24 10       	lea    0x10(%rsp),%r14
+    11b0:	41 bc 00 00 00 00    	mov    $0x0,%r12d
+    11b6:	4c 8d 2d 47 0e 00 00 	lea    0xe47(%rip),%r13        # 2004 <_
 
 
+outside com -01
 
+main:
+.LFB23:
+	.cfi_startproc
+	endbr64
+	pushq	%r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	pushq	%r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	pushq	%rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	pushq	%rbx
+	.cfi_def_cfa_offset 48
+	.cfi_offset 3, -48
+	subq	$32, %rsp
+	.cfi_def_cfa_offset 80
+	movq	%fs:40, %rax
+	movq	%rax, 24(%rsp)
+	xorl	%eax, %eax
+	movl	$0, (%rsp)
+	movl	$1, 4(%rsp)
+	movl	$2, 8(%rsp)
+	movl	$3, 12(%rsp)
+	movq	%rsp, %rbx
+	leaq	16(%rsp), %r14
+	movl	$0, %r12d
+	leaq	.LC0(%rip), %r13
