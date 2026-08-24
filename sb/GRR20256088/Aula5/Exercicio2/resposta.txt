@@ -1,0 +1,76 @@
+arquivo insideloop.s gerado pelo gcc -s insideloop.c:
+
+    main:
+    .LFB0:
+        .cfi_startproc
+        endbr64
+        pushq	%rbp
+        .cfi_def_cfa_offset 16
+        .cfi_offset 6, -16
+        movq	%rsp, %rbp
+        .cfi_def_cfa_register 6
+        subq	$64, %rsp  <<<<<<<<<<<<<
+        movq	%fs:40, %rax
+        movq	%rax, -8(%rbp)
+        xorl	%eax, %eax
+        movl	$0, -52(%rbp)
+        movq	$0, -48(%rbp)
+        jmp	.L2
+
+arquivo insideloop.s gerado pelo objdump -d inside | grep -A 15 "<main>:"
+
+    0000000000001169 <main>:
+        1169:	f3 0f 1e fa          	endbr64
+        116d:	55                   	push   %rbp
+        116e:	48 89 e5             	mov    %rsp,%rbp
+        1171:	48 83 ec 40          	sub    $0x40,%rsp
+        1175:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+        117c:	00 00 
+        117e:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+        1182:	31 c0                	xor    %eax,%eax
+        1184:	c7 45 cc 00 00 00 00 	movl   $0x0,-0x34(%rbp)
+        118b:	48 c7 45 d0 00 00 00 	movq   $0x0,-0x30(%rbp)
+        1192:	00 
+        1193:	eb 13                	jmp    11a8 <main+0x3f>
+        1195:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+        1199:	89 c2                	mov    %eax,%edx
+        119b:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+
+arquivo insideloop.s gerado pelo gcc -O1 -s insideloop.c:
+
+main:
+.LFB23:
+	.cfi_startproc
+	endbr64
+	pushq	%r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	pushq	%r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	pushq	%rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	pushq	%rbx
+	.cfi_def_cfa_offset 48
+	.cfi_offset 3, -48
+	subq	$32, %rsp
+	.cfi_def_cfa_offset 80
+	movq	%fs:40, %rax
+	movq	%rax, 24(%rsp)
+	xorl	%eax, %eax
+	movl	$0, (%rsp)
+	movl	$1, 4(%rsp)
+	movl	$2, 8(%rsp)
+	movl	$3, 12(%rsp)
+	movq	%rsp, %rbx
+	leaq	16(%rsp), %r14
+	movl	$0, %r12d
+	leaq	.LC0(%rip), %r13
+
+
+
+

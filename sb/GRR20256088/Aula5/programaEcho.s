@@ -18,20 +18,19 @@
 main:
     pushq %rbp
     movq %rsp, %rbp
-    subq $local_size, %rsp           # precisamos de espaco na pilha pro vetor de buffer (16 bytes, tam do local_size)
+    subq $local_size, %rsp         
 
-    movl $2, %edx 
-    leaq vetor(%rbp), %rsi           # dentro do rsi vai ter o ponteiro do vetor , eh q pois tem 64 bits na memoria(8 bytes) o vetor nao comeca em -16 (???????????? socor)
-    movl $STDIN, %edi                # (nao dava pra usar addi?)
+    movl $STDIN, %edi   
+    leaq vetor(%rbp), %rsi     
+    movl $2, %edx              
     call read
 
-    movl $2, %edx
-    leaq vetor(%rbp), %rsi
     movl $STDOUT, %edi
+    leaq vetor(%rbp), %rsi
+    movl $2, %edx
     call write
 
-    movl $45, %eax
+    movl $0, %eax  << change the value here
     movq %rbp, %rsp
     popq %rbp
     ret
-
