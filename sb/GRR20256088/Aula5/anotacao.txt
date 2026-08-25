@@ -1,0 +1,1 @@
+o prof tentou imprimir o sizeof(ssizet) e deu algo errado(?)naoentendi

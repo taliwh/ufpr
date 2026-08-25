@@ -1,0 +1,41 @@
+Breakpoint 1, while () at programa.s:23
+23		cmpb $0,(%rsi) #o valor na posição de memória é \0?
+(gdb) i r eflags
+eflags         0x207               [ CF PF IF ]
+(gdb) c
+Continuing.
+O
+Breakpoint 1, while () at programa.s:23
+23		cmpb $0,(%rsi) #o valor na posição de memória é \0?
+(gdb) i r eflags
+eflags         0x206               [ PF IF ]
+(gdb) c
+Continuing.
+l
+Breakpoint 1, while () at programa.s:23
+23		cmpb $0,(%rsi) #o valor na posição de memória é \0?
+(gdb) i r eflags
+eflags         0x206               [ PF IF ]
+(gdb) c
+Continuing.
+a
+Breakpoint 1, while () at programa.s:23
+23		cmpb $0,(%rsi) #o valor na posição de memória é \0?
+(gdb) i r eflags
+eflags         0x202               [ IF ]
+(gdb) c
+Continuing.
+
+
+Breakpoint 1, while () at programa.s:23
+23		cmpb $0,(%rsi) #o valor na posição de memória é \0?
+(gdb) i r eflags
+eflags         0x202               [ IF ]
+
+(gdb) c
+Continuing.
+
+Breakpoint 2, fimLoop () at programa.s:33
+33		popq %rbp #fim do epílogo
+(gdb) i r eflags
+eflags         0x246               [ PF ZF IF ]
