@@ -17,8 +17,8 @@ main:
     leaq vetor(%rbp), %rsi  
     movl $16, %edx
     call read
-    movq %rax, -20(%rbp) 
-    movq -16(%rbp), %rdx
+    movq %rax, -24(%rbp) 
+    leaq vetor(%rbp), %r
     
 while:
     cmpb $0, (%rdx) # ve se eh /0
@@ -31,9 +31,8 @@ while:
     call write
 
     incq %rdx
+    jmp while
 fim:
-
     movq %rsp, %rbp
     popq %rbp
     ret
-
