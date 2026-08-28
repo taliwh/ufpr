@@ -13,28 +13,27 @@ main:
     movq %rsp, %rbp
     addq $line, %rsp
 
-    movl %STDIN, %edi
+    movl $STDIN, %edi
     leaq vetor(%rbp), %rsi  
     movl $16, %edx
     call read
-    movq %rax, -24(%rbp) //preciso disso so pro write ?
-    movq -24(rbp), %rdx
+    movq %rax, -20(%rbp) 
+    movq -16(%rbp), %rdx
     
 while:
     cmpb $0, (%rdx) # ve se eh /0
     je fim
-    movb 
-    movb , %al
-    movb %al, %cx # resultado na pilha
-    leaq 1(%rcx), %rcx # inc(?)
-
-fim:
-    movl %STDOUT, %edi
-    leaq vetor (%rbp), %rsi # achoq  nem precisa
-    movl $16, %edx
+    
+    # imprime 
+    movl $STDOUT, %edi
+    movq %rdx, %rsi
+    movl $1, %edx 
     call write
 
-        movl $0, %eax 
-        movq %rbp, %rsp
-        popq %rbp 
-        ret 
+    incq %rdx
+fim:
+
+    movq %rsp, %rbp
+    popq %rbp
+    ret
+
