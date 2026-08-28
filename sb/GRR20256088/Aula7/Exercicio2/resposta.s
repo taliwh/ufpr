@@ -1,7 +1,7 @@
 #constante
     .equ STDIN, 0
     .equ STDOUT, 1
-    .equ line, -16
+    .equ line, -32
     .equ vetor, -16
     .equ caps, 32
     .text
@@ -14,17 +14,17 @@ main:
     addq $line, %rsp
 
     movl %STDIN, %edi
-    leaq vetor(%rbp), %rsi     # -(%rsi)(%rbp) testar dps
+    leaq vetor(%rbp), %rsi  
     movl $16, %edx
     call read
-
-    leaq vetor(%rbp), %rcx # ponteiro do comeco da pilha
-
-// faz o echo nrmal
+    movq %rax, -24(%rbp) //preciso disso so pro write ?
+    movq -24(rbp), %rdx
+    
 while:
-    cmpb $0, (%rcx) # ve se eh 
+    cmpb $0, (%rdx) # ve se eh /0
     je fim
-    movb (%rcx), %al
+    movb 
+    movb , %al
     movb %al, %cx # resultado na pilha
     leaq 1(%rcx), %rcx # inc(?)
 
@@ -34,7 +34,7 @@ fim:
     movl $16, %edx
     call write
 
-	movl $0, %eax 
-	movq %rbp, %rsp
-	popq %rbp 
-	ret 
+        movl $0, %eax 
+        movq %rbp, %rsp
+        popq %rbp 
+        ret 
