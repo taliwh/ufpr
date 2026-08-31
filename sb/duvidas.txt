@@ -19,23 +19,26 @@ main:
         popq %rbp
         ret
 
+perguntar porque ele disse pra eu alocar mais coisa quando no exercicio2 eu usei write e read em vez de printf e dcanf , perguntar oq ele vai cobrar na prova se pdoe usar printf e sacnf e q emais facl
+perguntar se ta bom o codigo do exercicio 2 e perguntar diferenca de banco de registrador memoria etc 
+perguntar como funciona o cmp (eh o da diureita e  realacao a resqeuerda?\
 
-qual a ordem, botei a variavel dps dos 2 ponteiro mas nao sei a oredm
-int main() {
-        char* ptr; 8 bytes
-        int32_t* ptr2; 8 bytes
-        int32_t val = 32; 4 bytes
-}
+movq 0 rax 
+ou movl 0 eax)
 
-main: 
-        pushq %rbp
-        movq %rsp %rbp
-        subq $32, %rsp
+se o valor e fixo precisa por num reg?
+QUANDO EU USO WRITE E QUANDO EU USO PRINTF
+quais funcoes dos registradores
+quando eusei qual q devo usar
 
-        movl $32, -20(%rbp)
+oq e melhor vc usa registrador q estraga guardar na pila  e pega de novo ou usar r12 emdiante
 
-        movq %rbp, %rsp
-        popq %rbp
-        ret
+.section .rodata
+printFormat:
+    .string "%c\n"
+    .section .bss
+    .lcomm VETOR 127
 
+    nao precisa do bss ali so do lcomm ja tabom
 
+na aula8 ele nao aumento o frame com rsp, eh bug ou  era pq naoprecisava?
