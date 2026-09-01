@@ -1,10 +1,10 @@
-#constantes
-    .equ STDOUT, 1
 .section .rodata
 printFormat:
     .string "%i %c\n"
-    .section .bss
+
+.section .bss
     .lcomm VETOR 127
+    
 .text
 .globl main
 .type main, @function
@@ -34,6 +34,8 @@ loop_impressao:
     incq %r12
     cmpq %r13, %r12
     jne loop_impressao
+
+fim:
     movl $0, %eax
     movq %rbp, %rsp
     popq %rbp

@@ -8,16 +8,16 @@ int main() {
 }
 
 main:
-        pushq %rbp
-        movq %rsp, %rbp
-        subq $16, %rsp
+    pushq %rbp
+    movq %rsp, %rbp
+    subq $16, %rsp
 
-        movw $12, -2(%rbp)
+    movw $12, -2(%rbp)
 
 
-        movq %rbp, %rsp
-        popq %rbp
-        ret
+    movq %rbp, %rsp
+    popq %rbp
+    ret
 
 perguntar porque ele disse pra eu alocar mais coisa quando no exercicio2 eu usei write e read em vez de printf e dcanf , perguntar oq ele vai cobrar na prova se pdoe usar printf e sacnf e q emais facl
 perguntar se ta bom o codigo do exercicio 2 e perguntar diferenca de banco de registrador memoria etc 
