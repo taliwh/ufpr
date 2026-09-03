@@ -50,15 +50,11 @@ somar:
     addq $4, %rbx 
     addq $4, %rcx
     addq $4, %rax
-
 printar:
     movq $printFormat, %rdi
     movq -VET_SIZE(%rbp), %rsi
     movq $0, %rax
     call printf
-
-
-
 fim:
     movq %rbp, %rsp
     popq %rbp
