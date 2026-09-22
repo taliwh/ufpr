@@ -23,8 +23,6 @@ main:
     # pega o inteiro lido e coloca em edx
     # movl -4(%rbp), %edx
 
-    movl $0, %r12d # 1 termo fibo (termo ant)
-    movl $1, %ebx # 2 termo fibo (termo atual)
 
     movq $printFormat, %rdi
     movl $0, %esi
