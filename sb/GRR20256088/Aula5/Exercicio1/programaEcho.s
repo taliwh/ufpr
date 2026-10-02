@@ -1,5 +1,5 @@
 # ssize_t write(int fd, const void *buf, size_t count)
-# o count e passado dentro de edx
+# o count eh passado dentro de edx
 # ssize_t read(int fd, void *buf, size_t count)
 
 # constantes
@@ -8,7 +8,7 @@
 
 # posicoes na stack
 
-    .equ vetor, -16                   # .equ: define do c
+    .equ vetor, -16               
     .equ local_size, 16
 
     .text
@@ -30,7 +30,7 @@ main:
     movl $2, %edx
     call write
 
-    movl $0, %eax  << change the value here
+    movl $0, %eax 
     movq %rbp, %rsp
     popq %rbp
     ret

@@ -1,3 +1,12 @@
+O post está correto pois o tamanho do frame da main do insideloop.c e do outsideloop.c condiz com o tamanho do frame do gcc -S apresentado no blog
+frame outsideloop: 48
+frame insideloop: 64
+
+a declaracao da variavel dentro do escopo do for acaba por ser um pouco mais espacosa na pilha pois como 
+o programa so desaloca o frame apos o programa acabar, e tem 2 for declarando 2 size_t (cada um com 8 bytes), o insideloop.c acaba
+alocando mais 16 bytes na pilha 
+
+
 insideloop.s
 
 main:

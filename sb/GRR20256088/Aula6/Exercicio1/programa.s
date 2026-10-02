@@ -2,7 +2,7 @@
 	.text
 	.section	.rodata
 .LC0:
-	.string	"Ola\n" <<<string fica na rodata
+	.string	"Ola\n" <<< string fica na rodata
 	.text
 	.globl	main
 	.type	main, @function

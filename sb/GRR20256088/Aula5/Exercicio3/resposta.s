@@ -23,7 +23,7 @@ main:
     movb -VETORSIZE(%rbp), %al # pega o primeiro caractere
     movb -VETORSIZE+1(%rbp), %cl # pega o segundo caractere
 
-    subb $48, %al # pega o deciaml doa scci
+    subb $48, %al # pega o decimal do ascci
     subb $48, %cl # pega o decimal do ascii
 
     addb %al, %cl # soma os dois decimal

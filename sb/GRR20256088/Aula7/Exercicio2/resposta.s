@@ -11,7 +11,16 @@ printFormat:
 .text
 .globl main
 .type main, @function
-
+                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+                                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+                                                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+                                                                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+                                                                                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+                                                                                                                                                
 main:
     pushq %rbp
     movq %rsp, %rbp

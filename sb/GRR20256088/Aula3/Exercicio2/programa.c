@@ -1,8 +1,8 @@
 #include <stdio.h>
 
 int main(){
-        int valor = 0x00BBCCDD;
-        printf("%d\n", valor);
+    int valor = 0x00BBCCDD;
+    printf("%d\n", valor);
 
-        return 0;
+    return 0;
 }
