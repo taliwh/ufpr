@@ -1,4 +1,3 @@
-# int sumInts(int valor1, int valor2);
 
 .text
 .globl sumInts 

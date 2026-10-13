@@ -11,15 +11,7 @@ printFormat:
 .text
 .globl main
 .type main, @function
-                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
-                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
-                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
-                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
-                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
-                                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
-                                                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
-                                                                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
-                                                                                                                                                ARRUMAR EXERCICIO PQ TA ERRADO ARRUMAR EXERCICIO PQ TA ERRADOA RRUMAR EXERCICIO PQT A ERRAO ARRUMAR ECXERCICIO <<<<<<<<<<<<<<<,
+
                                                                                                                                                 
 main:
     pushq %rbp
@@ -30,9 +22,9 @@ main:
     leaq vetor(%rbp), %rsi # onde
     movq $0, %rax # flag pra ver se ha numero flutuante
     call scanf
+
     leaq vetor(%rbp), %rsi
-    # VERIFICACAO COM IF PRA CONTROLAR OQ O USUARIO VAI DIGITAR
-    # TESTAR O CODIGO COM WRITE E READ PRA VER COMO Q EH
+
 
 while:
     cmpb $0, (%rsi)
@@ -43,15 +35,16 @@ while:
 
     # se o valor lido eh menor que o ascii do a
     cmpb $'a', %al
-    jb fim
+    jb fora
 
     # se o valor lido eh maior que o ascii do z
     cmpb $'z', %al
-    ja fim
+    ja fora
 
     subb $caps, %al
     movb %al, (%rsi)
-
+    
+fora:
     incq %rsi
     jmp while
 

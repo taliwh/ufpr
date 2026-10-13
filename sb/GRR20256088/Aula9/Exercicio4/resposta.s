@@ -10,9 +10,9 @@ printFormat:
     .lcomm VET_2 VET_SIZE12
     .lcomm VET_3 VET_SIZE3
 
-.text
-.globl main
-.type main, @function
+    .text
+    .globl main
+    .type main, @function
 
 main:
     pushq %rbp

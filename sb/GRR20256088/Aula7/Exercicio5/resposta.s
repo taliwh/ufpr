@@ -49,4 +49,4 @@ fim:
     popq %rbp
     ret
 
-read write printf scanf
+

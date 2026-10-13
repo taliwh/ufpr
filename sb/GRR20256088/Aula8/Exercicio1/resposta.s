@@ -6,7 +6,7 @@ printFormat:
     .lcomm VETOR 127
     
 .text
-.globl main
+.globl main 
 .type main, @function
 
 main:
@@ -16,20 +16,20 @@ main:
     movl $127, %eax
 loop_ascii:
     movl $127, %edx
-    subl %eax, %edx
+    subl %eax, %edx  # edx vale 0, dps 1, dps 2, dps 3, ...
     movb %dl, (%rcx)
     incq %rcx
     subl $1, %eax
-    jnz loop_ascii
+    jnz loop_ascii # loop (se eax n for zero)
 
-    movq $VETOR, %r12
-    leaq 127(%r12), %r13
+    movq $VETOR, %r12    # inicio do vetor
+    leaq 127(%r12), %r13 # final do vetor
 
 loop_impressao:
     movq $printFormat, %rdi # endereço da string em rdi
-    movq $0, %rax # sem ponto flutuante
     movsbl (%r12), %esi
     movsbl (%r12), %edx
+    movq $0, %rax # sem ponto flutuante
     call printf
     incq %r12
     cmpq %r13, %r12

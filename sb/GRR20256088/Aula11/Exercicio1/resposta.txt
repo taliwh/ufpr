@@ -1,0 +1,12 @@
+1) comandos utilizados: 
+
+as sumInts.s -o sumInts.o
+gcc main.c sumInts.o -o main
+
+O arquivo .h é uma maneira mais "elegante" de importar funções de outros arquivos.
+Ele faz basicamente a mesma coisa que o extern faz, mas de uma forma mais prática, pois caso o
+protótipo da função do .h seja alterado, não há necessidade de fazer alterações nos arquivos .c (o include cuida disso)
+
+Mas no caso do extern, teríamos que mudar o nome de todas as funções extern nos .c caso fossemos mudar o cabeçalho das funções importadas
+do .s
+
