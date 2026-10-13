@@ -2,6 +2,15 @@
 .type digito, @function
 .globl digito
 
+int digito(int n, int k) {
+    
+    if (n == k)
+        return 1 + digito(n/10, k);
+    return digito(n/10);
+}
+2
+10202
+
 
 digito:
     pushq %rbp
@@ -34,3 +43,5 @@ fim:
     movq %rbp, %rsp
     popq %rbp
     ret
+
+

@@ -8,7 +8,7 @@ int main() {
 
     scanf("%d%d", &n, &k);
 
-    printf("%d", digito(n, k));
+    printf("%d\n", digito(n, k));
 
     return 0;
 }
