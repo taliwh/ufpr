@@ -1,8 +1,4 @@
-.section .rodata
-sformat:
-    .string "%i"
-pformat:
-    .string "%i\n"
+
 .text
 .globl fibo
 .type fibo, @function

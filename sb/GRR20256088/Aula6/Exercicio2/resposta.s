@@ -9,7 +9,8 @@ STR_OLA:
     .string "Ola\n"
     .text
     .globl main    
-    .type main, @function
+    .type main, @fun memória é \0?
+    je fimLoop # salta se iguction
 main:
     pushq %rbp
     movq %rsp,%rbp
@@ -18,8 +19,7 @@ main:
     movq %rsi, ptrOla(%rbp) # armazenar o endereço de STR_OLA na pilha
 while:
     movq ptrOla(%rbp),%rsi # carregar a posição atual para rsi
-    cmpb $0,(%rsi) # o valor na posição de memória é \0?
-    je fimLoop # salta se igual. Checa flag Z em rflags
+    cmpb $0,(%rsi) # o valor na posição deal. Checa flag Z em rflags
 
     movl $1, %edx # imprimir 1 caractere
     movq $STDOUT, %rdi # id. arquivo STDOUT em rdi

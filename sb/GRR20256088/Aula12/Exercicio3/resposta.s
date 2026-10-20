@@ -2,15 +2,32 @@
 .type digito, @function
 .globl digito
 
+/*
 int digito(int n, int k) {
-    
-    if (n == k)
+    if (n == 0)
+        return 0;
+    if (n % 10 == k)
         return 1 + digito(n/10, k);
-    return digito(n/10);
+    return digito(n/10, k);
 }
 2
 10202
+div (divisor)
 
+dividendo
+rax parte baixa
+rdx parte alta
+
+resultado
+rax (ou rax e rdx se for grande)
+
+resto
+rdx
+
+
+edi n
+esi k
+*/
 
 digito:
     pushq %rbp
@@ -23,7 +40,7 @@ digito:
 
 continua:
     movl %edi, %eax # dividendo
-    movl $0, %edx # zera a parte alta do dividendo
+    movq $0, %rdx # zera a parte alta do dividendo
     movl $10, %ecx # divisor
     divl %ecx # n mod 10 -> edx
     cmpl %edx, %esi # n % 10 (edx) == k

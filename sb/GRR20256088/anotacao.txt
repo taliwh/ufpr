@@ -1,0 +1,20 @@
+div sem sinal  div
+
+div com sinal  idiv
+
+
+
+
+
+
+div (divisor)
+
+dividendo
+rax parte baixa
+rdx parte alta
+
+resultado
+rax (ou rax e rdx se for grande)
+
+resto 
+rdx

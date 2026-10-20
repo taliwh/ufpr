@@ -20,9 +20,6 @@ main:
     movq $0, %rax 
     call scanf
 
-    # pega o inteiro lido e coloca em edx
-    # movl -4(%rbp), %edx
-
 
     movq $printFormat, %rdi
     movl $0, %esi
