@@ -1,1 +1,1 @@
-a) endereco de retorno, 
+a) endereco de retorno, registradores, ?

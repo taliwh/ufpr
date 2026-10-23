@@ -20,7 +20,7 @@ main:
     addq $line, %rsp
 
     movq $STDIN, %rdi # em q arquivo e pra por
-    leaq vetor(%rbp), %rsi # onde ??
+    leaq vetor(%rbp), %rsi # onde 
     movq $16, %rdx # quantidade de coisa q vo ler
     movq $READ, %rax # flag pra ver se ha numero flutuante
     syscall
