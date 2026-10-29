@@ -20,13 +20,10 @@ main:
     movq $0, %rax 
     call scanf
 
-
-    movq $printFormat, %rdi
-    movl $0, %esi
-    movq $0, %rax
-    call printf
-
-    # se edx for 0, nao ha pq fazer loop, acaba o programa
+    movl $1, %ebx # valor atual
+    movl $0, %r12d # valor anterior
+    
+    # se for 0, nao ha pq fazer loop, acaba o programa
     cmpl $0, -4(%rbp)
     je fim
 
@@ -55,51 +52,3 @@ fim:
     movq %rbp, %rsp
     popq %rbp
     ret
-
-
-
-
-
-
-
-
-
-/*\
-veriricar se o valor nao eh numero dps
-valor atual = 3
-valor anterior 2
-0   1     1      2     3
-          ant   atual  novo 
-
-val_atual = 1
-val_ANTERIOR = 0
-enquanto valor atual <= valor digitado faca
-    c
-    addq valoranterior, valor atual
-
-
-
-val atual = 3
-val anterior = 1
-
-
-val_atual = val_ant + val_atual
-addl val_ant, val_atual
-
-val_ant = val_atual - val_ant
-movl val_atual, aux 
-subl val_ant, aux
-movl aux, val_ant
-
-# nao pode pq vai sobrescrever o val atual, e precisamos dele para atualizar o proximo val atual
-subl valant, val atual 
-
-# sub normal nao funciona  pois vai fazer na ordem errada
-val_ant = val_ant - val_atual
-subl val_atual, val_ant
-
-
-
-
-
-*/

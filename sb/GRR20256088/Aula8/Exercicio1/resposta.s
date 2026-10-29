@@ -12,7 +12,8 @@ printFormat:
 main:
     pushq %rbp
     movq %rsp, %rbp
-    movq $VETOR, %rcx
+    leaq VETOR(%rip), %rcx
+    leaq VETOR(%rip), %rcx
     movl $127, %eax
 loop_ascii:
     movl $127, %edx

@@ -1,20 +1,64 @@
-div sem sinal  div
 
-div com sinal  idiv
+div com sinal:  idiv
 
+COMO USAR:
+div (registrador com o divisor)
 
-
-
-
-
-div (divisor)
-
-dividendo
+dividendo:
 rax parte baixa
-rdx parte alta
+rdx parte alta (tem q zerar a parte alta)
 
-resultado
-rax (ou rax e rdx se for grande)
+resultado:
+rax
 
-resto 
+resto:
 rdx
+
+cwd
+mul com sinal: imul
+etc
+etc
+
+códigos syscall:
+int write / read (int fd, char *buffer, int count)
+retorna quantos bytes ele escreveu
+
+void exit (int status)
+o return 0 e return 1 da main do c eh exatamente (ATT:. Kaue) o edi desse cara ? ...
+ATT:. Thalísia.
+
+msg:
+.string "Voce digitou: "
+
+mexer na pilha write e read (msm raciocinio):
+movq $STDIN, %rdi # arquivo que vou ler (stdin = 0)
+leaq aLetter(%rbp), %rsi # endereco daonde eu vou deixar oq eu li
+movl $2, %edx # bytes maximos q posso ler (tamanho do buffer, se for ler inteiro eh 12 bytes no maximo, e sempre tem q ter espaco pro \0, SEMPRE E BOM UMA GORDURINHA KAUE AMA IMENSAS)
+movl $READ, %eax # codigo da syscall, (read = 0)
+syscall
+
+em rax o syscall read retorna quantos bytes ele leu (inclusive o \n)
+
+imprimindo frase:
+movq $STDOUT,%rdi
+movq $msg,%rsi     # ponteiro da msg
+movq $14,%rdx   # tamanho da mensagem
+movl $WRITE,%eax
+syscall
+
+movq $printFormat, %rdi  # especificador doq vai imprimir, tipo %i 
+leaq vetor(%rbp), %rsi   # o conteudo, se quiser imprimir so msg nao poe nada no rsi
+movq $0, %rax            # potno flutuante balbalabla
+call printf
+
+0 read
+1 write 
+60 exit
+
+
+asdasdasdasdasdasd
+atoi -> ler
+itoa -> imprimir
+
+
+
