@@ -17,9 +17,11 @@ main:
 
     movq $STDIN, %rdi # arquivo que vou ler
     leaq -16(%rbp), %rsi # endereco onde vou deixar oq eu li
-    movl $12, %edx # bytes maximos q posso ler (vai ate 4 bilhoes)
+    movl $11, %edx # bytes maximos q posso ler (vai ate 4 bilhoes)
     movl $READ, %eax
     syscall
+
+    # 4 000 000 000
 
     decl %eax
     leaq -16(%rbp), %rdi
@@ -42,11 +44,19 @@ while:
 
     movl %ebx, %edi
     leaq -16(%rbp), %rsi
-    call itoa            
+    call itoa      
     
+    movl $10, -15(%rbp)
+
     movq $STDOUT, %rdi
     leaq -16(%rbp), %rsi
-    movl $12, %edx # bytes maximos q posso imprimir (vai ate 4 bilhoes)
+    movl $1, %edx # bytes maximos q posso imprimir (vai ate 4 bilhoes)
+    movl $WRITE, %eax
+    syscall 
+
+    movq $STDOUT, %rdi
+    leaq -15(%rbp), %rsi
+    movl $1, %edx # bytes maximos q posso imprimir (vai ate 4 bilhoes)
     movl $WRITE, %eax
     syscall 
     
